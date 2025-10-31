@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { instrumentSans, sfPro } from "./fonts";
 import "./globals.css";
@@ -15,7 +16,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${sfPro.variable} ${instrumentSans.variable}`}>{children}</body>
+            <body className={cn(sfPro.variable, instrumentSans.variable, "min-h-dvh flex flex-col")}>{children}</body>
         </html>
     );
 }

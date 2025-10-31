@@ -13,7 +13,7 @@ const socialLinks = [
 
 const Footer = () => {
     return (
-        <footer className="py-8.5 flex items-center justify-center gap-50">
+        <footer className="py-8.5 flex items-center justify-center gap-50 mt-auto">
             {socialLinks.map(({ icon, name, href }) => (
                 <a
                     key={name}

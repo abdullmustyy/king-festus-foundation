@@ -43,7 +43,7 @@ const Navbar = () => {
                     ))}
                 </ul>
 
-                <Link href="" className={cn(buttonVariants())}>
+                <Link href="" title="Sign in" className={cn(buttonVariants())}>
                     Sign in
                     <DottedArrowRight className="size-4.5" />
                 </Link>

@@ -24,12 +24,13 @@ const HomePage = () => {
                 </div>
 
                 <div className="flex gap-5">
-                    <Link href="" className={cn(buttonVariants({ size: "lg" }), "")}>
+                    <Link href="" title="See about the foundation" className={cn(buttonVariants({ size: "lg" }), "")}>
                         See about the foundation
                         <DottedArrowRight className="size-4.5" />
                     </Link>
                     <Link
                         href=""
+                        title="Reach out"
                         className={cn(buttonVariants({ size: "lg" }), "bg-white hover:bg-white/90 text-foreground")}
                     >
                         Reach out
