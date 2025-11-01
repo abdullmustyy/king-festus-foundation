@@ -1,15 +1,30 @@
+import { baseSocialLinks } from "@/lib/constants";
 import Facebook from "@/public/icons/facebook.svg";
 import Instagram from "@/public/icons/instagram.svg";
 import Linkedin from "@/public/icons/linkedin.svg";
 import Whatsapp from "@/public/icons/whatsapp.svg";
 import Image from "next/image";
 
-const socialLinks = [
-    { icon: Facebook, name: "Facebook", href: "" },
-    { icon: Instagram, name: "Instagram", href: "" },
-    { icon: Linkedin, name: "LinkedIn", href: "" },
-    { icon: Whatsapp, name: "WhatsApp", href: "" },
-];
+const socialLinks = baseSocialLinks.map((link) => {
+    let icon;
+
+    switch (link.name) {
+        case "Facebook":
+            icon = Facebook;
+            break;
+        case "Instagram":
+            icon = Instagram;
+            break;
+        case "LinkedIn":
+            icon = Linkedin;
+            break;
+        case "WhatsApp":
+            icon = Whatsapp;
+            break;
+    }
+
+    return { ...link, icon };
+});
 
 const Footer = () => {
     return (
