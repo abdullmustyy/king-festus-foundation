@@ -109,5 +109,5 @@
 }
 
 @utility w-contain {
-  @apply 2xl:max-w-350 w-[95%] mx-auto;
+  @apply 2xl:max-w-350 lg:w-[95%] w-[90%] mx-auto;
 }

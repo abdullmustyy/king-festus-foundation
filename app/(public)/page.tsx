@@ -8,12 +8,12 @@ import Link from "next/link";
 
 const HomePage = () => {
     return (
-        <main className="w-contain py-20 grid lg:grid-cols-2 items-center gap-7">
+        <main className="w-contain lg:py-20 py-10 grid lg:grid-cols-2 items-center gap-7">
             <div className="flex flex-col gap-12.5">
                 <div className="space-y-2.5">
                     <SectionTag tag="INTRODUCING King Festus Foundation" className="uppercase" />
                     <div className="space-y-5">
-                        <h1 className="text-[4rem] leading-[100%]">Empowering progress through purpose</h1>
+                        <h1 className="lg:text-[4rem] text-5xl leading-[100%]">Empowering progress through purpose</h1>
                         <p className="text-xl text-foreground/50">
                             King Festus Foundation was established in 2021 to support a network of related families
                             towards achieving stable, middle-class livelihoods through facilitation of free medical and
@@ -23,15 +23,22 @@ const HomePage = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-5">
-                    <Link href="" title="See about the foundation" className={cn(buttonVariants({ size: "lg" }), "")}>
+                <div className="flex lg:flex-row flex-col items-center lg:gap-5 gap-4">
+                    <Link
+                        href=""
+                        title="See about the foundation"
+                        className={cn(buttonVariants({ size: "lg" }), "lg:w-fit w-full")}
+                    >
                         See about the foundation
                         <DottedArrowRight className="size-4.5" />
                     </Link>
                     <Link
                         href=""
                         title="Reach out"
-                        className={cn(buttonVariants({ size: "lg" }), "bg-white hover:bg-white/90 text-foreground")}
+                        className={cn(
+                            buttonVariants({ size: "lg" }),
+                            "lg:w-fit w-full bg-white hover:bg-white/90 text-foreground",
+                        )}
                     >
                         Reach out
                     </Link>
@@ -39,7 +46,12 @@ const HomePage = () => {
             </div>
 
             <div>
-                <Image src={HeroVolunteerImage} alt="Hero Volunteer Image" priority className="size-full object-cover" />
+                <Image
+                    src={HeroVolunteerImage}
+                    alt="Hero Volunteer Image"
+                    priority
+                    className="size-full object-cover"
+                />
             </div>
         </main>
     );
