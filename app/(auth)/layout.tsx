@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
                 <section className="w-contain flex items-center justify-between xl:gap-46 gap-7">
                     {children}
 
-                    <div className="shrink-0">
+                    <div className="lg:w-1/2 shrink-0">
                         <Image
                             src={HeroVolunteerImage}
                             alt="Hero Volunteer Image"

@@ -2,7 +2,7 @@ import ResetPasswordForm from "@/components/features/forms/reset-password-form";
 
 const ResetPasswordPage = () => {
     return (
-        <div className="flex flex-col gap-12.5 w-full">
+        <div className="flex flex-col gap-12.5 lg:w-1/2">
             <div className="space-y-2.5 text-center">
                 <h1 className="text-[2.8125rem] leading-[100%]">Reset password</h1>
                 <p className="font-sf-pro text-xl text-foreground/50">
