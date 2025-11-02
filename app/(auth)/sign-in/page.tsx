@@ -1,0 +1,17 @@
+import SignInForm from "@/components/features/forms/sign-in-form";
+
+const SignInPage = () => {
+    return (
+        <div className="flex flex-col gap-12.5 w-full">
+            <h1 className="text-[2.8125rem] leading-[100%]">
+                <span className="text-foreground/50">Welcome to </span>
+                <br className="md-br" />
+                <span>King Festus Foundation</span>
+            </h1>
+
+            <SignInForm />
+        </div>
+    );
+};
+
+export default SignInPage;

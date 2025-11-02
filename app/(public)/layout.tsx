@@ -1,5 +1,9 @@
 import Footer from "@/components/layout/footer";
 import Navbar from "@/components/layout/navbar";
+import { buttonVariants } from "@/components/ui/button";
+import DottedArrowRight from "@/components/ui/icons/dotted-arrow-right";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function PublicLayout({
     children,
@@ -8,7 +12,12 @@ export default function PublicLayout({
 }>) {
     return (
         <>
-            <Navbar />
+            <Navbar className="*:data-[slot='navbar-menu']:justify-between">
+                <Link href="/sign-in" title="Sign in" className={cn(buttonVariants())}>
+                    Sign in
+                    <DottedArrowRight className="size-4.5" />
+                </Link>
+            </Navbar>
             {children}
             <Footer />
         </>

@@ -5,8 +5,7 @@ import Logo from "@/public/images/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { buttonVariants } from "../ui/button";
-import DottedArrowRight from "../ui/icons/dotted-arrow-right";
+import React from "react";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -15,15 +14,18 @@ const navLinks = [
     { name: "Contacts Us", href: "/contact-us" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
     const pathname = usePathname();
 
     return (
-        <nav className="w-contain">
+        <nav className={cn("w-contain", className)}>
             <div className="py-6 flex items-center justify-center">
-                <Image src={Logo} alt="King Festus Foundation" />
+                <Link href="/" title="King Festus Foundation | Home">
+                    <Image src={Logo} alt="King Festus Foundation" priority />
+                </Link>
             </div>
-            <div className="flex items-center justify-between py-5">
+
+            <div data-slot="navbar-menu" className="flex items-center py-5">
                 <ul className="flex items-center gap-10">
                     {navLinks.map((link) => (
                         <li key={link.name}>
@@ -43,10 +45,7 @@ const Navbar = () => {
                     ))}
                 </ul>
 
-                <Link href="" title="Sign in" className={cn(buttonVariants())}>
-                    Sign in
-                    <DottedArrowRight className="size-4.5" />
-                </Link>
+                {children}
             </div>
         </nav>
     );

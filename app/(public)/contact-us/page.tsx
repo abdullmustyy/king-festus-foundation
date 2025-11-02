@@ -67,7 +67,7 @@ const ContactItem = ({
                     <span>{label}</span>
                 </div>
             </Link>
-            <Button variant="ghost" size="icon" onClick={() => copy(value)} className="hover:bg-accent/10">
+            <Button variant="ghost" size="icon" onClick={() => copy(value)}>
                 {isCopied ? <Check className="size-5 opacity-20" /> : <Copy className="size-5 opacity-20" />}
             </Button>
         </div>

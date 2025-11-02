@@ -23,7 +23,7 @@ const HomePage = () => {
                     </div>
                 </div>
 
-                <div className="flex gap-5">
+                <div className="flex items-center gap-5">
                     <Link href="" title="See about the foundation" className={cn(buttonVariants({ size: "lg" }), "")}>
                         See about the foundation
                         <DottedArrowRight className="size-4.5" />
@@ -39,7 +39,7 @@ const HomePage = () => {
             </div>
 
             <div>
-                <Image src={HeroVolunteerImage} alt="Hero Volunteer Image" className="size-full object-cover" />
+                <Image src={HeroVolunteerImage} alt="Hero Volunteer Image" priority className="size-full object-cover" />
             </div>
         </main>
     );
