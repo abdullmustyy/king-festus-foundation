@@ -31,14 +31,14 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
     }
 
     return (
-        <nav className={cn("w-contain relative", className)}>
-            <div className="py-6 lg:flex hidden items-center justify-center">
+        <nav className={cn("relative", className)}>
+            <div className="lg:flex hidden items-center justify-center">
                 <Link href="/" title="King Festus Foundation | Home">
-                    <Image src={Logo} alt="King Festus Foundation" priority />
+                    <Image src={Logo} alt="King Festus Foundation" priority className="h-20" />
                 </Link>
             </div>
 
-            <div data-slot="navbar-menu" className="flex items-center justify-between py-5">
+            <div data-slot="navbar-menu" className="flex items-center justify-between">
                 <Link href="/" title="King Festus Foundation | Home" className="lg:hidden block">
                     <Image src={LogoMobile} alt="King Festus Foundation" priority className="size-25" />
                 </Link>

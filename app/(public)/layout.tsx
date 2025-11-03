@@ -12,13 +12,15 @@ export default function PublicLayout({
 }>) {
     return (
         <>
-            <Navbar className="*:data-[slot='navbar-menu']:justify-between">
-                <Link href="/sign-in" title="Sign in" className={cn(buttonVariants())}>
-                    Sign in
-                    <DottedArrowRight className="size-4.5" />
-                </Link>
-            </Navbar>
-            {children}
+            <main className="w-contain">
+                <Navbar className="*:data-[slot='navbar-menu']:justify-between">
+                    <Link href="/sign-in" title="Sign in" className={cn(buttonVariants())}>
+                        Sign in
+                        <DottedArrowRight className="size-4.5" />
+                    </Link>
+                </Navbar>
+                {children}
+            </main>
             <Footer />
         </>
     );

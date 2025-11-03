@@ -30,105 +30,103 @@ const SignInForm = () => {
     };
 
     return (
-        <div className="flex flex-col gap-17.5 lg:px-6">
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-7.5">
-                <div className="flex flex-col gap-6">
-                    <FieldGroup className="gap-4.5">
-                        <FormField
-                            name="email"
-                            control={form.control}
-                            label="Email address"
-                            className="*:data-[slot='field-label']:text-foreground/50"
-                        >
-                            {(field, fieldState) => (
-                                <div className="relative flex items-center">
-                                    <Input
-                                        {...field}
-                                        id={field.name}
-                                        value={field.value as string}
-                                        type="email"
-                                        aria-invalid={fieldState.invalid}
-                                        className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
-                                    />
-                                    {!fieldState.invalid && fieldState.isDirty && (
-                                        <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
-                                            <Check className="size-4 text-primary" />
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </FormField>
-
-                        <FormField
-                            name="password"
-                            control={form.control}
-                            label="Password"
-                            className="*:data-[slot='field-label']:text-foreground/50"
-                        >
-                            {(field, fieldState) => (
-                                <div className="relative flex items-center">
-                                    <Input
-                                        {...field}
-                                        id={field.name}
-                                        value={field.value as string}
-                                        type={showPassword ? "text" : "password"}
-                                        aria-invalid={fieldState.invalid}
-                                        className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
-                                    />
-                                    <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="icon"
-                                        className="absolute right-4 rounded-full text-primary"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                    >
-                                        {showPassword ? <EyeOff /> : <Eye />}
-                                    </Button>
-                                </div>
-                            )}
-                        </FormField>
-                    </FieldGroup>
-
-                    <div className="flex items-center justify-between">
-                        <FormField
-                            name="remember_me"
-                            control={form.control}
-                            label="Remember me"
-                            orientation="horizontal"
-                            className="flex-row-reverse *:data-[slot='field-label']:text-foreground/50"
-                        >
-                            {(field, fieldState) => (
-                                <Checkbox
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-7.5 lg:px-6">
+            <div className="flex flex-col gap-6">
+                <FieldGroup className="gap-4.5">
+                    <FormField
+                        name="email"
+                        control={form.control}
+                        label="Email address"
+                        className="*:data-[slot='field-label']:text-foreground/50"
+                    >
+                        {(field, fieldState) => (
+                            <div className="relative flex items-center">
+                                <Input
+                                    {...field}
                                     id={field.name}
-                                    name={field.name}
+                                    value={field.value as string}
+                                    type="email"
                                     aria-invalid={fieldState.invalid}
-                                    checked={field.value as boolean}
-                                    onCheckedChange={field.onChange}
+                                    className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
                                 />
-                            )}
-                        </FormField>
+                                {!fieldState.invalid && fieldState.isDirty && (
+                                    <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                                        <Check className="size-4 text-primary" />
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </FormField>
 
-                        <Link
-                            href="/forgot-password"
-                            className="shrink-0 font-medium font-sf-pro text-primary hover:underline"
-                        >
-                            Forgot password?
-                        </Link>
-                    </div>
+                    <FormField
+                        name="password"
+                        control={form.control}
+                        label="Password"
+                        className="*:data-[slot='field-label']:text-foreground/50"
+                    >
+                        {(field, fieldState) => (
+                            <div className="relative flex items-center">
+                                <Input
+                                    {...field}
+                                    id={field.name}
+                                    value={field.value as string}
+                                    type={showPassword ? "text" : "password"}
+                                    aria-invalid={fieldState.invalid}
+                                    className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="icon"
+                                    className="absolute right-4 rounded-full text-primary"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? <EyeOff /> : <Eye />}
+                                </Button>
+                            </div>
+                        )}
+                    </FormField>
+                </FieldGroup>
+
+                <div className="flex items-center justify-between">
+                    <FormField
+                        name="remember_me"
+                        control={form.control}
+                        label="Remember me"
+                        orientation="horizontal"
+                        className="flex-row-reverse *:data-[slot='field-label']:text-foreground/50"
+                    >
+                        {(field, fieldState) => (
+                            <Checkbox
+                                id={field.name}
+                                name={field.name}
+                                aria-invalid={fieldState.invalid}
+                                checked={field.value as boolean}
+                                onCheckedChange={field.onChange}
+                            />
+                        )}
+                    </FormField>
+
+                    <Link
+                        href="/forgot-password"
+                        className="shrink-0 font-medium font-sf-pro text-primary hover:underline"
+                    >
+                        Forgot password?
+                    </Link>
                 </div>
+            </div>
 
-                <Button size="xl" className="w-full rounded-full">
-                    Login
-                </Button>
-            </form>
-
+            <Button size="xl" className="w-full rounded-full">
+                Login
+            </Button>
+            
             <p className="flex items-center justify-center gap-1.5">
                 Don&apos;t have an account?
                 <Link href="/sign-up" className="font-semibold text-primary hover:underline">
                     Signup here
                 </Link>
             </p>
-        </div>
+        </form>
     );
 };
 

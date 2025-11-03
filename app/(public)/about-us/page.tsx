@@ -20,7 +20,7 @@ const mission = [
 
 const AboutUspage = () => {
     return (
-        <main className="w-contain lg:px-20 lg:py-20 py-10 grid lg:grid-cols-2 lg:gap-50 gap-12.5 text-xl">
+        <section className="py-10 grid lg:grid-cols-2 lg:gap-50 gap-12.5 text-xl">
             <div className="flex flex-col gap-12.5">
                 <h4 className="text-3xl text-primary">Vision</h4>
                 <p>
@@ -41,7 +41,7 @@ const AboutUspage = () => {
                     ))}
                 </div>
             </div>
-        </main>
+        </section>
     );
 };
 

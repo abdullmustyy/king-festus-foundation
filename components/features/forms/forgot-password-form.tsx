@@ -26,44 +26,42 @@ const ForgotPasswordForm = () => {
     };
 
     return (
-        <div className="flex flex-col gap-17.5 lg:px-6">
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-7.5">
-                <FieldGroup>
-                    <FormField
-                        name="email"
-                        control={form.control}
-                        className="*:data-[slot='field-label']:text-foreground/50"
-                    >
-                        {(field, fieldState) => (
-                            <div className="relative flex items-center">
-                                <Input
-                                    {...field}
-                                    id={field.name}
-                                    value={field.value as string}
-                                    type="email"
-                                    aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
-                                />
-                                {!fieldState.invalid && fieldState.isDirty && (
-                                    <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
-                                        <Check className="size-4 text-primary" />
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </FormField>
-                </FieldGroup>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-7.5 lg:px-6">
+            <FieldGroup>
+                <FormField
+                    name="email"
+                    control={form.control}
+                    className="*:data-[slot='field-label']:text-foreground/50"
+                >
+                    {(field, fieldState) => (
+                        <div className="relative flex items-center">
+                            <Input
+                                {...field}
+                                id={field.name}
+                                value={field.value as string}
+                                type="email"
+                                aria-invalid={fieldState.invalid}
+                                className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
+                            />
+                            {!fieldState.invalid && fieldState.isDirty && (
+                                <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                                    <Check className="size-4 text-primary" />
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </FormField>
+            </FieldGroup>
 
-                <div className="space-y-2">
-                    <Button size="xl" className="w-full rounded-full">
-                        Send reset link
-                    </Button>
-                    <Link href="/sign-in" className={cn(buttonVariants({ size: "xl", variant: "link" }), "w-full")}>
-                        <ArrowLeft className="size-5" />
-                        Back to login
-                    </Link>
-                </div>
-            </form>
+            <div className="space-y-2">
+                <Button size="xl" className="w-full rounded-full">
+                    Send reset link
+                </Button>
+                <Link href="/sign-in" className={cn(buttonVariants({ size: "xl", variant: "link" }), "w-full")}>
+                    <ArrowLeft className="size-5" />
+                    Back to login
+                </Link>
+            </div>
 
             <p className="flex items-center justify-center gap-1.5">
                 Don&apos;t have an account?
@@ -71,7 +69,7 @@ const ForgotPasswordForm = () => {
                     Signup here
                 </Link>
             </p>
-        </div>
+        </form>
     );
 };
 

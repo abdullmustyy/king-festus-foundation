@@ -13,7 +13,7 @@ const governance = [
 
 const GovernanceStructurePage = () => {
     return (
-        <main className="w-contain lg:px-20 lg:py-20 py-10">
+        <section className="py-10">
             <div className="flex flex-col items-center gap-12.5">
                 <h3 className="text-3xl text-center">Governance & organisational structure</h3>
 
@@ -31,7 +31,7 @@ const GovernanceStructurePage = () => {
                     ))}
                 </div>
             </div>
-        </main>
+        </section>
     );
 };
 
