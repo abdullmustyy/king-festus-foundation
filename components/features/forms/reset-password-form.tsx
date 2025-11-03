@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, buttonVariants } from "@/components/ui/button";
-import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -29,37 +28,35 @@ const ResetPasswordForm = () => {
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-7.5 lg:px-6">
-            <FieldGroup className="gap-4.5">
-                <FormField
-                    name="password"
-                    control={form.control}
-                    label="Enter new password"
-                    className="*:data-[slot='field-label']:text-foreground/50"
-                >
-                    {(field, fieldState) => (
-                        <div className="relative flex items-center">
-                            <Input
-                                {...field}
-                                id={field.name}
-                                value={field.value as string}
-                                type={showPassword ? "text" : "password"}
-                                aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
-                            />
-                            <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                className="absolute right-4 rounded-full text-primary"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <EyeOff /> : <Eye />}
-                            </Button>
-                        </div>
-                    )}
-                </FormField>
-            </FieldGroup>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 lg:px-6">
+            <FormField
+                name="password"
+                control={form.control}
+                label="Enter new password"
+                className="*:data-[slot='field-label']:text-foreground/50"
+            >
+                {(field, fieldState) => (
+                    <div className="relative flex items-center">
+                        <Input
+                            {...field}
+                            id={field.name}
+                            value={field.value as string}
+                            type={showPassword ? "text" : "password"}
+                            aria-invalid={fieldState.invalid}
+                            className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                        />
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-4 rounded-full text-primary"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <EyeOff /> : <Eye />}
+                        </Button>
+                    </div>
+                )}
+            </FormField>
 
             <div className="space-y-2">
                 <Button size="xl" className="w-full rounded-full">

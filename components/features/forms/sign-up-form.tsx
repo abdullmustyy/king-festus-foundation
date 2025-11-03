@@ -31,8 +31,8 @@ const SignUpForm = () => {
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-7.5 lg:px-6">
-            <FieldGroup className="gap-4.5">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 lg:px-6">
+            <FieldGroup className="gap-3">
                 <FormField
                     name="email"
                     control={form.control}
@@ -47,7 +47,7 @@ const SignUpForm = () => {
                                 value={field.value as string}
                                 type="email"
                                 aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
+                                className="bg-[#ECECEC] h-13 px-5 rounded-full"
                             />
                             {!fieldState.invalid && fieldState.isDirty && (
                                 <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
@@ -72,7 +72,7 @@ const SignUpForm = () => {
                                 value={field.value as string}
                                 type={showPassword ? "text" : "password"}
                                 aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
+                                className="bg-[#ECECEC] h-13 px-5 rounded-full"
                             />
                             <Button
                                 type="button"
@@ -101,7 +101,7 @@ const SignUpForm = () => {
                                 value={field.value as string}
                                 type={showConfirmPassword ? "text" : "password"}
                                 aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-15.5 px-5 rounded-full"
+                                className="bg-[#ECECEC] h-13 px-5 rounded-full"
                             />
                             <Button
                                 type="button"
