@@ -11,7 +11,7 @@ const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
                 <section className="w-contain flex justify-between xl:gap-46 gap-7">
                     {children}
 
-                    <div className="lg:w-1/2 lg:block hidden">
+                    <div className="lg:w-1/2 lg:block hidden rounded-[20px] overflow-hidden">
                         <Image
                             src={AuthVolunteerImage}
                             alt="Hero Volunteer Image"
