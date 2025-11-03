@@ -8,7 +8,7 @@ import Link from "next/link";
 
 const HomePage = () => {
     return (
-        <section className="lg:py-5 py-10 grid lg:grid-cols-2 items-center gap-7">
+        <section className="w-contain lg:py-5 py-10 grid lg:grid-cols-2 items-center gap-7">
             <div className="flex flex-col gap-12.5">
                 <div className="space-y-2.5">
                     <SectionTag tag="INTRODUCING King Festus Foundation" className="uppercase" />

@@ -76,7 +76,7 @@ const ContactItem = ({
 
 const ContactUsPage = () => {
     return (
-        <main className="py-10 grid lg:grid-cols-2 lg:gap-50 gap-10 text-xl">
+        <main className="w-contain py-10 grid lg:grid-cols-2 lg:gap-50 gap-10 text-xl">
             <div className="flex flex-col gap-6">
                 <h4 className="text-3xl text-primary">Contact details</h4>
 

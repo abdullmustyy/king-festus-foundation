@@ -13,7 +13,7 @@ const governance = [
 
 const GovernanceStructurePage = () => {
     return (
-        <section className="py-10">
+        <section className="w-contain py-10">
             <div className="flex flex-col items-center gap-12.5">
                 <h3 className="text-3xl text-center">Governance & organisational structure</h3>
 
