@@ -8,12 +8,12 @@ import Link from "next/link";
 
 const HomePage = () => {
     return (
-        <section className="w-contain lg:py-5 py-10 grid lg:grid-cols-2 items-center gap-7">
-            <div className="flex flex-col gap-12.5">
+        <section className="w-contain py-10 grid lg:grid-cols-2 lg:grid-rows-[28.125rem] items-center gap-7">
+            <div className="flex flex-col gap-8">
                 <div className="space-y-2.5">
                     <SectionTag tag="INTRODUCING King Festus Foundation" className="uppercase" />
                     <div className="space-y-5">
-                        <h1 className="lg:text-[4rem] text-5xl leading-[100%]">Empowering progress through purpose</h1>
+                        <h1 className="lg:text-6xl text-5xl leading-[100%]">Empowering progress through purpose</h1>
                         <p className="text-xl text-foreground/50">
                             King Festus Foundation was established in 2021 to support a network of related families
                             towards achieving stable, middle-class livelihoods through facilitation of free medical and
@@ -45,14 +45,7 @@ const HomePage = () => {
                 </div>
             </div>
 
-            <div>
-                <Image
-                    src={HeroVolunteerImage}
-                    alt="Hero Volunteer Image"
-                    priority
-                    className="size-full object-cover"
-                />
-            </div>
+            <Image src={HeroVolunteerImage} alt="Hero Volunteer Image" priority className="size-full object-contain" />
         </section>
     );
 };

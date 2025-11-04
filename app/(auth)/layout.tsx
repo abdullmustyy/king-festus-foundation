@@ -5,13 +5,13 @@ import Image from "next/image";
 const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
     return (
         <>
-            <Navbar className="w-contain lg:pb-4 lg:*:data-[slot='navbar-menu']:justify-center *:data-[slot='navbar-menu']:justify-between" />
+            <Navbar className="w-contain gap-4 lg:pb-4 lg:*:data-[slot='navbar-menu']:justify-center *:data-[slot='navbar-menu']:justify-between" />
 
             <main className="bg-white lg:py10 py20 flex-1 flex items-center">
-                <section className="w-contain flex items-center justify-between xl:gap-46 gap-7">
+                <section className="w-contain grid lg:grid-cols-2 items-center xl:gap-30 gap-7">
                     {children}
 
-                    <div className="lg:w-1/2 h-130 lg:block hidden rounded-[20px] overflow-hidden">
+                    <div className="lg:block hidden p-15">
                         <Image
                             src={AuthVolunteerImage}
                             alt="Hero Volunteer Image"

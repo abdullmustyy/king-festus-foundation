@@ -31,10 +31,10 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
     }
 
     return (
-        <nav className={cn("relative", className)}>
+        <nav className={cn("relative lg:flex flex-col", className)}>
             <div className="lg:flex hidden items-center justify-center">
                 <Link href="/" title="King Festus Foundation | Home">
-                    <Image src={Logo} alt="King Festus Foundation" priority className="h-20" />
+                    <Image src={Logo} alt="King Festus Foundation" priority className="h20" />
                 </Link>
             </div>
 
