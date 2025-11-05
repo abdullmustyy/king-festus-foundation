@@ -25,7 +25,7 @@ const HomePage = () => {
 
                 <div className="flex lg:flex-row flex-col items-center lg:gap-5 gap-4">
                     <Link
-                        href=""
+                        href="/about-us"
                         title="See about the foundation"
                         className={cn(buttonVariants({ size: "lg" }), "lg:w-fit w-full")}
                     >
@@ -33,7 +33,7 @@ const HomePage = () => {
                         <DottedArrowRight className="size-4.5" />
                     </Link>
                     <Link
-                        href=""
+                        href="/contact-us"
                         title="Reach out"
                         className={cn(
                             buttonVariants({ size: "lg" }),
