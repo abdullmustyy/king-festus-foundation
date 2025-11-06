@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import LogoMobile from "@/public/images/logo-mobile.svg";
+import LogoIcon from "@/public/images/logo-icon.svg";
 import Logo from "@/public/images/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -40,7 +40,7 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
 
             <div data-slot="navbar-menu" className="flex items-center justify-between">
                 <Link href="/" title="King Festus Foundation | Home" className="lg:hidden block">
-                    <Image src={LogoMobile} alt="King Festus Foundation" priority className="size-25" />
+                    <Image src={LogoIcon} alt="King Festus Foundation" priority className="size-25" />
                 </Link>
 
                 <ul className="lg:flex hidden items-center gap-10">
