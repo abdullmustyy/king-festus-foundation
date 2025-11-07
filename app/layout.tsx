@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { instrumentSans, sfPro } from "./fonts";
 import "./globals.css";
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={cn(sfPro.variable, instrumentSans.variable, "min-h-dvh flex flex-col")}>{children}</body>
+            <body className={cn(sfPro.variable, instrumentSans.variable, "min-h-dvh flex flex-col")}>
+                <NuqsAdapter>{children}</NuqsAdapter>
+            </body>
         </html>
     );
 }

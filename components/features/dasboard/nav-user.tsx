@@ -29,10 +29,7 @@ export function NavUser({ className, user }: INavUserProps) {
         <SidebarMenuItem className={cn(className)}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild className="focus-visible:ring-0">
-                    <SidebarMenuButton
-                        size="lg"
-                        className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                    >
+                    <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                         <Avatar className="size-6 rounded-lg grayscale">
                             <AvatarImage src={user.avatar} alt={user.name} />
                             <AvatarFallback className="rounded-lg text-xs">L</AvatarFallback>
