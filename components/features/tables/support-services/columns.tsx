@@ -33,6 +33,9 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                 <span>{row.original.department}</span>
             </div>
         ),
+        meta: {
+            label: "Department",
+        },
     },
     {
         accessorKey: "vendor",
@@ -59,6 +62,9 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                 />
             );
         },
+        meta: {
+            label: "Vendor",
+        },
     },
     {
         accessorKey: "status",
@@ -84,6 +90,9 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                     )}
                 />
             );
+        },
+        meta: {
+            label: "Status",
         },
     },
     {
@@ -121,6 +130,9 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                 );
             }
             return null;
+        },
+        meta: {
+            label: "Action",
         },
     },
 ];

@@ -26,6 +26,9 @@ export const meetingsAndEventsColumns: ColumnDef<TMeetingsAndEvents>[] = [
                 <span>Date and Time</span>
             </div>
         ),
+        meta: {
+            label: "Date and Time",
+        },
     },
     {
         accessorKey: "department",
@@ -41,6 +44,9 @@ export const meetingsAndEventsColumns: ColumnDef<TMeetingsAndEvents>[] = [
                 <span>{row.original.department}</span>
             </div>
         ),
+        meta: {
+            label: "Department",
+        },
     },
     {
         accessorKey: "host",
@@ -50,6 +56,9 @@ export const meetingsAndEventsColumns: ColumnDef<TMeetingsAndEvents>[] = [
                 <span>Host</span>
             </div>
         ),
+        meta: {
+            label: "Host",
+        },
     },
     {
         accessorKey: "status",
@@ -71,6 +80,9 @@ export const meetingsAndEventsColumns: ColumnDef<TMeetingsAndEvents>[] = [
                     )}
                 />
             );
+        },
+        meta: {
+            label: "Status",
         },
     },
 ];

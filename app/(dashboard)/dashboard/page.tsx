@@ -8,16 +8,9 @@ const DashboardPage = () => {
     return (
         <>
             {/* Support Services */}
-            <section className="flex flex-col gap-5 p-5">
-                <div className="flex items-center justify-between">
-                    <h6 className="font-medium">Support Services</h6>
-                </div>
-
-                {/* Support Services Table */}
-                <Suspense fallback={<></>}>
-                    <SupportServicesTable />
-                </Suspense>
-            </section>
+            <Suspense fallback={<></>}>
+                <SupportServicesTable />
+            </Suspense>
 
             {/* Media */}
             <section className="p-5">
@@ -26,17 +19,10 @@ const DashboardPage = () => {
                 </div>
             </section>
 
-            {/* Upcoming Meetings and Events */}
-            <section className="flex flex-col gap-5 p-5">
-                <div className="flex items-center justify-between">
-                    <h6 className="font-medium">Upcoming Meetings and Events</h6>
-                </div>
-
-                {/* Upcoming Meetings and Events Table */}
-                <Suspense fallback={<></>}>
-                    <MeetingsAndEventsTable />
-                </Suspense>
-            </section>
+            {/* Upcoming Meetings and Events. */}
+            <Suspense fallback={<></>}>
+                <MeetingsAndEventsTable />
+            </Suspense>
         </>
     );
 };

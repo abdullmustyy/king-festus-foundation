@@ -2,6 +2,7 @@
 
 import { DataTable } from "@/components/features/tables/data-table/data-table";
 import { useDataTable } from "@/hooks/use-data-table";
+import { DataTableViewOptions } from "../data-table/data-table-view-options";
 import { meetingsAndEventsColumns, TMeetingsAndEvents } from "./columns";
 
 const data: TMeetingsAndEvents[] = [
@@ -28,7 +29,16 @@ const MeetingsAndEventsTable = () => {
         pageCount: 1,
     });
 
-    return <DataTable table={table} />;
+    return (
+        <section className="p-5">
+            <DataTable table={table} className="gap-5">
+                <div className="flex items-center justify-between">
+                    <h6 className="font-medium">Upcoming Meetings and Events</h6>
+                    <DataTableViewOptions table={table} align="end" />
+                </div>
+            </DataTable>
+        </section>
+    );
 };
 
 export default MeetingsAndEventsTable;
