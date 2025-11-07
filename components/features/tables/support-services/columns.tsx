@@ -9,16 +9,16 @@ import Status from "@/components/ui/icons/status";
 import Vendor from "@/components/ui/icons/vendor";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import AvailabilityTag from "../../dasboard/availability-tag";
+import StatusTag from "../../dasboard/status-tag";
 
-export type SupportService = {
+export type TSupportServices = {
     id: string;
     department: string;
     vendor: "Available" | "Not Available";
     status: "Available" | "Not Available";
 };
 
-export const columns: ColumnDef<SupportService>[] = [
+export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
     {
         accessorKey: "department",
         header: () => (
@@ -45,7 +45,7 @@ export const columns: ColumnDef<SupportService>[] = [
         cell: ({ row }) => {
             const isAvailable = row.original.vendor === "Available";
             return (
-                <AvailabilityTag
+                <StatusTag
                     status={
                         <span>
                             {row.original.vendor} {isAvailable && <span className="text-black/50">(Mon - Fri)</span>}
@@ -71,7 +71,7 @@ export const columns: ColumnDef<SupportService>[] = [
         cell: ({ row }) => {
             const isAvailable = row.original.status === "Available";
             return (
-                <AvailabilityTag
+                <StatusTag
                     status={
                         <span>
                             {row.original.status} {isAvailable && <span className="text-black/50">(Mon - Fri)</span>}

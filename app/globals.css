@@ -40,6 +40,15 @@
   /* Fonts */
   --font-sf-pro: var(--font-sf-pro);
   --font-instrument-sans: var(--font-instrument-sans);
+
+  /* Keyframes and animations */
+  --animate-marquee: marquee var(--speed, 30s) linear infinite var(--direction, normal);
+  
+    @keyframes marquee {
+    to {
+      transform: translateX(calc(-100% - var(--marquee-gap)));
+    }
+  }
 }
 
 :root {
@@ -58,7 +67,7 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: #626362;
   --accent-foreground: #33330A;
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: #BA0000;
   --border: #F5F5F5;
   --input: #F5F5F5;
   --ring: oklch(0.708 0 0);

@@ -1,11 +1,11 @@
 import { cn } from "@/lib/utils";
 import React from "react";
 
-interface IAvailabilityTag extends React.ComponentProps<"div"> {
+interface IStatusTag extends React.ComponentProps<"div"> {
     status: React.ReactNode;
 }
 
-const AvailabilityTag = ({ className, status }: IAvailabilityTag) => {
+const StatusTag = ({ className, status }: IStatusTag) => {
     return (
         <div className={cn("flex items-center gap-2", className)}>
             <div data-slot="indicator" className="inline-block size-2 rounded-xs" />
@@ -14,4 +14,4 @@ const AvailabilityTag = ({ className, status }: IAvailabilityTag) => {
     );
 };
 
-export default AvailabilityTag;
+export default StatusTag;

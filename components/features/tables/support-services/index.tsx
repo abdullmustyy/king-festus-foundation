@@ -2,9 +2,9 @@
 
 import { DataTable } from "@/components/features/tables/data-table/data-table";
 import { useDataTable } from "@/hooks/use-data-table";
-import { columns, SupportService } from "./columns";
+import { supportServicesColumns, TSupportServices } from "./columns";
 
-const data: SupportService[] = [
+const data: TSupportServices[] = [
     {
         id: "1",
         department: "Medicare Consultation",
@@ -46,7 +46,7 @@ const data: SupportService[] = [
 export function SupportServicesTable() {
     const { table } = useDataTable({
         data,
-        columns,
+        columns: supportServicesColumns,
         pageCount: 1,
     });
 
