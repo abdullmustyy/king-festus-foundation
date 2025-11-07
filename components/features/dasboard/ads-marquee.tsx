@@ -5,7 +5,7 @@ const AdsMarquee = ({ className }: React.ComponentProps<"aside">) => {
     return (
         <aside
             className={cn(
-                "bg-destructive lg:w-[calc(100%-var(--sidebar-width))] lg:px-15 z-80 hover:[&_:is(ul)]:paused",
+                "bg-destructive lg:w-[calc(100%-var(--sidebar-width))] lg:px-15 hover:[&_:is(ul)]:paused",
                 className,
             )}
         >
