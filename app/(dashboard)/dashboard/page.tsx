@@ -1,5 +1,5 @@
 import { SupportServicesTable } from "@/components/features/tables/support-services";
-// import { Suspense } from "react";
+import { Suspense } from "react";
 
 const DashboardPage = () => {
     return (
@@ -11,9 +11,9 @@ const DashboardPage = () => {
                 </div>
 
                 {/* Support Services Table */}
-                {/* <Suspense fallback={<div>Loading table...</div>}> */}
-                <SupportServicesTable />
-                {/* </Suspense> */}
+                <Suspense fallback={<></>}>
+                    <SupportServicesTable />
+                </Suspense>
             </section>
         </>
     );
