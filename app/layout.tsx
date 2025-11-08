@@ -1,4 +1,6 @@
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { instrumentSans, sfPro } from "./fonts";
@@ -16,10 +18,13 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={cn(sfPro.variable, instrumentSans.variable, "min-h-dvh flex flex-col")}>
-                <NuqsAdapter>{children}</NuqsAdapter>
-            </body>
-        </html>
+        <ClerkProvider>
+            <html lang="en">
+                <body className={cn(sfPro.variable, instrumentSans.variable, "min-h-dvh flex flex-col")}>
+                    <NuqsAdapter>{children}</NuqsAdapter>
+                    <Toaster />
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }

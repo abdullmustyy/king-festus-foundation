@@ -10,11 +10,23 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/lib/constants/dashboard";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { isMobile, setOpenMobile } = useSidebar();
+    const pathname = usePathname();
+
+    useEffect(() => {
+        if (isMobile) {
+            setOpenMobile(false);
+        }
+    }, [pathname, isMobile, setOpenMobile]);
+
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarContent>
@@ -38,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             <SidebarFooter>
                 <SidebarMenu>
-                    <NavUser user={sidebarLinks.user} className="border-t py-3 border-dashed" />
+                    <NavUser className="border-t py-3 border-dashed" />
                 </SidebarMenu>
             </SidebarFooter>
         </Sidebar>

@@ -16,7 +16,7 @@ interface FormFieldProps<T extends FieldValues>
         VariantProps<typeof fieldVariants> {
     name: Path<T>;
     control: Control<T>;
-    label?: string;
+    label?: React.ReactNode;
     children: (field: ControllerRenderProps<T, Path<T>>, fieldState: ControllerFieldState) => React.ReactNode;
 }
 

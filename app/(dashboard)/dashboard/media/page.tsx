@@ -41,7 +41,7 @@ const MediaPage = () => {
                 </div>
 
                 {/* Media gallery */}
-                <div className="columns-1 md:columns-2 lg:columns-3 2xl:columns-4 gap-2.5">
+                <div className="columns-2 lg:columns-3 2xl:columns-4 gap-2.5">
                     {gallery.map((image, index) => (
                         <div key={index} className="mb-2.5 break-inside-avoid">
                             <Image src={image} alt="" className="w-full h-auto" />

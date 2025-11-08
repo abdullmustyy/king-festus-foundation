@@ -13,7 +13,7 @@ const SiteHeader = () => {
                         <span className="text-sm font-medium uppercase">King Festus Foundation</span>
                     </div>
                 </Link>
-                
+
                 <SidebarTrigger className="lg:hidden" />
             </div>
         </header>

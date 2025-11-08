@@ -1,29 +1,30 @@
 "use client";
 
-import { IconCreditCard, IconLogout, IconNotification, IconUserCircle } from "@tabler/icons-react";
+import { useClerk, useUser } from "@clerk/nextjs";
+import { IconLogout } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { sidebarLinks } from "@/lib/constants/dashboard";
 import { cn } from "@/lib/utils";
 import { Ellipsis } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
 
-interface INavUserProps extends React.ComponentProps<typeof SidebarMenuItem> {
-    user: typeof sidebarLinks.user;
-}
-
-export function NavUser({ className, user }: INavUserProps) {
+export function NavUser({ className }: React.ComponentProps<typeof SidebarMenuItem>) {
     const { isMobile } = useSidebar();
+    const { user } = useUser();
+    const { signOut } = useClerk();
+    const router = useRouter();
+
+    if (!user) return null;
 
     return (
         <SidebarMenuItem className={cn(className)}>
@@ -31,10 +32,10 @@ export function NavUser({ className, user }: INavUserProps) {
                 <DropdownMenuTrigger asChild className="focus-visible:ring-0">
                     <SidebarMenuButton className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                         <Avatar className="size-6 rounded-lg grayscale">
-                            <AvatarImage src={user.avatar} alt={user.name} />
-                            <AvatarFallback className="rounded-lg text-xs">L</AvatarFallback>
+                            <AvatarImage src={user.imageUrl} alt={user.fullName ?? ""} />
+                            <AvatarFallback className="rounded-lg text-xs">{user.fullName?.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <span className="truncate font-medium text-sm">{user.name}</span>
+                        <span className="truncate font-medium text-sm">{user.fullName}</span>
 
                         <Ellipsis className="ml-auto size-3.75 text-[#71717A]" />
                     </SidebarMenuButton>
@@ -49,30 +50,15 @@ export function NavUser({ className, user }: INavUserProps) {
                     <DropdownMenuLabel className="p-0 font-normal">
                         <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                             <Avatar className="h-8 w-8 rounded-lg">
-                                <AvatarImage src={user.avatar} alt={user.name} />
-                                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                                <AvatarImage src={user.imageUrl} alt={user.fullName ?? ""} />
+                                <AvatarFallback className="rounded-lg">{user.fullName?.charAt(0)}</AvatarFallback>
                             </Avatar>
 
-                            <span className="truncate font-medium text-sm">{user.name}</span>
+                            <span className="truncate font-medium text-sm">{user.fullName}</span>
                         </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
-                        <DropdownMenuItem>
-                            <IconUserCircle />
-                            Account
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <IconCreditCard />
-                            Billing
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                            <IconNotification />
-                            Notifications
-                        </DropdownMenuItem>
-                    </DropdownMenuGroup>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => signOut(() => router.push("/auth/sign-in"))}>
                         <IconLogout />
                         Log out
                     </DropdownMenuItem>

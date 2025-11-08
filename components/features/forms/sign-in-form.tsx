@@ -7,13 +7,19 @@ import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { SignInFormSchema } from "@/lib/validators";
 import { TSignInForm } from "@/types";
+import { useSignIn } from "@clerk/nextjs";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 const SignInForm = () => {
+    const { isLoaded, signIn, setActive } = useSignIn();
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
 
     const form = useForm<TSignInForm>({
@@ -25,8 +31,42 @@ const SignInForm = () => {
         mode: "onChange",
     });
 
-    const onSubmit = (data: TSignInForm) => {
-        console.log(data);
+    const {
+        formState: { isSubmitting },
+    } = form;
+
+    const onSubmit = async (data: TSignInForm) => {
+        if (!isLoaded) return;
+
+        try {
+            const signInAttempt = await signIn.create({
+                identifier: data.email,
+                password: data.password,
+            });
+
+            if (signInAttempt.status === "complete") {
+                await setActive({
+                    session: signInAttempt.createdSessionId,
+                    navigate: async ({ session }) => {
+                        if (session?.currentTask) {
+                            console.log(session?.currentTask);
+                            return;
+                        }
+
+                        router.push("/dashboard");
+                    },
+                });
+            } else {
+                console.error(JSON.stringify(signInAttempt, null, 2));
+            }
+        } catch (err) {
+            console.error(JSON.stringify(err, null, 2));
+            if (isClerkAPIResponseError(err)) {
+                err.errors.forEach((error) => {
+                    toast.error(error.longMessage);
+                });
+            }
+        }
     };
 
     return (
@@ -106,7 +146,7 @@ const SignInForm = () => {
                     </FormField>
 
                     <Link
-                        href="/forgot-password"
+                        href="/auth/forgot-password"
                         className="shrink-0 font-medium font-sf-pro text-primary hover:underline"
                     >
                         Forgot password?
@@ -114,13 +154,13 @@ const SignInForm = () => {
                 </div>
             </FieldGroup>
 
-            <Button size="xl" className="w-full rounded-full">
+            <Button size="xl" className="w-full rounded-full" isLoading={isSubmitting}>
                 Login
             </Button>
 
             <p className="flex items-center justify-center gap-1.5">
                 Don&apos;t have an account?
-                <Link href="/sign-up" className="font-semibold text-primary hover:underline">
+                <Link href="/auth/sign-up" className="font-semibold text-primary hover:underline">
                     Signup here
                 </Link>
             </p>

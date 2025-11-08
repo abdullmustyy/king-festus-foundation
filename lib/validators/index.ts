@@ -1,26 +1,48 @@
 import * as z from "zod";
 
+const emailSchema = z.string().email("Invalid email address");
+const passwordSchema = z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(
+        /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+        "Password must include uppercase, lowercase, number, and special character",
+    );
+
 export const SignInFormSchema = z.object({
-    email: z.email("Please enter a valid email address."),
-    password: z.string().min(1, "Password is required."),
+    email: emailSchema,
+    password: z.string().min(1, "Password is required"),
     remember_me: z.boolean().default(false).optional(),
 });
 
 export const SignUpFormSchema = z
     .object({
-        email: z.email("Please enter a valid email address."),
-        password: z.string().min(8, "Password must be at least 8 characters long."),
-        confirm_password: z.string().min(8, "Confirm password must be at least 8 characters long."),
+        firstName: z.string().min(1, "First name is required"),
+        lastName: z.string().min(1, "Last name is required"),
+        email: emailSchema,
+        password: passwordSchema,
+        confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
     })
-    .refine((data) => data.password === data.confirm_password, {
-        message: "Passwords don't match.",
-        path: ["confirm_password"],
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
     });
 
 export const ForgotPasswordFormSchema = z.object({
-    email: z.email("Please enter a valid email address."),
+    email: emailSchema,
 });
 
-export const ResetPasswordFormSchema = z.object({
-    password: z.string().min(8, "Password must be at least 8 characters long."),
+export const ResetPasswordFormSchema = z
+    .object({
+        password: passwordSchema,
+        confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
+        code: z.string().min(6, "Code must be 6 characters"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+    });
+
+export const VerifyFormSchema = z.object({
+    pin: z.string().min(6, "PIN must be 6 characters"),
 });

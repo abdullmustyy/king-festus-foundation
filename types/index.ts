@@ -1,4 +1,4 @@
-import { ForgotPasswordFormSchema, ResetPasswordFormSchema, SignInFormSchema, SignUpFormSchema } from "@/lib/validators";
+import { ForgotPasswordFormSchema, ResetPasswordFormSchema, SignInFormSchema, SignUpFormSchema, VerifyFormSchema } from "@/lib/validators";
 import z from "zod";
 
 /**
@@ -20,3 +20,8 @@ export type TForgotPasswordForm = z.infer<typeof ForgotPasswordFormSchema>;
  * Represents the data structure for the reset password form, inferred from ResetPasswordFormSchema.
  */
 export type TResetPasswordForm = z.infer<typeof ResetPasswordFormSchema>;
+
+/**
+ * Represents the data structure for the verification form, inferred from VerifyFormSchema.
+ */
+export type TVerifyForm = z.infer<typeof VerifyFormSchema>;
