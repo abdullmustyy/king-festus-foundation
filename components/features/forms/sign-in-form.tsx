@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -27,9 +27,22 @@ const SignInForm = () => {
         defaultValues: {
             email: "",
             password: "",
+            rememberMe: false,
         },
         mode: "onChange",
     });
+
+    useEffect(() => {
+        const shouldRemember = localStorage.getItem("rememberMe") === "true";
+
+        if (shouldRemember) {
+            const rememberedEmail = localStorage.getItem("rememberedEmail");
+            if (rememberedEmail) {
+                form.setValue("email", rememberedEmail);
+                form.setValue("rememberMe", true);
+            }
+        }
+    }, [form]);
 
     const {
         formState: { isSubmitting },
@@ -37,6 +50,14 @@ const SignInForm = () => {
 
     const onSubmit = async (data: TSignInForm) => {
         if (!isLoaded) return;
+
+        if (data.rememberMe) {
+            localStorage.setItem("rememberedEmail", data.email);
+            localStorage.setItem("rememberMe", "true");
+        } else {
+            localStorage.removeItem("rememberedEmail");
+            localStorage.removeItem("rememberMe");
+        }
 
         try {
             const signInAttempt = await signIn.create({
@@ -128,7 +149,7 @@ const SignInForm = () => {
 
                 <div className="flex items-center justify-between">
                     <FormField
-                        name="remember_me"
+                        name="rememberMe"
                         control={form.control}
                         label="Remember me"
                         orientation="horizontal"

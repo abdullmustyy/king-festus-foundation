@@ -1,22 +1,12 @@
-"use client";
-
 import ResetPasswordForm from "@/components/features/forms/reset-password-form";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { redirect } from "next/navigation";
 
-const ResetPasswordPage = () => {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const email = searchParams.get("email");
-
-    useEffect(() => {
-        if (!email) {
-            router.push("/auth/forgot-password");
-        }
-    }, [email, router]);
+const ResetPasswordPage = async ({ searchParams }: { searchParams: Promise<{ email?: string }> }) => {
+    const params = await searchParams;
+    const email = params.email;
 
     if (!email) {
-        return null;
+        redirect("/auth/forgot-password");
     }
 
     return (

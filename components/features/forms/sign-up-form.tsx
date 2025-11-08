@@ -120,7 +120,7 @@ const SignUpForm = () => {
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    value={field.value as string}
+                                    value={field.value}
                                     type="text"
                                     aria-invalid={fieldState.invalid}
                                     className="bg-[#ECECEC] h-13 px-5 rounded-full"
@@ -144,7 +144,7 @@ const SignUpForm = () => {
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    value={field.value as string}
+                                    value={field.value}
                                     type="text"
                                     aria-invalid={fieldState.invalid}
                                     className="bg-[#ECECEC] h-13 px-5 rounded-full"
@@ -170,7 +170,7 @@ const SignUpForm = () => {
                             <Input
                                 {...field}
                                 id={field.name}
-                                value={field.value as string}
+                                value={field.value}
                                 type="email"
                                 aria-invalid={fieldState.invalid}
                                 className="bg-[#ECECEC] h-13 px-5 rounded-full"
@@ -196,7 +196,7 @@ const SignUpForm = () => {
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    value={field.value as string}
+                                    value={field.value}
                                     type={showPassword ? "text" : "password"}
                                     aria-invalid={fieldState.invalid}
                                     className="bg-[#ECECEC] h-13 px-5 rounded-full"
@@ -224,7 +224,7 @@ const SignUpForm = () => {
                                 <Input
                                     {...field}
                                     id={field.name}
-                                    value={field.value as string}
+                                    value={field.value}
                                     type={showConfirmPassword ? "text" : "password"}
                                     aria-invalid={fieldState.invalid}
                                     className="bg-[#ECECEC] h-13 px-5 rounded-full"

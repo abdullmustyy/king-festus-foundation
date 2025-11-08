@@ -12,7 +12,7 @@ const passwordSchema = z
 export const SignInFormSchema = z.object({
     email: emailSchema,
     password: z.string().min(1, "Password is required"),
-    remember_me: z.boolean().default(false).optional(),
+    rememberMe: z.boolean().default(false).optional(),
 });
 
 export const SignUpFormSchema = z
