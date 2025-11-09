@@ -1,12 +1,14 @@
 "use client";
 
 import { NavUser } from "@/components/features/dasboard/nav-user";
+import ArrowUpRight from "@/components/ui/icons/arrow-up-right";
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
+    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -29,7 +31,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     return (
         <Sidebar collapsible="offcanvas" {...props}>
-            <SidebarContent>
+            <SidebarContent className="gap-7.5 p-5">
+                {/* Main group */}
                 <SidebarGroup>
                     <SidebarGroupContent className="flex flex-col gap-2">
                         <SidebarMenu>
@@ -38,7 +41,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                     <SidebarMenuButton tooltip={item.title} asChild>
                                         <Link href={item.url}>
                                             {item.icon && <item.icon />}
+
                                             <span>{item.title}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+
+                {/* Support apps group */}
+                <SidebarGroup>
+                    <SidebarGroupContent className="flex flex-col gap-2.5">
+                        <SidebarGroupLabel className="h-auto">Support apps</SidebarGroupLabel>
+                        <SidebarMenu>
+                            {sidebarLinks.supportApps.map((item) => (
+                                <SidebarMenuItem key={item.title}>
+                                    <SidebarMenuButton
+                                        tooltip={item.title}
+                                        className="hover:bgtransparent h-auto justify-between"
+                                        asChild
+                                    >
+                                        <Link href={item.url} target="_blank">
+                                            <span>{item.title}</span>
+                                            <ArrowUpRight className="size-4" />
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -50,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             <SidebarFooter>
                 <SidebarMenu>
-                    <NavUser className="border-t py-3 border-dashed" />
+                    <NavUser className="border-t border-dashed py-3" />
                 </SidebarMenu>
             </SidebarFooter>
         </Sidebar>

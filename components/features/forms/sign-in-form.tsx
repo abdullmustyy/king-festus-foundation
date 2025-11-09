@@ -107,10 +107,10 @@ const SignInForm = () => {
                                 value={field.value as string}
                                 type="email"
                                 aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                className="h-13 rounded-full bg-[#ECECEC] px-5"
                             />
                             {!fieldState.invalid && fieldState.isDirty && (
-                                <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                                <div className="pointer-events-none absolute right-4 flex size-9 items-center justify-center">
                                     <Check className="size-4 text-primary" />
                                 </div>
                             )}
@@ -132,7 +132,7 @@ const SignInForm = () => {
                                 value={field.value as string}
                                 type={showPassword ? "text" : "password"}
                                 aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                className="h-13 rounded-full bg-[#ECECEC] px-5"
                             />
                             <Button
                                 type="button"
@@ -168,7 +168,7 @@ const SignInForm = () => {
 
                     <Link
                         href="/auth/forgot-password"
-                        className="shrink-0 font-medium font-sf-pro text-primary hover:underline"
+                        className="shrink-0 font-sf-pro font-medium text-primary hover:underline"
                     >
                         Forgot password?
                     </Link>

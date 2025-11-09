@@ -14,4 +14,12 @@ export const sidebarLinks = {
             icon: Image,
         },
     ],
+
+    supportApps: [
+        { title: "Microsoft Outlook", url: "" },
+        { title: "Microsoft Excel", url: "" },
+        { title: "Microsoft PowerPoint", url: "" },
+        { title: "Microsoft Word", url: "" },
+        { title: "Microsoft 365 Apps (Suite Page)", url: "" },
+    ],
 };

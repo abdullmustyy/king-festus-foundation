@@ -108,7 +108,7 @@ const SignUpForm = () => {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 lg:px-6">
             <FieldGroup className="gap-3">
-                <div className="grid lg:grid-cols-2 gap-3">
+                <div className="grid gap-3 lg:grid-cols-2">
                     <FormField
                         name="firstName"
                         control={form.control}
@@ -123,10 +123,10 @@ const SignUpForm = () => {
                                     value={field.value}
                                     type="text"
                                     aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                    className="h-13 rounded-full bg-[#ECECEC] px-5"
                                 />
                                 {!fieldState.invalid && fieldState.isDirty && (
-                                    <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                                    <div className="pointer-events-none absolute right-4 flex size-9 items-center justify-center">
                                         <Check className="size-4 text-primary" />
                                     </div>
                                 )}
@@ -147,10 +147,10 @@ const SignUpForm = () => {
                                     value={field.value}
                                     type="text"
                                     aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                    className="h-13 rounded-full bg-[#ECECEC] px-5"
                                 />
                                 {!fieldState.invalid && fieldState.isDirty && (
-                                    <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                                    <div className="pointer-events-none absolute right-4 flex size-9 items-center justify-center">
                                         <Check className="size-4 text-primary" />
                                     </div>
                                 )}
@@ -173,10 +173,10 @@ const SignUpForm = () => {
                                 value={field.value}
                                 type="email"
                                 aria-invalid={fieldState.invalid}
-                                className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                className="h-13 rounded-full bg-[#ECECEC] px-5"
                             />
                             {!fieldState.invalid && fieldState.isDirty && (
-                                <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                                <div className="pointer-events-none absolute right-4 flex size-9 items-center justify-center">
                                     <Check className="size-4 text-primary" />
                                 </div>
                             )}
@@ -184,7 +184,7 @@ const SignUpForm = () => {
                     )}
                 </FormField>
 
-                <div className="grid lg:grid-cols-2 gap-3">
+                <div className="grid gap-3 lg:grid-cols-2">
                     <FormField
                         name="password"
                         control={form.control}
@@ -199,7 +199,7 @@ const SignUpForm = () => {
                                     value={field.value}
                                     type={showPassword ? "text" : "password"}
                                     aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                    className="h-13 rounded-full bg-[#ECECEC] px-5"
                                 />
                                 <Button
                                     type="button"
@@ -227,7 +227,7 @@ const SignUpForm = () => {
                                     value={field.value}
                                     type={showConfirmPassword ? "text" : "password"}
                                     aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                    className="h-13 rounded-full bg-[#ECECEC] px-5"
                                 />
                                 <Button
                                     type="button"
