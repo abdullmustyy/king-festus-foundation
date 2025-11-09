@@ -46,3 +46,15 @@ export const ResetPasswordFormSchema = z
 export const VerifyFormSchema = z.object({
     pin: z.string().min(6, "PIN must be 6 characters"),
 });
+
+const MAX_FILE_SIZE = 500000; // 500KB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+export const AddImageFormSchema = z.object({
+    image: z
+        .any()
+        .refine((file) => file, "Image is required.")
+        .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 500KB.`)
+        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
+    description: z.string().optional(),
+});

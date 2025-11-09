@@ -23,7 +23,6 @@ const ForgotPasswordForm = () => {
         defaultValues: {
             email: "",
         },
-        mode: "onChange",
     });
 
     const {
@@ -60,10 +59,10 @@ const ForgotPasswordForm = () => {
                             value={field.value}
                             type="email"
                             aria-invalid={fieldState.invalid}
-                            className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                            className="h-13 rounded-full bg-[#ECECEC] px-5"
                         />
                         {!fieldState.invalid && fieldState.isDirty && (
-                            <div className="pointer-events-none absolute right-4 size-9 flex items-center justify-center">
+                            <div className="pointer-events-none absolute right-4 flex size-9 items-center justify-center">
                                 <Check className="size-4 text-primary" />
                             </div>
                         )}

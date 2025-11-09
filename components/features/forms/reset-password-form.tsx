@@ -31,7 +31,6 @@ const ResetPasswordForm = () => {
             confirmPassword: "",
             code: "",
         },
-        mode: "onChange",
     });
 
     const {
@@ -67,7 +66,7 @@ const ResetPasswordForm = () => {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 lg:px-6">
             <FieldGroup className="gap-3">
-                <div className="grid lg:grid-cols-2 gap-3">
+                <div className="grid gap-3 lg:grid-cols-2">
                     <FormField
                         name="password"
                         control={form.control}
@@ -82,7 +81,7 @@ const ResetPasswordForm = () => {
                                     value={field.value}
                                     type={showPassword ? "text" : "password"}
                                     aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                    className="h-13 rounded-full bg-[#ECECEC] px-5"
                                 />
                                 <Button
                                     type="button"
@@ -111,7 +110,7 @@ const ResetPasswordForm = () => {
                                     value={field.value}
                                     type={showConfirmPassword ? "text" : "password"}
                                     aria-invalid={fieldState.invalid}
-                                    className="bg-[#ECECEC] h-13 px-5 rounded-full"
+                                    className="h-13 rounded-full bg-[#ECECEC] px-5"
                                 />
                                 <Button
                                     type="button"
@@ -141,7 +140,7 @@ const ResetPasswordForm = () => {
                                         key={index}
                                         index={index}
                                         aria-invalid={fieldState.invalid}
-                                        className="w-full h-13"
+                                        className="h-13 w-full"
                                     />
                                 ))}
                             </InputOTPGroup>

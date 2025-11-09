@@ -33,7 +33,6 @@ const SignUpForm = () => {
             password: "",
             confirmPassword: "",
         },
-        mode: "onChange",
     });
 
     const {

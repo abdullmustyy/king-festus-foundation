@@ -29,7 +29,6 @@ const SignInForm = () => {
             password: "",
             rememberMe: false,
         },
-        mode: "onChange",
     });
 
     useEffect(() => {
