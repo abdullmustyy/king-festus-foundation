@@ -52,9 +52,9 @@ export function SupportServicesTable() {
     });
 
     return (
-        <section className="p-5">
-            <DataTable table={table} className="gap-5">
-                <div className="flex items-center justify-between">
+        <section className="py-5">
+            <DataTable table={table} className="gap-5 lg:px-5">
+                <div className="flex items-center justify-between px-4 lg:p-0">
                     <h6 className="font-medium">Support Services</h6>
                     <DataTableViewOptions table={table} align="end" />
                 </div>

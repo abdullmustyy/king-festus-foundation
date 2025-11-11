@@ -15,7 +15,6 @@ interface IMediaGalleryProps {
 
 const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
     const [open, setOpen] = useState(false);
-    console.log("Gallery: ", gallery);
 
     return (
         <>
@@ -29,9 +28,9 @@ const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
                 </div>
 
                 {/* Media gallery */}
-                <div className="columns-2 gap-2.5 lg:columns-3 2xl:columns-4">
+                <div className="columns-2 gap-1.5 lg:columns-3 lg:gap-2.5 2xl:columns-4">
                     {gallery.map(({ key, name }) => (
-                        <div key={key} className="relative mb-2.5 break-inside-avoid">
+                        <div key={key} className="relative mb-1.5 break-inside-avoid lg:mb-2.5">
                             <Image
                                 src={`https://hcyular991.ufs.sh/f/${key}`}
                                 alt={name}

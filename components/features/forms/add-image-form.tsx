@@ -100,11 +100,12 @@ const AddImageForm = ({ setOpen }: IAddImageFormProps) => {
                                                     <Download className="size-3.75" />
                                                     Import Files
                                                 </Button>
-                                                <p className="text-sm text-[#71717A]">
+                                                <p className="hidden text-sm text-[#71717A] lg:block">
                                                     {isDragging
                                                         ? "Drop files here"
                                                         : "Drag and drop files here or click to upload"}
                                                 </p>
+                                                <p className="text-sm text-[#71717A] lg:hidden">Click to upload</p>
                                             </>
                                         )}
                                     </div>

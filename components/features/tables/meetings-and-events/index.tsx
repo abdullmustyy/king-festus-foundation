@@ -30,9 +30,9 @@ const MeetingsAndEventsTable = () => {
     });
 
     return (
-        <section className="p-5">
-            <DataTable table={table} className="gap-5">
-                <div className="flex items-center justify-between">
+        <section className="y-5">
+            <DataTable table={table} className="gap-5 lg:px-5">
+                <div className="flex items-center justify-between px-4 lg:p-0">
                     <h6 className="font-medium">Upcoming Meetings and Events</h6>
                     <DataTableViewOptions table={table} align="end" />
                 </div>

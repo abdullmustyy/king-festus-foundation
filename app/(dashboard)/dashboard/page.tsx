@@ -13,8 +13,8 @@ const DashboardPage = () => {
             </Suspense>
 
             {/* Media */}
-            <section className="p-5">
-                <div className="h-65.5 rounded-[20px] overflow-hidden">
+            <section className="px-4 py-5 lg:px-5">
+                <div className="h-65.5 overflow-hidden rounded-[20px]">
                     <Image src={DashboardVolunteerImage} alt="" className="size-full object-cover" />
                 </div>
             </section>
