@@ -16,10 +16,10 @@ import { toast } from "sonner";
 import UploadMediaTrigger from "../../ui/upload-media-trigger";
 
 interface IAddImageFormProps extends React.ComponentProps<"form"> {
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    onUploadComplete: () => void;
 }
 
-const AddImageForm = ({ setOpen }: IAddImageFormProps) => {
+const AddImageForm = ({ onUploadComplete }: IAddImageFormProps) => {
     const form = useForm<TAddImageForm>({
         resolver: zodResolver(AddImageFormSchema),
         defaultValues: {
@@ -47,12 +47,12 @@ const AddImageForm = ({ setOpen }: IAddImageFormProps) => {
                     localStorage.setItem("gallery", JSON.stringify(existingGallery));
 
                     toast.success("Image uploaded and added to gallery!");
-                    setOpen(false);
+                    onUploadComplete();
                 }
             } else {
                 // Handle case where only description is provided
                 toast.success("Description saved!");
-                setOpen(false);
+                onUploadComplete();
             }
         } catch (err) {
             console.error(err);

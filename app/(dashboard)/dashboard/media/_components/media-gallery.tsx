@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { DialogClose } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface IMediaGalleryProps {
@@ -15,6 +16,12 @@ interface IMediaGalleryProps {
 
 const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
     const [open, setOpen] = useState(false);
+    const { refresh } = useRouter();
+
+    const onUploadComplete = () => {
+        setOpen(false);
+        refresh();
+    };
 
     return (
         <>
@@ -31,12 +38,7 @@ const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
                 <div className="columns-2 gap-1.5 lg:columns-3 lg:gap-2.5 2xl:columns-4">
                     {gallery.map(({ key, name }) => (
                         <div key={key} className="relative mb-1.5 break-inside-avoid lg:mb-2.5">
-                            <Image
-                                src={`https://hcyular991.ufs.sh/f/${key}`}
-                                alt={name}
-                                className="h-auto w-full"
-                                fill
-                            />
+                            <Image src={`https://hcyular991.ufs.sh/f/${key}`} alt={name} height={500} width={500} />
                         </div>
                     ))}
                 </div>
@@ -60,7 +62,7 @@ const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
                         </div>
                     </DialogHeader>
 
-                    <AddImageForm setOpen={setOpen} />
+                    <AddImageForm onUploadComplete={onUploadComplete} />
                 </DialogContent>
             </Dialog>
         </>
