@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
-import { UploadThingError } from "uploadthing/server";
+import { UploadThingError, UTApi } from "uploadthing/server";
 
 const f = createUploadthing();
 
@@ -17,5 +17,7 @@ export const ourFileRouter = {
             return { uploadedBy: metadata.userId, url: file.ufsUrl };
         }),
 } satisfies FileRouter;
+
+export const utapi = new UTApi();
 
 export type OurFileRouter = typeof ourFileRouter;
