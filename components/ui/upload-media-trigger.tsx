@@ -7,17 +7,16 @@ import Dropzone, { DropzoneProps, FileRejection } from "react-dropzone";
 import { FieldValues, Path, useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 
-type IUploadMediaTriggerProps<T extends FieldValues, K extends Path<T>> = Omit<HTMLAttributes<HTMLElement>, "children"> & {
+type IUploadMediaTriggerProps<T extends FieldValues, K extends Path<T>> = Omit<
+    HTMLAttributes<HTMLElement>,
+    "children"
+> & {
     accept?: DropzoneProps["accept"];
     maxSize?: DropzoneProps["maxSize"];
     disabled?: DropzoneProps["disabled"];
     multiple?: boolean;
     name: K;
-    children: (props: {
-        isDragging: boolean;
-        file: File | null;
-        preview: string | null;
-    }) => React.ReactNode;
+    children: (props: { isDragging: boolean; file: File | null; preview: string | null }) => React.ReactNode;
 };
 
 const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({

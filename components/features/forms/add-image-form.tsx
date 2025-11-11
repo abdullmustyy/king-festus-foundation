@@ -5,6 +5,7 @@ import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import InfoCircle from "@/components/ui/icons/info-circle";
 import { Textarea } from "@/components/ui/textarea";
+import { uploadFiles } from "@/lib/uploadthing";
 import { AddImageFormSchema } from "@/lib/validators";
 import { TAddImageForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,11 @@ import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import UploadMediaTrigger from "../../ui/upload-media-trigger";
 
-const AddImageForm = () => {
+interface IAddImageFormProps extends React.ComponentProps<"form"> {
+    onImageAdded: () => void;
+}
+
+const AddImageForm = ({ onImageAdded }: IAddImageFormProps) => {
     const form = useForm<TAddImageForm>({
         resolver: zodResolver(AddImageFormSchema),
         defaultValues: {
@@ -29,12 +34,29 @@ const AddImageForm = () => {
 
     const onSubmit = async (data: TAddImageForm) => {
         try {
-            // TODO: Handle image upload
-            console.log(data);
-            toast.success("Image added successfully!");
+            if (data.image) {
+                const res = await uploadFiles("imageUploader", {
+                    files: [data.image],
+                });
+
+                if (res && res.length > 0) {
+                    const [{ ufsUrl: uploadedFileUrl }] = res;
+
+                    const existingGallery = JSON.parse(localStorage.getItem("gallery") || "[]");
+                    existingGallery.push(uploadedFileUrl);
+                    localStorage.setItem("gallery", JSON.stringify(existingGallery));
+
+                    toast.success("Image uploaded and added to gallery!");
+                    onImageAdded();
+                }
+            } else {
+                // Handle case where only description is provided
+                toast.success("Description saved!");
+                onImageAdded();
+            }
         } catch (err) {
             console.error(err);
-            toast.error("Failed to add image.");
+            toast.error("Failed to upload image.");
         }
     };
 
@@ -61,7 +83,7 @@ const AddImageForm = () => {
                         className="*:data-[slot='field-label']:text-foreground/50"
                     >
                         {() => (
-                            <UploadMediaTrigger name="image">
+                            <UploadMediaTrigger name="image" disabled={isSubmitting}>
                                 {({ isDragging, preview }) => (
                                     <div className="grid h-58.5 place-content-center gap-1 rounded-lg border border-dashed border-[#D4D4D8] bg-[#FAFAFA] px-8 py-6 text-center">
                                         {preview ? (
@@ -96,7 +118,9 @@ const AddImageForm = () => {
                             <Textarea
                                 {...field}
                                 id={field.name}
+                                value={field.value as string}
                                 placeholder="Description"
+                                disabled={isSubmitting}
                                 aria-invalid={fieldState.invalid}
                                 className="h-21 resize-none"
                             />

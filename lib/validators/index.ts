@@ -52,7 +52,7 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 
 export const AddImageFormSchema = z.object({
     image: z
-        .any()
+        .instanceof(File)
         .refine((file) => file, "Image is required.")
         .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 500KB.`)
         .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
