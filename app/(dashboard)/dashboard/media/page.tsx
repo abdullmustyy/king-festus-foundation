@@ -1,10 +1,10 @@
-import { utapi } from "@/app/api/uploadthing/core";
+import db from "@/lib/db";
 import MediaGallery from "./_components/media-gallery";
 
 const MediaPage = async () => {
-    const gallery = (await utapi.listFiles()).files;
+    const mediaPromise = db.media.findMany();
 
-    return <MediaGallery gallery={gallery} />;
+    return <MediaGallery mediaPromise={mediaPromise} />;
 };
 
 export default MediaPage;

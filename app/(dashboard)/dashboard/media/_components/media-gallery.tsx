@@ -1,21 +1,23 @@
 "use client";
 
-import { utapi } from "@/app/api/uploadthing/core";
 import AddImageForm from "@/components/features/forms/add-image-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Media } from "@/generated/prisma/client";
+import { PrismaPromise } from "@/generated/prisma/internal/prismaNamespace";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
 
 interface IMediaGalleryProps {
-    gallery: Awaited<ReturnType<typeof utapi.listFiles>>["files"];
+    mediaPromise: PrismaPromise<Media[]>;
 }
 
-const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
+const MediaGallery = ({ mediaPromise }: IMediaGalleryProps) => {
     const [open, setOpen] = useState(false);
+    const media = use(mediaPromise);
     const { refresh } = useRouter();
 
     const onUploadComplete = () => {
@@ -36,9 +38,9 @@ const MediaGallery = ({ gallery }: IMediaGalleryProps) => {
 
                 {/* Media gallery */}
                 <div className="columns-2 gap-1.5 lg:columns-3 lg:gap-2.5 2xl:columns-4">
-                    {gallery.map(({ key, name }) => (
-                        <div key={key} className="relative mb-1.5 break-inside-avoid lg:mb-2.5">
-                            <Image src={`https://hcyular991.ufs.sh/f/${key}`} alt={name} height={500} width={500} />
+                    {media.map(({ id, url, description }) => (
+                        <div key={id} className="relative mb-1.5 break-inside-avoid lg:mb-2.5">
+                            <Image src={url} alt={description ?? ""} height={500} width={500} />
                         </div>
                     ))}
                 </div>

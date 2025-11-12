@@ -37,15 +37,12 @@ const AddImageForm = ({ onUploadComplete }: IAddImageFormProps) => {
             if (data.image) {
                 const res = await uploadFiles("imageUploader", {
                     files: [data.image],
+                    input: {
+                        description: data.description,
+                    },
                 });
 
                 if (res && res.length > 0) {
-                    const [{ ufsUrl: uploadedFileUrl }] = res;
-
-                    const existingGallery = JSON.parse(localStorage.getItem("gallery") || "[]");
-                    existingGallery.push(uploadedFileUrl);
-                    localStorage.setItem("gallery", JSON.stringify(existingGallery));
-
                     toast.success("Image uploaded and added to gallery!");
                     onUploadComplete();
                 }

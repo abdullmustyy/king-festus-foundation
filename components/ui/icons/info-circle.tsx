@@ -9,7 +9,7 @@ const InfoCircle = ({ className, ...rest }: React.SVGProps<SVGSVGElement>) => {
             className={className}
             {...rest}
         >
-            <g clip-path="url(#clip0_508_1904)">
+            <g clipPath="url(#clip0_508_1904)">
                 <path
                     fillRule="evenodd"
                     clipRule="evenodd"

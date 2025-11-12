@@ -1,5 +1,6 @@
 onlyBuiltDependencies:
   - '@clerk/shared'
+  - '@prisma/client'
   - msgpackr-extract
   - sharp
   - unrs-resolver
