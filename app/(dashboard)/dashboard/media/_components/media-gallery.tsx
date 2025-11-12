@@ -58,7 +58,7 @@ const MediaGallery = ({ mediaPromise }: IMediaGalleryProps) => {
                             <DialogClose asChild>
                                 <X className="size-3.75 cursor-pointer text-[#52525B]" />
                             </DialogClose>
-                            <div className="flex h-4 items-center justify-center rounded-sm border border-[#E4E4E7] bg-[#FAFAFA] px-1">
+                            <div className="hidden h-4 items-center justify-center rounded-sm border border-[#E4E4E7] bg-[#FAFAFA] px-1 lg:flex">
                                 <span className="text-xs font-medium text-[#52525B]">esc</span>
                             </div>
                         </div>
