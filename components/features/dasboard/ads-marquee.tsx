@@ -9,7 +9,7 @@ const AdsMarquee = ({ className }: React.ComponentProps<"aside">) => {
                 className,
             )}
         >
-            <div className="h-13.5 flex items-center gap-(--marquee-gap) text-white overflow-hidden [--direction:alternate] [--marquee-gap:calc(var(--spacing)*5)]">
+            <div className="h-13.5 flex items-center gap-(--marquee-gap) text-white overflow-hidden mask-x-from-90% [--direction:alternate] [--marquee-gap:calc(var(--spacing)*5)]">
                 {Array.from({ length: 2 }, (_, index) => (
                     <ul key={index} className="flex items-center gap-(--marquee-gap) whitespace-nowrap animate-marquee">
                         {Array.from({ length: 8 }, (_, index) => (

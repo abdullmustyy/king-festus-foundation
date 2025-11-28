@@ -13,6 +13,11 @@ export const sidebarLinks = {
             url: "/dashboard/media",
             icon: Image,
         },
+        {
+            title: "CMS",
+            url: "/dashboard/cms",
+            icon: Image,
+        },
     ],
 
     supportApps: [

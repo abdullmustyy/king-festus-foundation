@@ -1,4 +1,4 @@
-const Calendar = ({ className, ...rest }: React.SVGProps<SVGSVGElement>) => {
+const CalendarClock = ({ className, ...rest }: React.SVGProps<SVGSVGElement>) => {
     return (
         <svg
             width="20"
@@ -17,4 +17,4 @@ const Calendar = ({ className, ...rest }: React.SVGProps<SVGSVGElement>) => {
     );
 };
 
-export default Calendar;
+export default CalendarClock;

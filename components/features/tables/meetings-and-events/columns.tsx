@@ -2,7 +2,7 @@
 
 import { type ColumnDef } from "@tanstack/react-table";
 
-import Calendar from "@/components/ui/icons/calendar";
+import CalendarClock from "@/components/ui/icons/calendar-clock";
 import Department from "@/components/ui/icons/department";
 import Host from "@/components/ui/icons/host";
 import Status from "@/components/ui/icons/status";
@@ -22,7 +22,7 @@ export const meetingsAndEventsColumns: ColumnDef<TMeetingsAndEvents>[] = [
         accessorKey: "date_time",
         header: () => (
             <div className="flex items-center gap-1.5 text-black/50">
-                <Calendar className="size-5" />
+                <CalendarClock className="size-5" />
                 <span>Date and Time</span>
             </div>
         ),
