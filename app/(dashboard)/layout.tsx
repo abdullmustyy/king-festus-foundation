@@ -18,7 +18,7 @@ const DashboardLayout = ({
         >
             <AppSidebar />
 
-            <main className="relative flex w-full flex-1 flex-col bg-white pb-13.5">
+            <main className="relative flex w-full flex-1 flex-col pb-13.5">
                 <SiteHeader />
 
                 {children}

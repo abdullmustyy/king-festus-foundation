@@ -5,7 +5,7 @@ interface ISectionTagProps extends React.ComponentProps<"div"> {
 }
 
 const SectionTag = ({ className, tag }: ISectionTagProps) => {
-    return <div className={cn("w-fit px-2.5 py-1.5 bg-primary/10 border-x border-primary text-sm", className)}>{tag}</div>;
+    return <div className={cn("w-fit bg-primary/10 px-2.5 py-1.5 text-sm", className)}>{tag}</div>;
 };
 
 export default SectionTag;

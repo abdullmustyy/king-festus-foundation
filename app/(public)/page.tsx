@@ -13,7 +13,7 @@ const HomePage = () => {
                 <div className="space-y-2.5">
                     <SectionTag tag="INTRODUCING King Festus Foundation" className="uppercase" />
                     <div className="space-y-5">
-                        <h1 className="lg:text-6xl text-5xl leading-[100%]">Empowering progress through purpose</h1>
+                        <h1 className="text-5xl leading-[100%]">Empowering progress through purpose</h1>
                         <p className="text-xl text-foreground/50">
                             King Festus Foundation was established in 2021 to support a network of related families
                             towards achieving stable, middle-class livelihoods through facilitation of free medical and

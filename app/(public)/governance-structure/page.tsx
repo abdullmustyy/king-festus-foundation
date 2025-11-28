@@ -13,9 +13,27 @@ const governance = [
 
 const GovernanceStructurePage = () => {
     return (
-        <section className="w-contain py-10">
-            <div className="flex flex-col items-center gap-12.5">
+        <section className="w-contain py-10 flex flex-col gap-8">
+            <div className="flex flex-col items-center gap-8">
                 <h3 className="text-3xl text-center">Governance & organisational structure</h3>
+
+                <div className="grid lg:grid-cols-6 grid-cols-2 lg:gap-12.5 gap-4">
+                    {governance.map(({ image, name, position }, index) => (
+                        <div key={name + index} className="flex flex-col gap-5">
+                            <div>
+                                <Image src={image} alt={name} className="size-full object-cover" />
+                            </div>
+                            <div className="text-center flex flex-col gap-1">
+                                <span className="text-xl font-medium text-primary">{name}</span>
+                                <span className="text-foreground/50">{position}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-8">
+                <h3 className="text-3xl text-center">Support structure</h3>
 
                 <div className="grid lg:grid-cols-6 grid-cols-2 lg:gap-12.5 gap-4">
                     {governance.map(({ image, name, position }, index) => (
