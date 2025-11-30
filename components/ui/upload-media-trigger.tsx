@@ -30,7 +30,7 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
     disabled,
 }: IUploadMediaTriggerProps<T, K>) => {
     const { register, unregister, setValue, watch } = useFormContext<T>();
-    const file = watch(name);
+    const file: File = watch(name);
 
     const [preview, setPreview] = useState<string | null>(null);
 
@@ -58,15 +58,14 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
                 return;
             }
 
-            const file = acceptedFiles[0];
-            setValue(name, file as T[K], { shouldValidate: true });
+            const acceptedFile = acceptedFiles[0];
+            setValue(name, acceptedFile as T[K], { shouldValidate: true });
 
-            if (preview) {
-                URL.revokeObjectURL(preview);
-            }
-            setPreview(URL.createObjectURL(file));
+            // The useEffect below will handle setting the preview URL,
+            // so we don't need to do it here directly.
+            // Old: if (preview) { URL.revokeObjectURL(preview); } setPreview(URL.createObjectURL(file));
         },
-        [maxSize, name, setValue, preview],
+        [maxSize, name, setValue],
     );
 
     useEffect(() => {
@@ -76,20 +75,25 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
         };
     }, [register, unregister, name]);
 
+    // Effect to sync internal preview state with the form's watched file value
+    const isFileInstance = file instanceof File;
+
     useEffect(() => {
-        return () => {
-            if (preview) {
-                URL.revokeObjectURL(preview);
-            }
-        };
-    }, [preview]);
+        if (isFileInstance) {
+            const objectUrl = URL.createObjectURL(file);
+            setPreview(objectUrl);
+            return () => URL.revokeObjectURL(objectUrl);
+        } else {
+            setPreview(null);
+        }
+    }, [file, isFileInstance]);
 
     return (
         <Dropzone accept={accept} maxFiles={1} maxSize={maxSize} onDrop={handleDrop} disabled={disabled}>
             {({ getRootProps, getInputProps, isDragActive }) => (
                 <div {...getRootProps()} className={cn(className)}>
                     <input {...getInputProps()} />
-                    {children({ isDragging: isDragActive, file, preview })}
+                    {children({ isDragging: isDragActive, file: isFileInstance ? file : null, preview })}
                 </div>
             )}
         </Dropzone>

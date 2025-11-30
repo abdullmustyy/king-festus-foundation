@@ -48,6 +48,7 @@ export const VerifyFormSchema = z.object({
 });
 
 const MAX_FILE_SIZE = 500000; // 500KB
+const MAX_CMS_FILE_SIZE = 3 * 1024 * 1024; // 3MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 export const AddImageFormSchema = z.object({
@@ -57,4 +58,12 @@ export const AddImageFormSchema = z.object({
         .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 500KB.`)
         .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
     description: z.string().optional(),
+});
+
+export const LandingPageMediaFormSchema = z.object({
+    image: z
+        .instanceof(File, { error: "Image is required." })
+        .refine((file) => file, "Image is required.")
+        .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
+        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
 });

@@ -1,6 +1,7 @@
 import {
     AddImageFormSchema,
     ForgotPasswordFormSchema,
+    LandingPageMediaFormSchema,
     ResetPasswordFormSchema,
     SignInFormSchema,
     SignUpFormSchema,
@@ -37,3 +38,8 @@ export type TVerifyForm = z.infer<typeof VerifyFormSchema>;
  * Represents the data structure for the add image form, inferred from AddImageFormSchema.
  */
 export type TAddImageForm = z.infer<typeof AddImageFormSchema>;
+
+/**
+ * Represents the data structure for the landing page media form, inferred from LandingPageMediaFormSchema.
+ */
+export type TLandingPageMediaForm = z.infer<typeof LandingPageMediaFormSchema>;
