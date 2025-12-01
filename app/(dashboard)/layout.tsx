@@ -1,4 +1,4 @@
-import AdsMarquee from "@/components/features/dasboard/ads-marquee";
+import AdsMarquee from "@/components/features/dashboard/ads-marquee";
 import { AppSidebar } from "@/components/layout/dashboard/app-sidebar";
 import SiteHeader from "@/components/layout/dashboard/site-header";
 import { SidebarProvider } from "@/components/ui/sidebar";

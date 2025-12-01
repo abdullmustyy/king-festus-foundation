@@ -1,6 +1,8 @@
 import ResetPasswordForm from "@/components/features/forms/reset-password-form";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 const ResetPasswordPage = async ({ searchParams }: { searchParams: Promise<{ email?: string }> }) => {
     const params = await searchParams;
     const email = params.email;

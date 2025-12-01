@@ -70,7 +70,7 @@ const AddImageForm = ({ onUploadComplete }: IAddImageFormProps) => {
                                     <span className="text-[#18181B]">
                                         Media <span className="text-[#71717A]">(Optional)</span>
                                     </span>
-                                    <InfoCircle />
+                                    <InfoCircle className="text-[#71717A]" />
                                 </div>
                                 <p className="text-sm font-normal text-[#52525B]">
                                     Max file size is 500kb. Supported file types are .jpg and .png.

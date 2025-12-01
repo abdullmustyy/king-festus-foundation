@@ -7,7 +7,7 @@ import Department from "@/components/ui/icons/department";
 import Host from "@/components/ui/icons/host";
 import Status from "@/components/ui/icons/status";
 import { cn } from "@/lib/utils";
-import StatusTag from "../../dasboard/status-tag";
+import StatusTag from "../../dashboard/status-tag";
 
 export type TMeetingsAndEvents = {
     id: string;

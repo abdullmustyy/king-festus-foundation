@@ -9,7 +9,7 @@ import Status from "@/components/ui/icons/status";
 import Vendor from "@/components/ui/icons/vendor";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import StatusTag from "../../dasboard/status-tag";
+import StatusTag from "../../dashboard/status-tag";
 
 export type TSupportServices = {
     id: string;
@@ -112,7 +112,7 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                             href=""
                             className={cn(
                                 buttonVariants({ size: "sm" }),
-                                "bg-primary/20 hover:bg-primary/10 text-primary rounded-full",
+                                "rounded-full bg-primary/20 text-primary hover:bg-primary/10",
                             )}
                         >
                             Schedule meeting
@@ -121,7 +121,7 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                             href=""
                             className={cn(
                                 buttonVariants({ size: "sm" }),
-                                "bg-primary/20 hover:bg-primary/10 text-primary rounded-full",
+                                "rounded-full bg-primary/20 text-primary hover:bg-primary/10",
                             )}
                         >
                             Send mail

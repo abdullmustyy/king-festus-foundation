@@ -1,5 +1,7 @@
 import ForgotPasswordForm from "@/components/features/forms/forgot-password-form";
 
+export const dynamic = "force-dynamic";
+
 const ForgotPasswordPage = () => {
     return (
         <div className="flex flex-col justify-center gap-8">

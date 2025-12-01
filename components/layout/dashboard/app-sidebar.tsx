@@ -1,6 +1,6 @@
 "use client";
 
-import { NavUser } from "@/components/features/dasboard/nav-user";
+import { NavUser } from "@/components/features/dashboard/nav-user";
 import ArrowUpRight from "@/components/ui/icons/arrow-up-right";
 import {
     Sidebar,
