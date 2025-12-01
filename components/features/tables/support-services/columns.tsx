@@ -106,19 +106,33 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
         cell: ({ row }) => {
             const isAvailable = row.original.status === "Available";
             if (isAvailable) {
+                const department = row.original.department;
+                let scheduleMeetingHref = ""; // Default empty href
+                const sendMailHref = ""; // Default empty href
+                let firstLinkText = "Schedule meeting";
+
+                if (department === "Accounts Clarification") {
+                    scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
+                    firstLinkText = "View account statement";
+                }
+
                 return (
                     <div className="flex items-center gap-2">
                         <Link
-                            href=""
+                            href={scheduleMeetingHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className={cn(
                                 buttonVariants({ size: "sm" }),
                                 "rounded-full bg-primary/20 text-primary hover:bg-primary/10",
                             )}
                         >
-                            Schedule meeting
+                            {firstLinkText}
                         </Link>
                         <Link
-                            href=""
+                            href={sendMailHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className={cn(
                                 buttonVariants({ size: "sm" }),
                                 "rounded-full bg-primary/20 text-primary hover:bg-primary/10",

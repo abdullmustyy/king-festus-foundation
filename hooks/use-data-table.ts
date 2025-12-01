@@ -191,8 +191,8 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
                 const processedValue = Array.isArray(value)
                     ? value
                     : typeof value === "string" && /[^a-zA-Z0-9]/.test(value)
-                    ? value.split(/[^a-zA-Z0-9]+/).filter(Boolean)
-                    : [value];
+                      ? value.split(/[^a-zA-Z0-9]+/).filter(Boolean)
+                      : [value];
 
                 filters.push({
                     id: key,
