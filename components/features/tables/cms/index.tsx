@@ -1,5 +1,7 @@
 "use client";
 
+import GovernanceStructureForm from "@/components/features/forms/cms/governance-structure-form";
+import LandingPageMediaForm from "@/components/features/forms/cms/landing-page-media-form";
 import { DataTable } from "@/components/features/tables/data-table/data-table";
 import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
@@ -9,7 +11,6 @@ import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
 import { useMemo, useState } from "react";
-import LandingPageMediaForm from "../../forms/cms/landing-page-media-form";
 import { cmsColumns, TCMS } from "./columns";
 
 const CMS_IDS = {
@@ -64,6 +65,14 @@ export function CMSTable() {
                         onUploadComplete={() => setIsSheetOpen(false)}
                     />
                 );
+            case CMS_IDS.GOVERNANCE:
+                return (
+                    <GovernanceStructureForm
+                        id={`${CMS_IDS.GOVERNANCE}-form`}
+                        onUploadComplete={() => setIsSheetOpen(false)}
+                    />
+                );
+
             default:
                 return <div className="mt-4 font-medium">{selectedRow.title}</div>;
         }
@@ -99,7 +108,7 @@ export function CMSTable() {
                     }
                 }}
             >
-                <SheetContent className="*:data-[slot='sheet-close']:hidden sm:max-w-xl">
+                <SheetContent className="h-full gap-0 *:data-[slot='sheet-close']:hidden sm:max-w-xl">
                     <SheetHeader className="flex-row items-center justify-between space-y-0 border-b">
                         <SheetClose asChild>
                             <Button variant="ghost" size="icon" className="size-9 rounded-full">
@@ -116,7 +125,7 @@ export function CMSTable() {
                         </Button>
                     </SheetHeader>
 
-                    {renderSheetContent()}
+                    <div className="hide-scrollbar flex-1 overflow-y-auto">{renderSheetContent()}</div>
                 </SheetContent>
             </Sheet>
         </section>

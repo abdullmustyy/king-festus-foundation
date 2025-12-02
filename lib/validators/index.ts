@@ -67,3 +67,20 @@ export const LandingPageMediaFormSchema = z.object({
         .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
         .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
 });
+
+export const GovernanceStructureFormSchema = z.object({
+    governanceBodies: z.array(
+        z.object({
+            image: z
+                .instanceof(File, { error: "Image is required." })
+                .refine((file) => file, "Image is required.")
+                .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
+                .refine(
+                    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+                    ".jpg, .jpeg, .png and .webp files are accepted.",
+                ),
+            name: z.string().min(1, "Name is required"),
+            role: z.string().min(1, "Role is required"),
+        }),
+    ),
+});

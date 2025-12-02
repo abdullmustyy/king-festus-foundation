@@ -9,7 +9,7 @@ export default function CMSPage() {
             <div className="px-4 pt-5 lg:px-5">
                 <h1 className="font-medium">Content management system</h1>
             </div>
-            <Suspense fallback={<div className="px-5 py-5">Loading CMS...</div>}>
+            <Suspense fallback={<></>}>
                 <CMSTable />
             </Suspense>
         </>

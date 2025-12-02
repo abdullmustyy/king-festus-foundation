@@ -29,7 +29,7 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
     name,
     disabled,
 }: IUploadMediaTriggerProps<T, K>) => {
-    const { register, unregister, setValue, watch } = useFormContext<T>();
+    const { register, setValue, watch } = useFormContext<T>();
     const file: File = watch(name);
 
     const [preview, setPreview] = useState<string | null>(null);
@@ -70,10 +70,7 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
 
     useEffect(() => {
         register(name);
-        return () => {
-            unregister(name);
-        };
-    }, [register, unregister, name]);
+    }, [register, name]);
 
     // Effect to sync internal preview state with the form's watched file value
     const isFileInstance = file instanceof File;

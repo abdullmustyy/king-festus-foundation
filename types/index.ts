@@ -1,6 +1,7 @@
 import {
     AddImageFormSchema,
     ForgotPasswordFormSchema,
+    GovernanceStructureFormSchema,
     LandingPageMediaFormSchema,
     ResetPasswordFormSchema,
     SignInFormSchema,
@@ -43,3 +44,8 @@ export type TAddImageForm = z.infer<typeof AddImageFormSchema>;
  * Represents the data structure for the landing page media form, inferred from LandingPageMediaFormSchema.
  */
 export type TLandingPageMediaForm = z.infer<typeof LandingPageMediaFormSchema>;
+
+/**
+ * Represents the data structure for the governance structure form, inferred from GovernanceStructureFormSchema.
+ */
+export type TGovernanceStructureForm = z.infer<typeof GovernanceStructureFormSchema>;
