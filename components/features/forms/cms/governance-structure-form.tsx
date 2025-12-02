@@ -65,11 +65,12 @@ export default function GovernanceStructureForm({ onComplete, id, ...props }: IG
                                     label="Image"
                                     className="*:data-[slot='field-label']:text-foreground/50"
                                 >
-                                    {() => (
+                                    {(field, fieldState) => (
                                         <div className="space-y-3">
                                             <UploadMediaTrigger
                                                 name={`governanceBodies.${index}.image`}
                                                 disabled={isSubmitting}
+                                                aria-invalid={fieldState.invalid}
                                             >
                                                 {({ isDragging, preview }) => (
                                                     <CmsImageFormField
@@ -94,12 +95,13 @@ export default function GovernanceStructureForm({ onComplete, id, ...props }: IG
                                     label="Name"
                                     className="*:data-[slot='field-label']:text-foreground/50"
                                 >
-                                    {(field) => (
+                                    {(field, fieldState) => (
                                         <Input
                                             {...field}
                                             value={field.value as string}
                                             placeholder="Name"
                                             disabled={isSubmitting}
+                                            aria-invalid={fieldState.invalid}
                                             className="h-11.25"
                                         />
                                     )}
@@ -111,12 +113,13 @@ export default function GovernanceStructureForm({ onComplete, id, ...props }: IG
                                     label="Role"
                                     className="*:data-[slot='field-label']:text-foreground/50"
                                 >
-                                    {(field) => (
+                                    {(field, fieldState) => (
                                         <Input
                                             {...field}
                                             value={field.value as string}
                                             placeholder="Role"
                                             disabled={isSubmitting}
+                                            aria-invalid={fieldState.invalid}
                                             className="h-11.25"
                                         />
                                     )}

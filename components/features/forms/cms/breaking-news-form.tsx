@@ -47,12 +47,13 @@ export default function BreakingNewsForm({ onComplete, id, ...props }: IBreaking
                             label="Headline"
                             className="*:data-[slot='field-label']:text-foreground/50"
                         >
-                            {(field) => (
+                            {(field, fieldState) => (
                                 <Input
                                     {...field}
                                     value={field.value as string}
                                     placeholder="Enter headline"
                                     disabled={isSubmitting}
+                                    aria-invalid={fieldState.invalid}
                                     className="h-11.25"
                                 />
                             )}
@@ -64,12 +65,13 @@ export default function BreakingNewsForm({ onComplete, id, ...props }: IBreaking
                             label="Link/URL"
                             className="*:data-[slot='field-label']:text-foreground/50"
                         >
-                            {(field) => (
+                            {(field, fieldState) => (
                                 <Input
                                     {...field}
                                     value={field.value as string}
                                     placeholder="Enter URL"
                                     disabled={isSubmitting}
+                                    aria-invalid={fieldState.invalid}
                                     className="h-11.25"
                                 />
                             )}
@@ -82,12 +84,13 @@ export default function BreakingNewsForm({ onComplete, id, ...props }: IBreaking
                                 label="Start date"
                                 className="flex-1 *:data-[slot='field-label']:text-foreground/50"
                             >
-                                {(field) => (
+                                {(field, fieldState) => (
                                     <CalendarDatePicker
                                         date={field.value as Date | undefined}
                                         setDate={field.onChange}
                                         disabled={isSubmitting}
                                         id="start-date"
+                                        ariaInvalid={fieldState.invalid}
                                         className="**:data-[slot='input']:h-11.25"
                                     />
                                 )}
@@ -98,12 +101,13 @@ export default function BreakingNewsForm({ onComplete, id, ...props }: IBreaking
                                 label="End date"
                                 className="flex-1 *:data-[slot='field-label']:text-foreground/50"
                             >
-                                {(field) => (
+                                {(field, fieldState) => (
                                     <CalendarDatePicker
                                         date={field.value as Date | undefined}
                                         setDate={field.onChange}
                                         disabled={isSubmitting}
                                         id="end-date"
+                                        ariaInvalid={fieldState.invalid}
                                         className="**:data-[slot='input']:h-11.25"
                                     />
                                 )}
@@ -116,11 +120,12 @@ export default function BreakingNewsForm({ onComplete, id, ...props }: IBreaking
                             className="*:data-[slot='field-label']:text-foreground/50"
                             label="Status (Inactive/Active)"
                         >
-                            {(field) => (
+                            {(field, fieldState) => (
                                 <Switch
                                     checked={field.value as boolean}
                                     onCheckedChange={field.onChange}
                                     disabled={isSubmitting}
+                                    aria-invalid={fieldState.invalid}
                                     className="w-8!"
                                 />
                             )}

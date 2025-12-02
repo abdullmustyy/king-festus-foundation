@@ -19,6 +19,7 @@ interface CalendarDatePickerProps extends React.ComponentPropsWithoutRef<"div"> 
     dateFormat?: string; // Custom date format, e.g., "PPP"
     disabled?: boolean;
     id?: string;
+    ariaInvalid?: boolean;
 }
 
 export function CalendarDatePicker({
@@ -30,6 +31,7 @@ export function CalendarDatePicker({
     disabled,
     id,
     className,
+    ariaInvalid,
     ...props
 }: CalendarDatePickerProps) {
     const [open, setOpen] = React.useState(false);
@@ -80,6 +82,7 @@ export function CalendarDatePicker({
                     placeholder={placeholder}
                     className="bg-background pr-10"
                     disabled={disabled}
+                    aria-invalid={ariaInvalid}
                 />
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>

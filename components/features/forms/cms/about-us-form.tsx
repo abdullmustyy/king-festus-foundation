@@ -39,7 +39,7 @@ export default function AboutUsForm({ onComplete, id, ...props }: IAboutUsFormPr
     return (
         <section className="space-y-3 p-5">
             <h6>About us</h6>
-            
+
             <FormProvider {...form}>
                 <form id={id} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" {...props}>
                     <FieldGroup className="flex flex-col gap-5">
@@ -52,11 +52,12 @@ export default function AboutUsForm({ onComplete, id, ...props }: IAboutUsFormPr
                                 label="Content"
                                 className="*:data-[slot='field-label']:text-foreground/50"
                             >
-                                {(field) => (
+                                {(field, fieldState) => (
                                     <Textarea
                                         {...field}
                                         value={field.value as string}
                                         disabled={isSubmitting}
+                                        aria-invalid={fieldState.invalid}
                                         className="h-42.5 resize-none"
                                     />
                                 )}
@@ -74,11 +75,12 @@ export default function AboutUsForm({ onComplete, id, ...props }: IAboutUsFormPr
                                     label={`Mission ${index + 1}`}
                                     className="*:data-[slot='field-label']:text-foreground/50"
                                 >
-                                    {(field) => (
+                                    {(field, fieldState) => (
                                         <Textarea
                                             {...field}
                                             value={field.value as string}
                                             disabled={isSubmitting}
+                                            aria-invalid={fieldState.invalid}
                                             className="h-28.25 resize-none"
                                         />
                                     )}
