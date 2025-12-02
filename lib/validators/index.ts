@@ -87,10 +87,29 @@ export const GovernanceStructureFormSchema = z.object({
 
 export const AboutUsFormSchema = z.object({
     content: z.string().min(1, "Content is required"),
-    missions: z.array(
-        z.object({
-            text: z.string().min(1, "Mission cannot be empty"),
-        })
-    ).min(3).max(3, "There must be exactly three missions"),
+    missions: z
+        .array(
+            z.object({
+                text: z.string().min(1, "Mission cannot be empty"),
+            }),
+        )
+        .min(3)
+        .max(3, "There must be exactly three missions"),
 });
 
+export const BreakingNewsFormSchema = z
+    .object({
+        headline: z.string().min(1, "Headline is required"),
+        linkUrl: z.url("Invalid URL").min(1, "Link URL is required"),
+        startDate: z.date({
+            error: (issue) => (issue.input === undefined ? "Start date is required" : "Invalid date"),
+        }),
+        endDate: z.date({
+            error: (issue) => (issue.input === undefined ? "End date is required" : "Invalid date"),
+        }),
+        status: z.boolean(),
+    })
+    .refine((data) => data.endDate >= data.startDate, {
+        message: "End date cannot be before start date",
+        path: ["endDate"],
+    });

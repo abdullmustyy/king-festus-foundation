@@ -1,6 +1,7 @@
 "use client";
 
 import AboutUsForm from "@/components/features/forms/cms/about-us-form";
+import BreakingNewsForm from "@/components/features/forms/cms/breaking-news-form";
 import GovernanceStructureForm from "@/components/features/forms/cms/governance-structure-form";
 import LandingPageMediaForm from "@/components/features/forms/cms/landing-page-media-form";
 import { DataTable } from "@/components/features/tables/data-table/data-table";
@@ -75,6 +76,13 @@ export function CMSTable() {
                 );
             case CMS_IDS.ABOUT_US:
                 return <AboutUsForm id={`${CMS_IDS.ABOUT_US}-form`} onComplete={() => setIsSheetOpen(false)} />;
+            case CMS_IDS.BREAKING_NEWS:
+                return (
+                    <BreakingNewsForm
+                        id={`${CMS_IDS.BREAKING_NEWS}-form`}
+                        onComplete={() => setIsSheetOpen(false)}
+                    />
+                );
             default:
                 return <div className="mt-4 font-medium">{selectedRow.title}</div>;
         }

@@ -8,6 +8,7 @@ import {
     SignUpFormSchema,
     VerifyFormSchema,
     AboutUsFormSchema,
+    BreakingNewsFormSchema,
 } from "@/lib/validators";
 import z from "zod";
 
@@ -55,3 +56,8 @@ export type TGovernanceStructureForm = z.infer<typeof GovernanceStructureFormSch
  * Represents the data structure for the about us form, inferred from AboutUsFormSchema.
  */
 export type TAboutUsForm = z.infer<typeof AboutUsFormSchema>;
+
+/**
+ * Represents the data structure for the breaking news form, inferred from BreakingNewsFormSchema.
+ */
+export type TBreakingNewsForm = z.infer<typeof BreakingNewsFormSchema>;
