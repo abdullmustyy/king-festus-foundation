@@ -84,3 +84,13 @@ export const GovernanceStructureFormSchema = z.object({
         }),
     ),
 });
+
+export const AboutUsFormSchema = z.object({
+    content: z.string().min(1, "Content is required"),
+    missions: z.array(
+        z.object({
+            text: z.string().min(1, "Mission cannot be empty"),
+        })
+    ).min(3).max(3, "There must be exactly three missions"),
+});
+

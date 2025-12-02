@@ -9,10 +9,10 @@ import { FormProvider, useForm } from "react-hook-form";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface ILandingPageMediaFormProps extends React.ComponentProps<"form"> {
-    onUploadComplete: () => void;
+    onComplete: () => void;
 }
 
-const LandingPageMediaForm = ({ onUploadComplete, id, ...props }: ILandingPageMediaFormProps) => {
+const LandingPageMediaForm = ({ onComplete, id, ...props }: ILandingPageMediaFormProps) => {
     const form = useForm<TLandingPageMediaForm>({
         resolver: zodResolver(LandingPageMediaFormSchema),
         defaultValues: {
@@ -24,7 +24,7 @@ const LandingPageMediaForm = ({ onUploadComplete, id, ...props }: ILandingPageMe
         formState: { isSubmitting },
     } = form;
 
-    const onSubmit = async () => onUploadComplete();
+    const onSubmit = async () => onComplete();
 
     return (
         <section className="space-y-3 p-5">
@@ -49,7 +49,7 @@ const LandingPageMediaForm = ({ onUploadComplete, id, ...props }: ILandingPageMe
                                                 preview={preview}
                                                 onRemove={() => form.resetField("image")}
                                             />
-                                        )}
+                                                                                        )}
                                     </UploadMediaTrigger>
 
                                     <div className="flex items-center gap-1">

@@ -13,10 +13,10 @@ import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface IGovernanceStructureFormProps extends React.ComponentProps<"form"> {
-    onUploadComplete: () => void;
+    onComplete: () => void;
 }
 
-export default function GovernanceStructureForm({ onUploadComplete, id, ...props }: IGovernanceStructureFormProps) {
+export default function GovernanceStructureForm({ onComplete, id, ...props }: IGovernanceStructureFormProps) {
     const form = useForm<TGovernanceStructureForm>({
         resolver: zodResolver(GovernanceStructureFormSchema),
         defaultValues: {
@@ -40,7 +40,7 @@ export default function GovernanceStructureForm({ onUploadComplete, id, ...props
         name: "governanceBodies",
     });
 
-    const onSubmit = async () => onUploadComplete();
+    const onSubmit = async () => onComplete();
 
     return (
         <FormProvider {...form}>

@@ -1,5 +1,6 @@
 "use client";
 
+import AboutUsForm from "@/components/features/forms/cms/about-us-form";
 import GovernanceStructureForm from "@/components/features/forms/cms/governance-structure-form";
 import LandingPageMediaForm from "@/components/features/forms/cms/landing-page-media-form";
 import { DataTable } from "@/components/features/tables/data-table/data-table";
@@ -62,17 +63,18 @@ export function CMSTable() {
                 return (
                     <LandingPageMediaForm
                         id={`${CMS_IDS.LANDING_MEDIA}-form`}
-                        onUploadComplete={() => setIsSheetOpen(false)}
+                        onComplete={() => setIsSheetOpen(false)}
                     />
                 );
             case CMS_IDS.GOVERNANCE:
                 return (
                     <GovernanceStructureForm
                         id={`${CMS_IDS.GOVERNANCE}-form`}
-                        onUploadComplete={() => setIsSheetOpen(false)}
+                        onComplete={() => setIsSheetOpen(false)}
                     />
                 );
-
+            case CMS_IDS.ABOUT_US:
+                return <AboutUsForm id={`${CMS_IDS.ABOUT_US}-form`} onComplete={() => setIsSheetOpen(false)} />;
             default:
                 return <div className="mt-4 font-medium">{selectedRow.title}</div>;
         }
