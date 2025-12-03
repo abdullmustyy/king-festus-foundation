@@ -113,3 +113,13 @@ export const BreakingNewsFormSchema = z
         message: "End date cannot be before start date",
         path: ["endDate"],
     });
+
+export const DashboardAdsFormSchema = z.object({
+    adTitle: z.string().min(1, "Ad title is required"),
+    adImage: z
+        .instanceof(File, { error: "Ad image is required." })
+        .refine((file) => file, "Ad image is required.")
+        .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
+        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
+    status: z.boolean(),
+});

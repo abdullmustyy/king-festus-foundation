@@ -2,6 +2,7 @@
 
 import AboutUsForm from "@/components/features/forms/cms/about-us-form";
 import BreakingNewsForm from "@/components/features/forms/cms/breaking-news-form";
+import DashboardAdsForm from "@/components/features/forms/cms/dashboard-ads-form";
 import GovernanceStructureForm from "@/components/features/forms/cms/governance-structure-form";
 import LandingPageMediaForm from "@/components/features/forms/cms/landing-page-media-form";
 import { DataTable } from "@/components/features/tables/data-table/data-table";
@@ -80,6 +81,13 @@ export function CMSTable() {
                 return (
                     <BreakingNewsForm
                         id={`${CMS_IDS.BREAKING_NEWS}-form`}
+                        onComplete={() => setIsSheetOpen(false)}
+                    />
+                );
+            case CMS_IDS.DASHBOARD_ADS:
+                return (
+                    <DashboardAdsForm
+                        id={`${CMS_IDS.DASHBOARD_ADS}-form`}
                         onComplete={() => setIsSheetOpen(false)}
                     />
                 );
