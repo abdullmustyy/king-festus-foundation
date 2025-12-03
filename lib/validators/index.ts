@@ -123,3 +123,10 @@ export const DashboardAdsFormSchema = z.object({
         .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
     status: z.boolean(),
 });
+
+export const AddAdminFormSchema = z.object({
+    fullName: z.string().min(1, "Full name is required"),
+    email: emailSchema,
+    password: passwordSchema,
+    role: z.enum(["ADMIN", "SUPER_ADMIN"], "Role is required"),
+});

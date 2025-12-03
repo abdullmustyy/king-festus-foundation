@@ -10,6 +10,7 @@ import {
     AboutUsFormSchema,
     BreakingNewsFormSchema,
     DashboardAdsFormSchema,
+    AddAdminFormSchema,
 } from "@/lib/validators";
 import z from "zod";
 
@@ -67,3 +68,8 @@ export type TBreakingNewsForm = z.infer<typeof BreakingNewsFormSchema>;
  * Represents the data structure for the dashboard ads form, inferred from DashboardAdsFormSchema.
  */
 export type TDashboardAdsForm = z.infer<typeof DashboardAdsFormSchema>;
+
+/**
+ * Represents the data structure for the add admin form, inferred from AddAdminFormSchema.
+ */
+export type TAddAdminForm = z.infer<typeof AddAdminFormSchema>;

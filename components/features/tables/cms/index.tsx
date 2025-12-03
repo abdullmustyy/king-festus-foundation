@@ -1,6 +1,7 @@
 "use client";
 
 import AboutUsForm from "@/components/features/forms/cms/about-us-form";
+import AddAdminForm from "@/components/features/forms/cms/add-admin-form";
 import BreakingNewsForm from "@/components/features/forms/cms/breaking-news-form";
 import DashboardAdsForm from "@/components/features/forms/cms/dashboard-ads-form";
 import GovernanceStructureForm from "@/components/features/forms/cms/governance-structure-form";
@@ -9,7 +10,7 @@ import { DataTable } from "@/components/features/tables/data-table/data-table";
 import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetClose, SheetContent, SheetHeader } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
@@ -79,18 +80,14 @@ export function CMSTable() {
                 return <AboutUsForm id={`${CMS_IDS.ABOUT_US}-form`} onComplete={() => setIsSheetOpen(false)} />;
             case CMS_IDS.BREAKING_NEWS:
                 return (
-                    <BreakingNewsForm
-                        id={`${CMS_IDS.BREAKING_NEWS}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
-                    />
+                    <BreakingNewsForm id={`${CMS_IDS.BREAKING_NEWS}-form`} onComplete={() => setIsSheetOpen(false)} />
                 );
             case CMS_IDS.DASHBOARD_ADS:
                 return (
-                    <DashboardAdsForm
-                        id={`${CMS_IDS.DASHBOARD_ADS}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
-                    />
+                    <DashboardAdsForm id={`${CMS_IDS.DASHBOARD_ADS}-form`} onComplete={() => setIsSheetOpen(false)} />
                 );
+            case CMS_IDS.ADD_ADMIN:
+                return <AddAdminForm id={`${CMS_IDS.ADD_ADMIN}-form`} onComplete={() => setIsSheetOpen(false)} />;
             default:
                 return <div className="mt-4 font-medium">{selectedRow.title}</div>;
         }
@@ -128,19 +125,32 @@ export function CMSTable() {
             >
                 <SheetContent className="h-full gap-0 *:data-[slot='sheet-close']:hidden sm:max-w-xl">
                     <SheetHeader className="flex-row items-center justify-between space-y-0 border-b">
-                        <SheetClose asChild>
-                            <Button variant="ghost" size="icon" className="size-9 rounded-full">
-                                <XIcon className="size-4" />
-                            </Button>
-                        </SheetClose>
-                        <Button
-                            size="sm"
-                            className="rounded-full text-sm"
-                            type="submit"
-                            form={selectedRow ? `${selectedRow.id}-form` : undefined}
-                        >
-                            Publish
-                        </Button>
+                        {selectedRow?.id === CMS_IDS.ADD_ADMIN ? (
+                            <>
+                                <SheetTitle className="font-normal">Add new admins</SheetTitle>
+                                <SheetClose asChild>
+                                    <Button variant="ghost" size="icon" className="size-9 rounded-full">
+                                        <XIcon className="size-4" />
+                                    </Button>
+                                </SheetClose>
+                            </>
+                        ) : (
+                            <>
+                                <SheetClose asChild>
+                                    <Button variant="ghost" size="icon" className="size-9 rounded-full">
+                                        <XIcon className="size-4" />
+                                    </Button>
+                                </SheetClose>
+                                <Button
+                                    size="sm"
+                                    className="rounded-full text-sm"
+                                    type="submit"
+                                    form={selectedRow ? `${selectedRow.id}-form` : undefined}
+                                >
+                                    Publish
+                                </Button>
+                            </>
+                        )}
                     </SheetHeader>
 
                     <div className="hide-scrollbar flex-1 overflow-y-auto">{renderSheetContent()}</div>
