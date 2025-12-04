@@ -1,14 +1,15 @@
 "use client";
 
+import { updateAboutUs } from "@/app/actions/cms/about-us";
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import { Textarea } from "@/components/ui/textarea";
 import { AboutUsFormSchema } from "@/lib/validators";
 import { TAboutUsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
-
 import { useEffect } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface IAboutUsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
@@ -41,7 +42,24 @@ export default function AboutUsForm({ onComplete, onSubmittingChange, id, ...pro
         name: "missions",
     });
 
-    const onSubmit = async () => onComplete();
+    const onSubmit = async (data: TAboutUsForm) => {
+        try {
+            const res = await updateAboutUs(data);
+
+            if (res.error) {
+                toast.error(res.error);
+                return;
+            }
+
+            toast.success("About Us section updated successfully");
+            onComplete();
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong", {
+                description: "Please try again later",
+            });
+        }
+    };
 
     return (
         <section className="space-y-3 p-5">

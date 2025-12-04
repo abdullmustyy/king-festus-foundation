@@ -97,7 +97,7 @@ export default function GovernanceStructureForm({
                                     label="Image"
                                     className="*:data-[slot='field-label']:text-foreground/50"
                                 >
-                                    {(field, fieldState) => (
+                                    {(_, fieldState) => (
                                         <div className="space-y-3">
                                             <UploadMediaTrigger
                                                 name={`governanceBodies.${index}.image`}

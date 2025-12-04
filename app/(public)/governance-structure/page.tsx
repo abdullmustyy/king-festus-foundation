@@ -11,7 +11,7 @@ const GovernanceStructurePage = async () => {
     return (
         <section className="w-contain flex flex-col gap-8 py-10">
             <div className="flex flex-col items-center gap-8">
-                <h3 className="text-center text-3xl">Governance & organisational structure</h3>
+                <h3 className="text-center text-3xl">Governance structure</h3>
 
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-6 lg:gap-12.5">
                     {governanceBodies.map((item) => (
@@ -21,7 +21,7 @@ const GovernanceStructurePage = async () => {
                             </div>
                             <div className="flex flex-col gap-1 text-center">
                                 <span className="text-xl font-medium text-primary">{item.name}</span>
-                                <span className="text-foreground/50">{item.role}</span>
+                                <span className="text-foreground/50 uppercase">{item.role}</span>
                             </div>
                         </div>
                     ))}

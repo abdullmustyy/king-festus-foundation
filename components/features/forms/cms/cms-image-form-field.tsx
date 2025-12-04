@@ -15,7 +15,7 @@ export function CmsImageFormField({ preview, isDragging, onRemove }: CmsImageFor
             <div className="relative flex h-full w-27.5 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-border/20">
                 {preview ? (
                     <>
-                        <Image src={preview} alt="preview" fill className="rounded-md object-cover" />
+                        <Image src={preview} alt="preview" fill className="rounded-md object-fill" />
                         <Button
                             type="button"
                             variant="ghost"
