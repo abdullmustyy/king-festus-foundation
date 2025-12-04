@@ -5,7 +5,16 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  fullName  String?
+  password  String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Media {
@@ -16,4 +25,60 @@ model Media {
   url         String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model LandingPage {
+  id        String   @id @default(uuid())
+  heroImage String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AboutUs {
+  id        String    @id @default(uuid())
+  vision    String
+  missions  Mission[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Mission {
+  id        String  @id @default(uuid())
+  text      String
+  aboutUs   AboutUs @relation(fields: [aboutUsId], references: [id], onDelete: Cascade)
+  aboutUsId String
+}
+
+model GovernanceBody {
+  id        String   @id @default(uuid())
+  image     String
+  name      String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BreakingNews {
+  id        String   @id @default(uuid())
+  headline  String
+  linkUrl   String
+  startDate DateTime
+  endDate   DateTime
+  status    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DashboardAd {
+  id        String   @id @default(uuid())
+  title     String
+  image     String
+  status    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

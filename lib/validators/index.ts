@@ -128,5 +128,5 @@ export const AddAdminFormSchema = z.object({
     fullName: z.string().min(1, "Full name is required"),
     email: emailSchema,
     password: passwordSchema,
-    role: z.enum(["ADMIN", "SUPER_ADMIN"], "Role is required"),
+    role: z.enum(["ADMIN", "USER"], "Role is required"),
 });

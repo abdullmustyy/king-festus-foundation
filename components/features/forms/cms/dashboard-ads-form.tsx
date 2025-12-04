@@ -10,13 +10,15 @@ import { TDashboardAdsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Info } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface IDashboardAdsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
+    onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
-export default function DashboardAdsForm({ onComplete, id, ...props }: IDashboardAdsFormProps) {
+export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, ...props }: IDashboardAdsFormProps) {
     const form = useForm<TDashboardAdsForm>({
         resolver: zodResolver(DashboardAdsFormSchema),
         defaultValues: {
@@ -32,6 +34,10 @@ export default function DashboardAdsForm({ onComplete, id, ...props }: IDashboar
         resetField,
         formState: { isSubmitting },
     } = form;
+
+    useEffect(() => {
+        onSubmittingChange?.(isSubmitting);
+    }, [isSubmitting, onSubmittingChange]);
 
     const onSubmit = async () => onComplete();
 

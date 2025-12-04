@@ -1,18 +1,28 @@
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import UploadMediaTrigger from "@/components/ui/upload-media-trigger";
+import { uploadFiles } from "@/lib/uploadthing";
 import { LandingPageMediaFormSchema } from "@/lib/validators";
 import { TLandingPageMediaForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Info } from "lucide-react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { CmsImageFormField } from "./cms-image-form-field";
+
+import { useEffect } from "react";
 
 interface ILandingPageMediaFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
+    onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
-const LandingPageMediaForm = ({ onComplete, id, ...props }: ILandingPageMediaFormProps) => {
+const LandingPageMediaForm = ({
+    onComplete,
+    onSubmittingChange,
+    id,
+    ...props
+}: ILandingPageMediaFormProps) => {
     const form = useForm<TLandingPageMediaForm>({
         resolver: zodResolver(LandingPageMediaFormSchema),
         defaultValues: {
@@ -24,7 +34,29 @@ const LandingPageMediaForm = ({ onComplete, id, ...props }: ILandingPageMediaFor
         formState: { isSubmitting },
     } = form;
 
-    const onSubmit = async () => onComplete();
+    useEffect(() => {
+        onSubmittingChange?.(isSubmitting);
+    }, [isSubmitting, onSubmittingChange]);
+
+    const onSubmit = async (data: TLandingPageMediaForm) => {
+        try {
+            const res = await uploadFiles("landingPageHeroImage", {
+                files: [data.image],
+            });
+
+            if (!res) {
+                throw new Error("Failed to upload image");
+            }
+
+            toast.success("Hero image updated successfully");
+            onComplete();
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong", {
+                description: "Please try again later",
+            });
+        }
+    };
 
     return (
         <section className="space-y-3 p-5">
@@ -49,7 +81,7 @@ const LandingPageMediaForm = ({ onComplete, id, ...props }: ILandingPageMediaFor
                                                 preview={preview}
                                                 onRemove={() => form.resetField("image")}
                                             />
-                                                                                        )}
+                                        )}
                                     </UploadMediaTrigger>
 
                                     <div className="flex items-center gap-1">

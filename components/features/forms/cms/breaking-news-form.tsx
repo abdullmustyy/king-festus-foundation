@@ -10,11 +10,14 @@ import { TBreakingNewsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { useEffect } from "react";
+
 interface IBreakingNewsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
+    onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
-export default function BreakingNewsForm({ onComplete, id, ...props }: IBreakingNewsFormProps) {
+export default function BreakingNewsForm({ onComplete, onSubmittingChange, id, ...props }: IBreakingNewsFormProps) {
     const form = useForm<TBreakingNewsForm>({
         resolver: zodResolver(BreakingNewsFormSchema),
         defaultValues: {
@@ -31,6 +34,10 @@ export default function BreakingNewsForm({ onComplete, id, ...props }: IBreaking
         handleSubmit,
         formState: { isSubmitting },
     } = form;
+
+    useEffect(() => {
+        onSubmittingChange?.(isSubmitting);
+    }, [isSubmitting, onSubmittingChange]);
 
     const onSubmit = async () => onComplete();
 

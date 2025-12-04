@@ -8,7 +8,7 @@ import z from "zod";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-    imageUploader: f(["image"])
+    media: f(["image"])
         .input(z.object({ description: z.string().optional() }))
         .middleware(async ({ input }) => {
             const user = await currentUser();
@@ -30,6 +30,31 @@ export const ourFileRouter = {
             });
 
             revalidatePath("/dashboard/media");
+        }),
+
+    landingPageHeroImage: f(["image"])
+        .middleware(async () => {
+            const user = await currentUser();
+
+            if (!user) throw new UploadThingError("You must be logged in to upload a landing page hero image");
+
+            return { userId: user.id };
+        })
+        .onUploadComplete(async ({ file }) => {
+            const existing = await db.landingPage.findFirst();
+
+            if (existing) {
+                await db.landingPage.update({
+                    where: { id: existing.id },
+                    data: { heroImage: file.ufsUrl },
+                });
+            } else {
+                await db.landingPage.create({
+                    data: { heroImage: file.ufsUrl },
+                });
+            }
+
+            revalidatePath("/");
         }),
 } satisfies FileRouter;
 

@@ -30,7 +30,7 @@ const initialData: TCMS[] = [
     { id: CMS_IDS.LANDING_MEDIA, title: "Media on landing page", lastUpdated: "23/11/25" },
     { id: CMS_IDS.GOVERNANCE, title: "Governance structure", lastUpdated: "23/11/25" },
     { id: CMS_IDS.ABOUT_US, title: "About us", lastUpdated: "23/11/25" },
-    { id: CMS_IDS.BREAKING_NEWS, title: "Scroll bar with breaking news ", lastUpdated: "23/11/25" },
+    { id: CMS_IDS.BREAKING_NEWS, title: "Scroll bar with breaking news", lastUpdated: "23/11/25" },
     { id: CMS_IDS.DASHBOARD_ADS, title: "Advertisement section on dashboard", lastUpdated: "23/11/25" },
     { id: CMS_IDS.ADD_ADMIN, title: "Add new admin", lastUpdated: "23/11/25" },
 ];
@@ -39,6 +39,7 @@ export function CMSTable() {
     const [searchQuery, setSearchQuery] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState<TCMS | null>(null);
+    const [isPublishing, setIsPublishing] = useState(false);
 
     const filteredData = useMemo(() => {
         if (!searchQuery) return initialData;
@@ -58,6 +59,10 @@ export function CMSTable() {
         setIsSheetOpen(true);
     };
 
+    const handleSubmittingChange = (isSubmitting: boolean) => {
+        setIsPublishing(isSubmitting);
+    };
+
     const renderSheetContent = () => {
         if (!selectedRow) return null;
 
@@ -67,6 +72,7 @@ export function CMSTable() {
                     <LandingPageMediaForm
                         id={`${CMS_IDS.LANDING_MEDIA}-form`}
                         onComplete={() => setIsSheetOpen(false)}
+                        onSubmittingChange={handleSubmittingChange}
                     />
                 );
             case CMS_IDS.GOVERNANCE:
@@ -74,17 +80,32 @@ export function CMSTable() {
                     <GovernanceStructureForm
                         id={`${CMS_IDS.GOVERNANCE}-form`}
                         onComplete={() => setIsSheetOpen(false)}
+                        onSubmittingChange={handleSubmittingChange}
                     />
                 );
             case CMS_IDS.ABOUT_US:
-                return <AboutUsForm id={`${CMS_IDS.ABOUT_US}-form`} onComplete={() => setIsSheetOpen(false)} />;
+                return (
+                    <AboutUsForm
+                        id={`${CMS_IDS.ABOUT_US}-form`}
+                        onComplete={() => setIsSheetOpen(false)}
+                        onSubmittingChange={handleSubmittingChange}
+                    />
+                );
             case CMS_IDS.BREAKING_NEWS:
                 return (
-                    <BreakingNewsForm id={`${CMS_IDS.BREAKING_NEWS}-form`} onComplete={() => setIsSheetOpen(false)} />
+                    <BreakingNewsForm
+                        id={`${CMS_IDS.BREAKING_NEWS}-form`}
+                        onComplete={() => setIsSheetOpen(false)}
+                        onSubmittingChange={handleSubmittingChange}
+                    />
                 );
             case CMS_IDS.DASHBOARD_ADS:
                 return (
-                    <DashboardAdsForm id={`${CMS_IDS.DASHBOARD_ADS}-form`} onComplete={() => setIsSheetOpen(false)} />
+                    <DashboardAdsForm
+                        id={`${CMS_IDS.DASHBOARD_ADS}-form`}
+                        onComplete={() => setIsSheetOpen(false)}
+                        onSubmittingChange={handleSubmittingChange}
+                    />
                 );
             case CMS_IDS.ADD_ADMIN:
                 return <AddAdminForm id={`${CMS_IDS.ADD_ADMIN}-form`} onComplete={() => setIsSheetOpen(false)} />;
@@ -120,6 +141,7 @@ export function CMSTable() {
                     setIsSheetOpen(open);
                     if (!open) {
                         setSelectedRow(null);
+                        setIsPublishing(false);
                     }
                 }}
             >
@@ -143,9 +165,10 @@ export function CMSTable() {
                                 </SheetClose>
                                 <Button
                                     size="sm"
-                                    className="rounded-full text-sm"
                                     type="submit"
+                                    isLoading={isPublishing}
                                     form={selectedRow ? `${selectedRow.id}-form` : undefined}
+                                    className="rounded-full text-sm"
                                 >
                                     Publish
                                 </Button>

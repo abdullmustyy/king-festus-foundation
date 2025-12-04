@@ -10,13 +10,20 @@ import { TGovernanceStructureForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronRight, Info } from "lucide-react";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface IGovernanceStructureFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
+    onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
-export default function GovernanceStructureForm({ onComplete, id, ...props }: IGovernanceStructureFormProps) {
+export default function GovernanceStructureForm({
+    onComplete,
+    onSubmittingChange,
+    id,
+    ...props
+}: IGovernanceStructureFormProps) {
     const form = useForm<TGovernanceStructureForm>({
         resolver: zodResolver(GovernanceStructureFormSchema),
         defaultValues: {
@@ -35,10 +42,9 @@ export default function GovernanceStructureForm({ onComplete, id, ...props }: IG
         formState: { isSubmitting },
     } = form;
 
-    const { fields } = useFieldArray({
-        control,
-        name: "governanceBodies",
-    });
+    useEffect(() => {
+        onSubmittingChange?.(isSubmitting);
+    }, [isSubmitting, onSubmittingChange]);
 
     const onSubmit = async () => onComplete();
 

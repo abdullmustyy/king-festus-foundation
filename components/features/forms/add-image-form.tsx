@@ -35,7 +35,7 @@ const AddImageForm = ({ onUploadComplete }: IAddImageFormProps) => {
     const onSubmit = async (data: TAddImageForm) => {
         try {
             if (data.image) {
-                const res = await uploadFiles("imageUploader", {
+                const res = await uploadFiles("media", {
                     files: [data.image],
                     input: {
                         description: data.description,

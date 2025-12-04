@@ -104,17 +104,13 @@ export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminForm
                                 className="*:data-[slot='field-label']:text-foreground/50"
                             >
                                 {(field) => (
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        defaultValue={field.value}
-                                        disabled={isSubmitting}
-                                    >
+                                    <Select onValueChange={field.onChange} defaultValue="ADMIN" disabled={isSubmitting}>
                                         <SelectTrigger className="w-full data-[size=default]:h-11.25">
                                             <SelectValue placeholder="Select role" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="ADMIN">Admin</SelectItem>
-                                            <SelectItem value="SUPER_ADMIN">Super Admin</SelectItem>
+                                            <SelectItem value="USER">User</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -125,10 +121,22 @@ export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminForm
             </section>
 
             <div className="mt-auto flex items-center gap-3 border-t p-5">
-                <Button type="button" variant="outline" className="h-10 flex-1 text-sm" onClick={() => onComplete()}>
+                <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isSubmitting}
+                    className="h-10 flex-1 text-sm"
+                    onClick={() => onComplete()}
+                >
                     Cancel
                 </Button>
-                <Button type="submit" form={id} className="h-10 flex-1 text-sm" isLoading={isSubmitting}>
+                <Button
+                    type="submit"
+                    form={id}
+                    disabled={isSubmitting}
+                    isLoading={isSubmitting}
+                    className="h-10 flex-1 text-sm"
+                >
                     Add admin
                 </Button>
             </div>

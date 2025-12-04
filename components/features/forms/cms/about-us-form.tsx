@@ -8,11 +8,14 @@ import { TAboutUsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 
+import { useEffect } from "react";
+
 interface IAboutUsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
+    onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
-export default function AboutUsForm({ onComplete, id, ...props }: IAboutUsFormProps) {
+export default function AboutUsForm({ onComplete, onSubmittingChange, id, ...props }: IAboutUsFormProps) {
     const form = useForm<TAboutUsForm>({
         resolver: zodResolver(AboutUsFormSchema),
         defaultValues: {
@@ -28,6 +31,10 @@ export default function AboutUsForm({ onComplete, id, ...props }: IAboutUsFormPr
         handleSubmit,
         formState: { isSubmitting },
     } = form;
+
+    useEffect(() => {
+        onSubmittingChange?.(isSubmitting);
+    }, [isSubmitting, onSubmittingChange]);
 
     const { fields } = useFieldArray({
         control,
