@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { BreakingNews } from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
@@ -35,7 +36,11 @@ const initialData: TCMS[] = [
     { id: CMS_IDS.ADD_ADMIN, title: "Add new admin", lastUpdated: "23/11/25" },
 ];
 
-export function CMSTable() {
+interface ICMSTableProps {
+    breakingNewsData?: BreakingNews | null;
+}
+
+export function CMSTable({ breakingNewsData }: ICMSTableProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState<TCMS | null>(null);
@@ -97,6 +102,7 @@ export function CMSTable() {
                         id={`${CMS_IDS.BREAKING_NEWS}-form`}
                         onComplete={() => setIsSheetOpen(false)}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={breakingNewsData}
                     />
                 );
             case CMS_IDS.DASHBOARD_ADS:

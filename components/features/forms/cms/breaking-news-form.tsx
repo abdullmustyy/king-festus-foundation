@@ -1,5 +1,6 @@
 "use client";
 
+import { updateBreakingNews } from "@/app/actions/cms/breaking-news";
 import { CalendarDatePicker } from "@/components/ui/calendar-date-picker";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
@@ -8,24 +9,31 @@ import { Switch } from "@/components/ui/switch";
 import { BreakingNewsFormSchema } from "@/lib/validators";
 import { TBreakingNewsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
-
 import { useEffect } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface IBreakingNewsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
     onSubmittingChange?: (isSubmitting: boolean) => void;
+    initialData?: Partial<TBreakingNewsForm> | null;
 }
 
-export default function BreakingNewsForm({ onComplete, onSubmittingChange, id, ...props }: IBreakingNewsFormProps) {
+export default function BreakingNewsForm({
+    onComplete,
+    onSubmittingChange,
+    initialData,
+    id,
+    ...props
+}: IBreakingNewsFormProps) {
     const form = useForm<TBreakingNewsForm>({
         resolver: zodResolver(BreakingNewsFormSchema),
         defaultValues: {
-            headline: "",
-            linkUrl: "",
-            startDate: undefined,
-            endDate: undefined,
-            status: false,
+            headline: initialData?.headline || "",
+            linkUrl: initialData?.linkUrl || "",
+            startDate: initialData?.startDate ? new Date(initialData.startDate) : new Date(),
+            endDate: initialData?.endDate ? new Date(initialData.endDate) : undefined,
+            status: initialData?.status || false,
         },
     });
 
@@ -39,7 +47,25 @@ export default function BreakingNewsForm({ onComplete, onSubmittingChange, id, .
         onSubmittingChange?.(isSubmitting);
     }, [isSubmitting, onSubmittingChange]);
 
-    const onSubmit = async () => onComplete();
+    const onSubmit = async (data: TBreakingNewsForm) => {
+        try {
+            const res = await updateBreakingNews(data);
+
+            if (res.error) {
+                toast.error(res.error);
+                return;
+            }
+
+            toast.success("Breaking news updated successfully");
+
+            onComplete();
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong", {
+                description: "Please try again later",
+            });
+        }
+    };
 
     return (
         <section className="space-y-3 p-5">
