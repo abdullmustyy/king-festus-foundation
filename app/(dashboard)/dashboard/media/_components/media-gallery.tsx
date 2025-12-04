@@ -3,7 +3,7 @@
 import AddImageForm from "@/components/features/forms/add-image-form";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Media } from "@/generated/prisma/client";
+import { Prisma } from "@/generated/prisma/client";
 import { PrismaPromise } from "@/generated/prisma/internal/prismaNamespace";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
@@ -11,8 +11,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
 
+type MediaWithImage = Prisma.MediaGetPayload<{
+    include: { image: true };
+}>;
+
 interface IMediaGalleryProps {
-    mediaPromise: PrismaPromise<Media[]>;
+    mediaPromise: PrismaPromise<MediaWithImage[]>;
 }
 
 const MediaGallery = ({ mediaPromise }: IMediaGalleryProps) => {
@@ -38,9 +42,14 @@ const MediaGallery = ({ mediaPromise }: IMediaGalleryProps) => {
 
                 {/* Media gallery */}
                 <div className="columns-2 gap-1.5 lg:columns-3 lg:gap-2.5 2xl:columns-4">
-                    {media.map(({ id, url, description }) => (
+                    {media.map(({ id, image, description }) => (
                         <div key={id} className="relative mb-1.5 break-inside-avoid lg:mb-2.5">
-                            <Image src={url} alt={description ?? ""} height={500} width={500} />
+                            <Image
+                                src={image?.url ?? ""}
+                                alt={image?.name ?? description ?? ""}
+                                height={500}
+                                width={500}
+                            />
                         </div>
                     ))}
                 </div>

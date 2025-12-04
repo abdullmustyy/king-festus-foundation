@@ -2,7 +2,11 @@ import db from "@/lib/db";
 import MediaGallery from "./_components/media-gallery";
 
 const MediaPage = async () => {
-    const mediaPromise = db.media.findMany();
+    const mediaPromise = db.media.findMany({
+        include: {
+            image: true,
+        },
+    });
 
     return <MediaGallery mediaPromise={mediaPromise} />;
 };

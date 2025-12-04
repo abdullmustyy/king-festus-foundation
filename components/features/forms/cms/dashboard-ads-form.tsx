@@ -5,12 +5,14 @@ import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import UploadMediaTrigger from "@/components/ui/upload-media-trigger";
+import { uploadFiles } from "@/lib/uploadthing";
 import { DashboardAdsFormSchema } from "@/lib/validators";
 import { TDashboardAdsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Info } from "lucide-react";
 import { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface IDashboardAdsFormProps extends React.ComponentProps<"form"> {
@@ -39,7 +41,29 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
         onSubmittingChange?.(isSubmitting);
     }, [isSubmitting, onSubmittingChange]);
 
-    const onSubmit = async () => onComplete();
+    const onSubmit = async (data: TDashboardAdsForm) => {
+        try {
+            const res = await uploadFiles("dashboardAdImage", {
+                files: [data.adImage],
+                input: {
+                    title: data.adTitle,
+                    status: data.status,
+                },
+            });
+
+            if (!res) {
+                throw new Error("Failed to upload ad image");
+            }
+
+            toast.success("Dashboard ad updated successfully");
+            onComplete();
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong", {
+                description: "Please try again later",
+            });
+        }
+    };
 
     return (
         <section className="space-y-3 p-5">

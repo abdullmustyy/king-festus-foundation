@@ -5,12 +5,14 @@ import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import UploadMediaTrigger from "@/components/ui/upload-media-trigger";
+import { uploadFiles } from "@/lib/uploadthing";
 import { GovernanceStructureFormSchema } from "@/lib/validators";
 import { TGovernanceStructureForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChevronRight, Info } from "lucide-react";
-import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface IGovernanceStructureFormProps extends React.ComponentProps<"form"> {
@@ -51,7 +53,26 @@ export default function GovernanceStructureForm({
         name: "governanceBodies",
     });
 
-    const onSubmit = async () => onComplete();
+    const onSubmit = async (data: TGovernanceStructureForm) => {
+        try {
+            await Promise.all(
+                data.governanceBodies.map((body) =>
+                    uploadFiles("governanceBodyImage", {
+                        files: [body.image],
+                        input: { name: body.name, role: body.role },
+                    }),
+                ),
+            );
+
+            toast.success("Governance structure updated successfully");
+            onComplete();
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong", {
+                description: "Please try again later",
+            });
+        }
+    };
 
     return (
         <FormProvider {...form}>

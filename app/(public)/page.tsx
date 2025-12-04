@@ -8,7 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const HomePage = async () => {
-    const landingPage = await db.landingPage.findFirst();
+    const landingPage = await db.landingPage.findFirst({
+        include: { heroImage: true },
+    });
 
     return (
         <section className="w-contain grid items-center gap-7 py-10 lg:grid-cols-2 lg:grid-rows-[28.125rem]">
@@ -50,7 +52,7 @@ const HomePage = async () => {
 
             <div className="relative size-full min-h-[300px] lg:min-h-auto">
                 <Image
-                    src={landingPage?.heroImage || HeroVolunteerImage}
+                    src={landingPage?.heroImage?.url || HeroVolunteerImage}
                     alt="Hero Volunteer Image"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     fill
