@@ -17,12 +17,7 @@ interface ILandingPageMediaFormProps extends React.ComponentProps<"form"> {
     onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
-const LandingPageMediaForm = ({
-    onComplete,
-    onSubmittingChange,
-    id,
-    ...props
-}: ILandingPageMediaFormProps) => {
+const LandingPageMediaForm = ({ onComplete, onSubmittingChange, id, ...props }: ILandingPageMediaFormProps) => {
     const form = useForm<TLandingPageMediaForm>({
         resolver: zodResolver(LandingPageMediaFormSchema),
         defaultValues: {

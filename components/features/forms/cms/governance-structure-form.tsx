@@ -46,6 +46,11 @@ export default function GovernanceStructureForm({
         onSubmittingChange?.(isSubmitting);
     }, [isSubmitting, onSubmittingChange]);
 
+    const { fields } = useFieldArray({
+        control,
+        name: "governanceBodies",
+    });
+
     const onSubmit = async () => onComplete();
 
     return (
