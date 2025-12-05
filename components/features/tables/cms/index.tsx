@@ -10,8 +10,8 @@ import { DataTable } from "@/components/features/tables/data-table/data-table";
 import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { BreakingNews } from "@/generated/prisma/client";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { BreakingNews, GovernanceBody, Image } from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
@@ -38,9 +38,10 @@ const initialData: TCMS[] = [
 
 interface ICMSTableProps {
     breakingNewsData?: BreakingNews | null;
+    governanceBodiesData?: (GovernanceBody & { image: Image | null })[] | null;
 }
 
-export function CMSTable({ breakingNewsData }: ICMSTableProps) {
+export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTableProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState<TCMS | null>(null);
@@ -86,6 +87,14 @@ export function CMSTable({ breakingNewsData }: ICMSTableProps) {
                         id={`${CMS_IDS.GOVERNANCE}-form`}
                         onComplete={() => setIsSheetOpen(false)}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={{
+                            governanceBodies: governanceBodiesData?.map((b) => ({
+                                id: b.id,
+                                image: b.image?.url,
+                                name: b.name,
+                                role: b.role,
+                            })),
+                        }}
                     />
                 );
             case CMS_IDS.ABOUT_US:
@@ -156,6 +165,7 @@ export function CMSTable({ breakingNewsData }: ICMSTableProps) {
                         {selectedRow?.id === CMS_IDS.ADD_ADMIN ? (
                             <>
                                 <SheetTitle className="font-normal">Add new admins</SheetTitle>
+                                <SheetDescription className="sr-only">Add new admins</SheetDescription>
                                 <SheetClose asChild>
                                     <Button variant="ghost" size="icon" className="size-9 rounded-full">
                                         <XIcon className="size-4" />
@@ -164,6 +174,8 @@ export function CMSTable({ breakingNewsData }: ICMSTableProps) {
                             </>
                         ) : (
                             <>
+                                <SheetTitle className="sr-only font-normal">{selectedRow?.title}</SheetTitle>
+                                <SheetDescription className="sr-only">{selectedRow?.title}</SheetDescription>
                                 <SheetClose asChild>
                                     <Button variant="ghost" size="icon" className="size-9 rounded-full">
                                         <XIcon className="size-4" />

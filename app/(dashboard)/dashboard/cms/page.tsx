@@ -6,6 +6,11 @@ export const dynamic = "force-dynamic";
 
 export default async function CMSPage() {
     const breakingNews = await db.breakingNews.findFirst();
+    const governanceBodies = await db.governanceBody.findMany({
+        include: {
+            image: true,
+        },
+    });
 
     return (
         <>
@@ -13,7 +18,7 @@ export default async function CMSPage() {
                 <h1 className="font-medium">Content management system</h1>
             </div>
             <Suspense fallback={<></>}>
-                <CMSTable breakingNewsData={breakingNews} />
+                <CMSTable breakingNewsData={breakingNews} governanceBodiesData={governanceBodies} />
             </Suspense>
         </>
     );

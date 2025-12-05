@@ -30,7 +30,7 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
     disabled,
 }: IUploadMediaTriggerProps<T, K>) => {
     const { register, setValue, watch } = useFormContext<T>();
-    const file: File = watch(name);
+    const file: File | string | undefined = watch(name); // file can be File or string
 
     const [preview, setPreview] = useState<string | null>(null);
 
@@ -72,18 +72,22 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
         register(name);
     }, [register, name]);
 
-    // Effect to sync internal preview state with the form's watched file value
     const isFileInstance = file instanceof File;
+    const isStringInstance = typeof file === "string";
 
     useEffect(() => {
         if (isFileInstance) {
             const objectUrl = URL.createObjectURL(file);
             setPreview(objectUrl);
             return () => URL.revokeObjectURL(objectUrl);
+        } else if (isStringInstance) {
+            // If it's a string (URL), use it directly
+            setPreview(file);
+            // No revokeObjectUrl needed for strings
         } else {
             setPreview(null);
         }
-    }, [file, isFileInstance]);
+    }, [file, isFileInstance, isStringInstance]); // Add isStringInstance to dependencies
 
     return (
         <Dropzone accept={accept} maxFiles={1} maxSize={maxSize} onDrop={handleDrop} disabled={disabled}>

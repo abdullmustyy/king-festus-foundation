@@ -107,6 +107,7 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
                                             <CmsImageFormField
                                                 name="adImage"
                                                 isDragging={isDragging}
+                                                isSubmitting={isSubmitting}
                                                 preview={preview}
                                                 onRemove={() => resetField("adImage")}
                                             />

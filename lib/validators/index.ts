@@ -24,7 +24,7 @@ export const SignUpFormSchema = z
         confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords do not match",
+        error: "Passwords do not match",
         path: ["confirmPassword"],
     });
 
@@ -39,7 +39,7 @@ export const ResetPasswordFormSchema = z
         code: z.string().min(6, "Code must be 6 characters"),
     })
     .refine((data) => data.password === data.confirmPassword, {
-        message: "Passwords do not match",
+        error: "Passwords do not match",
         path: ["confirmPassword"],
     });
 
@@ -69,20 +69,32 @@ export const LandingPageMediaFormSchema = z.object({
 });
 
 export const GovernanceStructureFormSchema = z.object({
-    governanceBodies: z.array(
-        z.object({
-            image: z
-                .instanceof(File, { error: "Image is required." })
-                .refine((file) => file, "Image is required.")
-                .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
-                .refine(
-                    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-                    ".jpg, .jpeg, .png and .webp files are accepted.",
-                ),
-            name: z.string().min(1, "Name is required"),
-            role: z.string().min(1, "Role is required"),
+    governanceBodies: z
+        .array(
+            z.object({
+                id: z.string().optional(),
+                image: z
+                    .union([
+                        z
+                            .instanceof(File)
+                            .refine((file) => file.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
+                            .refine(
+                                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+                                ".jpg, .jpeg, .png and .webp files are accepted.",
+                            ),
+                        z.string(),
+                        z.undefined(),
+                        z.null(),
+                    ])
+                    .optional(),
+                name: z.string().optional(),
+                role: z.string().optional(),
+            }),
+        )
+        .refine((bodies) => bodies.some((b) => b.name?.trim() && b.role?.trim() && b.image), {
+            error: "At least one complete governance body member (Name, Role, and Image) is required.",
+            path: [0, "role"],
         }),
-    ),
 });
 
 export const AboutUsFormSchema = z.object({
@@ -110,7 +122,7 @@ export const BreakingNewsFormSchema = z
         status: z.boolean(),
     })
     .refine((data) => data.endDate >= data.startDate, {
-        message: "End date cannot be before start date",
+        error: "End date cannot be before start date",
         path: ["endDate"],
     });
 

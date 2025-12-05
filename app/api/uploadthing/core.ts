@@ -8,6 +8,26 @@ import z from "zod";
 const f = createUploadthing();
 
 export const ourFileRouter = {
+    governanceBodyImage: f(["image"]) // Renamed from imageUploader
+        .middleware(async () => {
+            const user = await currentUser();
+
+            if (!user) throw new UploadThingError("You must be logged in to upload an image");
+
+            return { userId: user.id };
+        })
+        .onUploadComplete(async ({ file }) => {
+            // Create the new Image record
+            const newImage = await db.image.create({
+                data: {
+                    key: file.key,
+                    name: file.name,
+                    url: file.ufsUrl,
+                },
+            });
+            return { id: newImage.id, key: newImage.key, name: newImage.name, url: newImage.url };
+        }),
+
     dashboardAdImage: f(["image"])
         .input(z.object({ title: z.string(), status: z.boolean() }))
         .middleware(async ({ input }) => {
@@ -77,41 +97,6 @@ export const ourFileRouter = {
             revalidatePath("/dashboard/media");
         }),
 
-    governanceBodyImage: f(["image"])
-        .input(z.object({ name: z.string(), role: z.string() }))
-        .middleware(async ({ input }) => {
-            const user = await currentUser();
-
-            if (!user) throw new UploadThingError("You must be logged in to add a governance body member");
-
-            return { userId: user.id, input };
-        })
-        .onUploadComplete(async ({ metadata, file }) => {
-            const { input } = metadata;
-
-            // 1. Create the new Image record
-            const newImage = await db.image.create({
-                data: {
-                    key: file.key,
-                    name: file.name,
-                    url: file.ufsUrl,
-                },
-            });
-
-            // 2. Create the GovernanceBody record and link the image
-            await db.governanceBody.create({
-                data: {
-                    name: input.name,
-                    role: input.role,
-                    image: {
-                        connect: { id: newImage.id },
-                    },
-                },
-            });
-
-            revalidatePath("/governance-structure");
-        }),
-
     landingPageHeroImage: f(["image"])
         .middleware(async () => {
             const user = await currentUser();
@@ -122,7 +107,7 @@ export const ourFileRouter = {
         })
         .onUploadComplete(async ({ file }) => {
             const existingLandingPage = await db.landingPage.findFirst({
-                include: { heroImage: true }, // Include the related Image record
+                include: { heroImage: true },
             });
 
             // 1. Create the new Image record
@@ -135,13 +120,11 @@ export const ourFileRouter = {
             });
 
             if (existingLandingPage) {
-                // If a LandingPage exists and it had a previous heroImage,
-                // delete the old Image record from the database and from UploadThing
-                if (existingLandingPage.heroImage && existingLandingPage.heroImage.key) {
-                    await utapi.deleteFiles(existingLandingPage.heroImage.key); // Delete from UploadThing
-                    await db.image.delete({ where: { id: existingLandingPage.heroImage.id } }); // Delete from DB
-                }
+                const oldImageId = existingLandingPage.heroImage?.id;
+                const oldImageKey = existingLandingPage.heroImage?.key;
 
+                // 2. Update LandingPage to point to the new image FIRST
+                // This removes the reference to the old image
                 await db.landingPage.update({
                     where: { id: existingLandingPage.id },
                     data: {
@@ -150,8 +133,13 @@ export const ourFileRouter = {
                         },
                     },
                 });
+
+                // 3. Now it is safe to delete the old image
+                if (oldImageId && oldImageKey) {
+                    await utapi.deleteFiles(oldImageKey);
+                    await db.image.delete({ where: { id: oldImageId } });
+                }
             } else {
-                // Create a new LandingPage and connect the new Image
                 await db.landingPage.create({
                     data: {
                         heroImage: {

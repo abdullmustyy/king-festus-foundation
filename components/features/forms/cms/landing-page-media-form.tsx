@@ -73,6 +73,7 @@ const LandingPageMediaForm = ({ onComplete, onSubmittingChange, id, ...props }: 
                                             <CmsImageFormField
                                                 name="image"
                                                 isDragging={isDragging}
+                                                isSubmitting={isSubmitting}
                                                 preview={preview}
                                                 onRemove={() => form.resetField("image")}
                                             />

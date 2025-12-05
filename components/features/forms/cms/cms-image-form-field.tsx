@@ -6,10 +6,11 @@ interface CmsImageFormFieldProps {
     name: string;
     preview: string | null;
     isDragging: boolean;
+    isSubmitting: boolean;
     onRemove: () => void;
 }
 
-export function CmsImageFormField({ preview, isDragging, onRemove }: CmsImageFormFieldProps) {
+export function CmsImageFormField({ preview, isDragging, isSubmitting, onRemove }: CmsImageFormFieldProps) {
     return (
         <div className="flex h-25 w-full items-center gap-4 rounded-lg bg-[#F7F7F7] px-3 py-4">
             <div className="relative flex h-full w-27.5 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-border/20">
@@ -20,6 +21,7 @@ export function CmsImageFormField({ preview, isDragging, onRemove }: CmsImageFor
                             type="button"
                             variant="ghost"
                             size="icon"
+                            disabled={isSubmitting}
                             className="absolute -top-1 -right-1 z-10 size-4 cursor-pointer rounded-full bg-[#1F1F1F]/90 hover:bg-[#1F1F1F]"
                             onClick={(e) => {
                                 e.stopPropagation();

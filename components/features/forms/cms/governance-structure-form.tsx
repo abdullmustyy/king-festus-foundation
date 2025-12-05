@@ -1,5 +1,6 @@
 "use client";
 
+import { updateGovernanceStructure } from "@/app/actions/cms/governance-structure";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
@@ -18,29 +19,49 @@ import { CmsImageFormField } from "./cms-image-form-field";
 interface IGovernanceStructureFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
     onSubmittingChange?: (isSubmitting: boolean) => void;
+    initialData?: Partial<TGovernanceStructureForm> | null;
 }
 
 export default function GovernanceStructureForm({
     onComplete,
     onSubmittingChange,
+    initialData,
     id,
     ...props
 }: IGovernanceStructureFormProps) {
     const form = useForm<TGovernanceStructureForm>({
         resolver: zodResolver(GovernanceStructureFormSchema),
         defaultValues: {
-            governanceBodies: Array.from({ length: 6 }).map(() => ({
-                image: undefined,
-                name: "",
-                role: "",
-            })),
+            governanceBodies:
+                initialData?.governanceBodies && initialData.governanceBodies.length > 0
+                    ? [
+                          ...initialData.governanceBodies.map((b) => ({
+                              id: b.id,
+                              image: b.image,
+                              name: b.name,
+                              role: b.role,
+                          })),
+                          // Pad with empty objects until length 6
+                          ...Array.from({ length: Math.max(0, 6 - initialData.governanceBodies.length) }).map(() => ({
+                              id: undefined,
+                              image: undefined,
+                              name: "",
+                              role: "",
+                          })),
+                      ]
+                    : Array.from({ length: 6 }).map(() => ({
+                          id: undefined,
+                          image: undefined,
+                          name: "",
+                          role: "",
+                      })),
         },
     });
 
     const {
         control,
         handleSubmit,
-        resetField,
+        setValue,
         formState: { isSubmitting },
     } = form;
 
@@ -55,14 +76,38 @@ export default function GovernanceStructureForm({
 
     const onSubmit = async (data: TGovernanceStructureForm) => {
         try {
-            await Promise.all(
-                data.governanceBodies.map((body) =>
-                    uploadFiles("governanceBodyImage", {
-                        files: [body.image],
-                        input: { name: body.name, role: body.role },
-                    }),
-                ),
+            const validBodies = data.governanceBodies.filter(
+                (b) => b.name?.trim() && b.role?.trim() && b.image !== undefined,
             );
+
+            const processedBodies = await Promise.all(
+                validBodies.map(async (body) => {
+                    let imageUrl = body.image;
+
+                    if (body.image instanceof File) {
+                        const res = await uploadFiles("governanceBodyImage", {
+                            files: [body.image],
+                        });
+                        if (res && res[0]) {
+                            imageUrl = res[0].url;
+                        }
+                    }
+
+                    return {
+                        id: body.id,
+                        name: body.name!,
+                        role: body.role!,
+                        image: imageUrl as string,
+                    };
+                }),
+            );
+
+            const res = await updateGovernanceStructure({ governanceBodies: processedBodies });
+
+            if (res.error) {
+                toast.error(res.error);
+                return;
+            }
 
             toast.success("Governance structure updated successfully");
             onComplete();
@@ -108,8 +153,14 @@ export default function GovernanceStructureForm({
                                                     <CmsImageFormField
                                                         name={`governanceBodies.${index}.image`}
                                                         isDragging={isDragging}
+                                                        isSubmitting={isSubmitting}
                                                         preview={preview}
-                                                        onRemove={() => resetField(`governanceBodies.${index}.image`)}
+                                                        onRemove={() =>
+                                                            setValue(`governanceBodies.${index}.image`, undefined, {
+                                                                shouldValidate: true,
+                                                                shouldDirty: true,
+                                                            })
+                                                        }
                                                     />
                                                 )}
                                             </UploadMediaTrigger>
