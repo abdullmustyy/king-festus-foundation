@@ -108,12 +108,13 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
                                         }}
                                         maxSize={8 * 1024 * 1024}
                                     >
-                                        {({ isDragging, preview }) => (
+                                        {({ isDragging, preview, file }) => (
                                             <CmsImageFormField
                                                 name="adImage"
                                                 isDragging={isDragging}
                                                 isSubmitting={isSubmitting}
                                                 preview={preview}
+                                                file={file}
                                                 onRemove={() => resetField("adImage")}
                                             />
                                         )}

@@ -45,13 +45,20 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
 
                 if (error.code === "file-invalid-type") {
                     heading = "Invalid file type";
-                    description = "Please upload a valid image file (.jpg, .jpeg, .png, .webp, .svg).";
+                    const allowedExtensions = Object.values(accept || {})
+                        .flat()
+                        .join(", ");
+                    description = `Please upload a valid file (${allowedExtensions}).`;
                 } else if (error.code === "too-many-files") {
                     heading = "Too many files";
                     description = "Please upload only one file.";
                 } else if (error.code === "file-too-large") {
                     heading = "File too large";
-                    description = `File size should not be more than ${maxSize / 1024}KB.`;
+                    const sizeInMB = maxSize / (1024 * 1024);
+                    const sizeInKB = maxSize / 1024;
+                    const sizeText =
+                        sizeInMB >= 1 ? `${parseFloat(sizeInMB.toFixed(2))}MB` : `${Math.round(sizeInKB)}KB`;
+                    description = `File size should not be more than ${sizeText}.`;
                 }
 
                 toast(<ErrorToast {...{ heading, description }} />);
@@ -65,7 +72,7 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
             // so we don't need to do it here directly.
             // Old: if (preview) { URL.revokeObjectURL(preview); } setPreview(URL.createObjectURL(file));
         },
-        [maxSize, name, setValue],
+        [maxSize, name, setValue, accept],
     );
 
     useEffect(() => {

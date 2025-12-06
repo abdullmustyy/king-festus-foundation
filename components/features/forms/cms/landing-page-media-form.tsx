@@ -69,12 +69,13 @@ const LandingPageMediaForm = ({ onComplete, onSubmittingChange, id, ...props }: 
                             {() => (
                                 <div className="space-y-3">
                                     <UploadMediaTrigger name="image" disabled={isSubmitting}>
-                                        {({ isDragging, preview }) => (
+                                        {({ isDragging, preview, file }) => (
                                             <CmsImageFormField
                                                 name="image"
                                                 isDragging={isDragging}
                                                 isSubmitting={isSubmitting}
                                                 preview={preview}
+                                                file={file}
                                                 onRemove={() => form.resetField("image")}
                                             />
                                         )}

@@ -155,12 +155,13 @@ export default function GovernanceStructureForm({
                                                 disabled={isSubmitting}
                                                 aria-invalid={fieldState.invalid}
                                             >
-                                                {({ isDragging, preview }) => (
+                                                {({ isDragging, preview, file }) => (
                                                     <CmsImageFormField
                                                         name={`governanceBodies.${index}.image`}
                                                         isDragging={isDragging}
                                                         isSubmitting={isSubmitting}
                                                         preview={preview}
+                                                        file={file}
                                                         onRemove={() =>
                                                             setValue(`governanceBodies.${index}.image`, undefined, {
                                                                 shouldValidate: true,

@@ -59,7 +59,19 @@ export const ourFileRouter = {
 
             const mediaAssetsToDelete = existingAds
                 .map((ad) => ad.mediaAsset)
-                .filter((media): media is { id: string; key: string; name: string; url: string; type: "IMAGE" | "VIDEO"; createdAt: Date; updatedAt: Date } => !!media);
+                .filter(
+                    (
+                        media,
+                    ): media is {
+                        id: string;
+                        key: string;
+                        name: string;
+                        url: string;
+                        type: "IMAGE" | "VIDEO";
+                        createdAt: Date;
+                        updatedAt: Date;
+                    } => !!media,
+                );
 
             const mediaKeysToDelete = mediaAssetsToDelete.map((m) => m.key);
             const mediaIdsToDelete = mediaAssetsToDelete.map((m) => m.id);
