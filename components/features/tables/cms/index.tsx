@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { BreakingNews, GovernanceBody, Image } from "@/generated/prisma/client";
+import { BreakingNews, GovernanceBody, MediaAsset } from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { XIcon } from "lucide-react";
@@ -38,7 +38,7 @@ const initialData: TCMS[] = [
 
 interface ICMSTableProps {
     breakingNewsData?: BreakingNews | null;
-    governanceBodiesData?: (GovernanceBody & { image: Image | null })[] | null;
+    governanceBodiesData?: (GovernanceBody & { mediaAsset: MediaAsset | null })[] | null;
 }
 
 export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTableProps) {
@@ -90,7 +90,8 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
                         initialData={{
                             governanceBodies: governanceBodiesData?.map((b) => ({
                                 id: b.id,
-                                image: b.image?.url,
+                                image: b.mediaAsset?.url,
+                                mediaAssetId: b.mediaAssetId,
                                 name: b.name,
                                 role: b.role,
                             })),

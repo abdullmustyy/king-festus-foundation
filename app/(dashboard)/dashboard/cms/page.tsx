@@ -8,7 +8,7 @@ export default async function CMSPage() {
     const breakingNews = await db.breakingNews.findFirst();
     const governanceBodies = await db.governanceBody.findMany({
         include: {
-            image: true,
+            mediaAsset: true,
         },
     });
 

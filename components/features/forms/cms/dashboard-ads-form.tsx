@@ -43,7 +43,7 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
 
     const onSubmit = async (data: TDashboardAdsForm) => {
         try {
-            const res = await uploadFiles("dashboardAdImage", {
+            const res = await uploadFiles("dashboardAdMedia", {
                 files: [data.adImage],
                 input: {
                     title: data.adTitle,
@@ -102,6 +102,11 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
                                         name="adImage"
                                         disabled={isSubmitting}
                                         aria-invalid={fieldState.invalid}
+                                        accept={{
+                                            "image/*": [".jpg", ".jpeg", ".png", ".webp", ".svg"],
+                                            "video/*": [".mp4", ".webm", ".mov"],
+                                        }}
+                                        maxSize={8 * 1024 * 1024}
                                     >
                                         {({ isDragging, preview }) => (
                                             <CmsImageFormField
@@ -115,7 +120,7 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
                                     </UploadMediaTrigger>
                                     <div className="flex items-center gap-1">
                                         <Info className="size-4 fill-[#B47818] stroke-white" />
-                                        <span className="text-xs text-[#693D11]">3MB Image, or less</span>
+                                        <span className="text-xs text-[#693D11]">8MB Image/Video, or less</span>
                                     </div>
                                 </div>
                             )}

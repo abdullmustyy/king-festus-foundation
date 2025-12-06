@@ -21,7 +21,7 @@ type IUploadMediaTriggerProps<T extends FieldValues, K extends Path<T>> = Omit<
 
 const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
     accept = {
-        "image/*": [".jpg", ".jpeg", ".png"],
+        "image/*": [".jpg", ".jpeg", ".png", ".webp", ".svg"],
     },
     maxSize = 500 * 1024, // 500KB
     className,
@@ -45,7 +45,7 @@ const UploadMediaTrigger = <T extends FieldValues, K extends Path<T>>({
 
                 if (error.code === "file-invalid-type") {
                     heading = "Invalid file type";
-                    description = "Please upload a valid image file (.jpg, .jpeg, .png).";
+                    description = "Please upload a valid image file (.jpg, .jpeg, .png, .webp, .svg).";
                 } else if (error.code === "too-many-files") {
                     heading = "Too many files";
                     description = "Please upload only one file.";

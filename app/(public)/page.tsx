@@ -9,7 +9,7 @@ import Link from "next/link";
 
 const HomePage = async () => {
     const landingPage = await db.landingPage.findFirst({
-        include: { heroImage: true },
+        include: { heroMediaAsset: true },
     });
 
     return (
@@ -52,7 +52,7 @@ const HomePage = async () => {
 
             <div className="relative size-full min-h-[300px] lg:min-h-auto">
                 <Image
-                    src={landingPage?.heroImage?.url || HeroVolunteerImage}
+                    src={landingPage?.heroMediaAsset?.url || HeroVolunteerImage}
                     alt="Hero Volunteer Image"
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     fill

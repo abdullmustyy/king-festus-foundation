@@ -19,7 +19,7 @@ const structure = [
 const GovernanceStructurePage = async () => {
     const governanceBodies = await db.governanceBody.findMany({
         include: {
-            image: true,
+            mediaAsset: true,
         },
     });
 
@@ -35,7 +35,7 @@ const GovernanceStructurePage = async () => {
                         {governanceBodies.map((item) => (
                             <div key={item.id} className="flex flex-col gap-5">
                                 <div className="relative aspect-square w-full overflow-hidden rounded-lg">
-                                    <Image src={item.image?.url || ""} alt={item.name} fill className="object-cover" />
+                                    <Image src={item.mediaAsset?.url || ""} alt={item.name} fill className="object-cover" />
                                 </div>
                                 <div className="flex flex-col gap-1 text-center">
                                     <span className="text-xl font-medium text-primary">{item.name}</span>

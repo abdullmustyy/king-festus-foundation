@@ -1,6 +1,12 @@
 import * as z from "zod";
 
-const emailSchema = z.string().email("Invalid email address");
+const MAX_FILE_SIZE = 500000; // 500KB
+const MAX_CMS_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+const MAX_MEDIA_FILE_SIZE = 8 * 1024 * 1024; // 8MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/svg+xml"];
+const ACCEPTED_MEDIA_TYPES = [...ACCEPTED_IMAGE_TYPES, "video/mp4", "video/webm", "video/quicktime"];
+
+const emailSchema = z.email({ message: "Invalid email address" });
 const passwordSchema = z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -47,16 +53,15 @@ export const VerifyFormSchema = z.object({
     pin: z.string().min(6, "PIN must be 6 characters"),
 });
 
-const MAX_FILE_SIZE = 500000; // 500KB
-const MAX_CMS_FILE_SIZE = 3 * 1024 * 1024; // 3MB
-const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
 export const AddImageFormSchema = z.object({
     image: z
         .instanceof(File, { error: "Image is required." })
         .refine((file) => file, "Image is required.")
         .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 500KB.`)
-        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
+        .refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+            ".jpg, .jpeg, .png, .webp, and .svg files are accepted.",
+        ),
     description: z.string().optional(),
 });
 
@@ -64,8 +69,11 @@ export const LandingPageMediaFormSchema = z.object({
     image: z
         .instanceof(File, { error: "Image is required." })
         .refine((file) => file, "Image is required.")
-        .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
-        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
+        .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 2MB.`)
+        .refine(
+            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+            ".jpg, .jpeg, .png, .webp, and .svg files are accepted.",
+        ),
 });
 
 export const GovernanceStructureFormSchema = z.object({
@@ -77,16 +85,17 @@ export const GovernanceStructureFormSchema = z.object({
                     .union([
                         z
                             .instanceof(File)
-                            .refine((file) => file.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
+                            .refine((file) => file.size <= MAX_CMS_FILE_SIZE, `Max file size is 2MB.`)
                             .refine(
                                 (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
-                                ".jpg, .jpeg, .png and .webp files are accepted.",
+                                ".jpg, .jpeg, .png, .webp, and .svg files are accepted.",
                             ),
                         z.string(),
                         z.undefined(),
                         z.null(),
                     ])
                     .optional(),
+                mediaAssetId: z.string().optional(), // Added this
                 name: z.string().optional(),
                 role: z.string().optional(),
             }),
@@ -112,7 +121,7 @@ export const AboutUsFormSchema = z.object({
 export const BreakingNewsFormSchema = z
     .object({
         headline: z.string().min(1, "Headline is required"),
-        linkUrl: z.url("Invalid URL").min(1, "Link URL is required"),
+        linkUrl: z.url({ message: "Invalid URL" }),
         startDate: z.date({
             error: (issue) => (issue.input === undefined ? "Start date is required" : "Invalid date"),
         }),
@@ -129,10 +138,13 @@ export const BreakingNewsFormSchema = z
 export const DashboardAdsFormSchema = z.object({
     adTitle: z.string().min(1, "Ad title is required"),
     adImage: z
-        .instanceof(File, { error: "Ad image is required." })
-        .refine((file) => file, "Ad image is required.")
-        .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 3MB.`)
-        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file?.type), ".jpg, .jpeg, .png and .webp files are accepted."),
+        .instanceof(File, { error: "Ad image or video is required." })
+        .refine((file) => file, "Ad image or video is required.")
+        .refine((file) => file?.size <= MAX_MEDIA_FILE_SIZE, `Max file size is 8MB.`)
+        .refine(
+            (file) => ACCEPTED_MEDIA_TYPES.includes(file?.type),
+            ".jpg, .jpeg, .png, .webp, .svg, .mp4, .webm, and .mov files are accepted.",
+        ),
     status: z.boolean(),
 });
 

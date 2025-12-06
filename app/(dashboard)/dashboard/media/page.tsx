@@ -4,7 +4,7 @@ import MediaGallery from "./_components/media-gallery";
 const MediaPage = async () => {
     const mediaPromise = db.media.findMany({
         include: {
-            image: true,
+            mediaAsset: true,
         },
     });
 

@@ -82,7 +82,7 @@ const LandingPageMediaForm = ({ onComplete, onSubmittingChange, id, ...props }: 
 
                                     <div className="flex items-center gap-1">
                                         <Info className="size-4 fill-[#B47818] stroke-white" />
-                                        <span className="text-xs text-[#693D11]">3MB Image, or less</span>
+                                        <span className="text-xs text-[#693D11]">2MB Image, or less</span>
                                     </div>
                                 </div>
                             )}

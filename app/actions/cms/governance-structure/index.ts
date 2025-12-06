@@ -20,7 +20,7 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
         await db.$transaction(async (tx) => {
             // 1. Fetch current state
             const currentBodies = await tx.governanceBody.findMany({
-                include: { image: true },
+                include: { mediaAsset: true },
             });
 
             const incomingIds = new Set(
@@ -32,15 +32,15 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
             const bodyIdsToDelete = bodiesToDelete.map((b) => b.id);
 
             // 3. Handle Orphaned Images from DELETED bodies
-            // We collect image IDs/Keys to delete.
-            const imagesToDelete: { id: string; key: string }[] = [];
+            // We collect media asset IDs/Keys to delete.
+            const mediaAssetsToDelete: { id: string; key: string }[] = [];
 
             for (const body of bodiesToDelete) {
-                if (body.image) {
+                if (body.mediaAsset) {
                     // Check if this image is reused in the NEW submission (unlikely but possible if URLs match)
-                    const isReused = governanceBodies.some((newBody) => newBody.image === body.image?.url);
+                    const isReused = governanceBodies.some((newBody) => newBody.mediaAssetId === body.mediaAsset?.id);
                     if (!isReused) {
-                        imagesToDelete.push({ id: body.image.id, key: body.image.key });
+                        mediaAssetsToDelete.push({ id: body.mediaAsset.id, key: body.mediaAsset.key });
                     }
                 }
             }
@@ -54,21 +54,36 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
 
             // 4. Process Upserts (Update or Create)
             for (const body of governanceBodies) {
-                // Resolve Image Record
-                let imageRecord = await tx.image.findFirst({
-                    where: {
-                        OR: [{ key: body.image }, { url: body.image }],
-                    },
-                });
+                let mediaAssetRecord;
 
-                if (!imageRecord) {
-                    imageRecord = await tx.image.create({
+                if (body.mediaAssetId) {
+                    mediaAssetRecord = await tx.mediaAsset.findUnique({
+                        where: { id: body.mediaAssetId },
+                    });
+                } else {
+                    // This case should ideally not happen if mediaAssetId is always passed.
+                    // If it does, it means a new image was uploaded but ID was not captured, or old data.
+                    // For robustness, we could create a new MediaAsset here, but it implies a broken flow.
+                    // For now, let's assume mediaAssetId is always provided for images.
+                    // If it's a new upload, the form should have provided a new ID.
+                    // If it's an existing image, initialData should have provided an ID.
+                    // Hence, if mediaAssetId is missing, it's an error or a legacy image not properly migrated.
+                    // For current purpose, let's just create a new one, this will lead to duplicate mediaAsset
+                    // but will not break the flow.
+                    mediaAssetRecord = await tx.mediaAsset.create({
                         data: {
-                            key: body.image,
-                            name: body.name + "_image",
+                            key: body.image, // Assuming body.image is actually the key or url is sufficient
+                            name: body.name + "_media",
                             url: body.image,
+                            type: "IMAGE", // Default to IMAGE if type is not available
                         },
                     });
+                }
+
+                if (!mediaAssetRecord) {
+                    // If mediaAssetId was provided but not found, this is an error.
+                    // Or if body.image failed to create a mediaAsset.
+                    throw new Error(`Media asset not found or created for ID: ${body.mediaAssetId || body.image}`);
                 }
 
                 if (body.id && incomingIds.has(body.id)) {
@@ -76,17 +91,17 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
                     const existingBody = currentBodies.find((b) => b.id === body.id);
 
                     if (existingBody) {
-                        // Check if image has changed
-                        if (existingBody.imageId !== imageRecord.id) {
-                            // Old image might need deletion if not used elsewhere
-                            // Ideally we check usage count, but for 1:1-ish logic:
-                            // If the old image is not in the new list of images, delete it.
-                            // (We handle this lazily or strict? Strict is better for cleanliness)
-                            const oldImageIsReused = governanceBodies.some(
-                                (nb) => nb.image === existingBody.image?.url,
+                        // Check if mediaAsset has changed
+                        if (existingBody.mediaAssetId !== mediaAssetRecord.id) {
+                            // Old mediaAsset might need deletion if not used elsewhere
+                            const oldMediaAssetIsReused = governanceBodies.some(
+                                (nb) => nb.mediaAssetId === existingBody.mediaAsset?.id,
                             );
-                            if (!oldImageIsReused && existingBody.image) {
-                                imagesToDelete.push({ id: existingBody.image.id, key: existingBody.image.key });
+                            if (!oldMediaAssetIsReused && existingBody.mediaAsset) {
+                                mediaAssetsToDelete.push({
+                                    id: existingBody.mediaAsset.id,
+                                    key: existingBody.mediaAsset.key,
+                                });
                             }
                         }
 
@@ -95,7 +110,7 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
                             data: {
                                 name: body.name,
                                 role: body.role,
-                                imageId: imageRecord.id,
+                                mediaAssetId: mediaAssetRecord.id,
                             },
                         });
                     }
@@ -105,27 +120,27 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
                         data: {
                             name: body.name,
                             role: body.role,
-                            imageId: imageRecord.id,
+                            mediaAssetId: mediaAssetRecord.id,
                         },
                     });
                 }
             }
 
-            // 5. Execute Image Deletions
-            if (imagesToDelete.length > 0) {
-                // Unique images only
-                const uniqueImagesToDelete = Array.from(
-                    new Map(imagesToDelete.map((item) => [item.id, item])).values(),
+            // 5. Execute MediaAsset Deletions
+            if (mediaAssetsToDelete.length > 0) {
+                // Unique mediaAssets only
+                const uniqueMediaAssetsToDelete = Array.from(
+                    new Map(mediaAssetsToDelete.map((item) => [item.id, item])).values(),
                 );
-                const imageIdsToDelete = uniqueImagesToDelete.map((img) => img.id);
-                const imageKeysToDelete = uniqueImagesToDelete.map((img) => img.key);
+                const mediaAssetIdsToDelete = uniqueMediaAssetsToDelete.map((img) => img.id);
+                const mediaAssetKeysToDelete = uniqueMediaAssetsToDelete.map((img) => img.key);
 
-                await tx.image.deleteMany({
-                    where: { id: { in: imageIdsToDelete } },
+                await tx.mediaAsset.deleteMany({
+                    where: { id: { in: mediaAssetIdsToDelete } },
                 });
 
                 try {
-                    await utapi.deleteFiles(imageKeysToDelete);
+                    await utapi.deleteFiles(mediaAssetKeysToDelete);
                 } catch (utError) {
                     console.error("Failed to delete files from UploadThing:", utError);
                 }

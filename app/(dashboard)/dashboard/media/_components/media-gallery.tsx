@@ -11,12 +11,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { use, useState } from "react";
 
-type MediaWithImage = Prisma.MediaGetPayload<{
-    include: { image: true };
+type MediaWithAsset = Prisma.MediaGetPayload<{
+    include: { mediaAsset: true };
 }>;
 
 interface IMediaGalleryProps {
-    mediaPromise: PrismaPromise<MediaWithImage[]>;
+    mediaPromise: PrismaPromise<MediaWithAsset[]>;
 }
 
 const MediaGallery = ({ mediaPromise }: IMediaGalleryProps) => {
@@ -42,11 +42,11 @@ const MediaGallery = ({ mediaPromise }: IMediaGalleryProps) => {
 
                 {/* Media gallery */}
                 <div className="columns-2 gap-1.5 lg:columns-3 lg:gap-2.5 2xl:columns-4">
-                    {media.map(({ id, image, description }) => (
+                    {media.map(({ id, mediaAsset, description }) => (
                         <div key={id} className="relative mb-1.5 break-inside-avoid lg:mb-2.5">
                             <Image
-                                src={image?.url ?? ""}
-                                alt={image?.name ?? description ?? ""}
+                                src={mediaAsset?.url ?? ""}
+                                alt={mediaAsset?.name ?? description ?? ""}
                                 height={500}
                                 width={500}
                             />

@@ -20,7 +20,7 @@ export default function RootLayout({
     return (
         <ClerkProvider>
             <html lang="en">
-                <body className={cn(sfPro.variable, instrumentSans.variable, "min-h-dvh flex flex-col")}>
+                <body className={cn(sfPro.variable, instrumentSans.variable, "flex min-h-dvh flex-col")}>
                     <NuqsAdapter>{children}</NuqsAdapter>
                     <Toaster />
                 </body>

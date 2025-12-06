@@ -17,13 +17,14 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-model Image {
-  id        String   @id @default(uuid())
-  key       String   @unique
+model MediaAsset {
+  id        String         @id @default(uuid())
+  key       String         @unique
   name      String
   url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  type      MediaAssetType
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   landingPages     LandingPage[]
   governanceBodies GovernanceBody[]
@@ -32,20 +33,20 @@ model Image {
 }
 
 model Media {
-  id          String   @id @default(uuid())
-  description String?
-  imageId     String   @unique
-  image       Image    @relation(fields: [imageId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String     @id @default(uuid())
+  description  String?
+  mediaAssetId String     @unique
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model LandingPage {
-  id          String   @id @default(uuid())
-  heroImageId String
-  heroImage   Image    @relation(fields: [heroImageId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String     @id @default(uuid())
+  heroMediaAssetId String
+  heroMediaAsset   MediaAsset @relation(fields: [heroMediaAssetId], references: [id])
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 }
 
 model AboutUs {
@@ -64,13 +65,13 @@ model Mission {
 }
 
 model GovernanceBody {
-  id        String   @id @default(uuid())
-  imageId   String
-  image     Image    @relation(fields: [imageId], references: [id])
-  name      String
-  role      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String     @id @default(uuid())
+  mediaAssetId String
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id])
+  name         String
+  role         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model BreakingNews {
@@ -85,16 +86,21 @@ model BreakingNews {
 }
 
 model DashboardAd {
-  id        String   @id @default(uuid())
-  title     String
-  imageId   String
-  image     Image    @relation(fields: [imageId], references: [id])
-  status    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String     @id @default(uuid())
+  title        String
+  mediaAssetId String
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id])
+  status       Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 enum UserRole {
   ADMIN
   USER
+}
+
+enum MediaAssetType {
+  IMAGE
+  VIDEO
 }

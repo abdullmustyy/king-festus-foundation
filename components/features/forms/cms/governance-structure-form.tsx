@@ -38,6 +38,7 @@ export default function GovernanceStructureForm({
                           ...initialData.governanceBodies.map((b) => ({
                               id: b.id,
                               image: b.image,
+                              mediaAssetId: b.mediaAssetId,
                               name: b.name,
                               role: b.role,
                           })),
@@ -45,6 +46,7 @@ export default function GovernanceStructureForm({
                           ...Array.from({ length: Math.max(0, 6 - initialData.governanceBodies.length) }).map(() => ({
                               id: undefined,
                               image: undefined,
+                              mediaAssetId: undefined,
                               name: "",
                               role: "",
                           })),
@@ -52,6 +54,7 @@ export default function GovernanceStructureForm({
                     : Array.from({ length: 6 }).map(() => ({
                           id: undefined,
                           image: undefined,
+                          mediaAssetId: undefined,
                           name: "",
                           role: "",
                       })),
@@ -83,13 +86,15 @@ export default function GovernanceStructureForm({
             const processedBodies = await Promise.all(
                 validBodies.map(async (body) => {
                     let imageUrl = body.image;
+                    let mediaAssetId = body.mediaAssetId;
 
                     if (body.image instanceof File) {
                         const res = await uploadFiles("governanceBodyImage", {
                             files: [body.image],
                         });
                         if (res && res[0]) {
-                            imageUrl = res[0].url;
+                            imageUrl = res[0].ufsUrl;
+                            mediaAssetId = res[0].serverData?.id; // Capture mediaAssetId
                         }
                     }
 
@@ -98,6 +103,7 @@ export default function GovernanceStructureForm({
                         name: body.name!,
                         role: body.role!,
                         image: imageUrl as string,
+                        mediaAssetId: mediaAssetId as string | undefined,
                     };
                 }),
             );
@@ -166,7 +172,7 @@ export default function GovernanceStructureForm({
                                             </UploadMediaTrigger>
                                             <div className="flex items-center gap-1">
                                                 <Info className="size-4 fill-[#B47818] stroke-white" />
-                                                <span className="text-xs text-[#693D11]">3MB Image, or less</span>
+                                                <span className="text-xs text-[#693D11]">2MB Image, or less</span>
                                             </div>
                                         </div>
                                     )}
