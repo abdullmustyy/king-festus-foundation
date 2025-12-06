@@ -95,7 +95,7 @@ export const GovernanceStructureFormSchema = z.object({
                         z.null(),
                     ])
                     .optional(),
-                mediaAssetId: z.string().optional(), // Added this
+                mediaAssetId: z.string().optional(),
                 name: z.string().optional(),
                 role: z.string().optional(),
             }),
@@ -138,14 +138,22 @@ export const BreakingNewsFormSchema = z
 export const DashboardAdsFormSchema = z.object({
     adTitle: z.string().min(1, "Ad title is required"),
     adImage: z
-        .instanceof(File, { error: "Ad image or video is required." })
-        .refine((file) => file, "Ad image or video is required.")
-        .refine((file) => file?.size <= MAX_MEDIA_FILE_SIZE, `Max file size is 8MB.`)
-        .refine(
-            (file) => ACCEPTED_MEDIA_TYPES.includes(file?.type),
-            ".jpg, .jpeg, .png, .webp, .svg, .mp4, .webm, and .mov files are accepted.",
-        ),
+        .union([
+            z
+                .instanceof(File, { error: "Ad image or video is required." })
+                .refine((file) => file, "Ad image or video is required.")
+                .refine((file) => file?.size <= MAX_MEDIA_FILE_SIZE, `Max file size is 8MB.`)
+                .refine(
+                    (file) => ACCEPTED_MEDIA_TYPES.includes(file?.type),
+                    ".jpg, .jpeg, .png, .webp, .svg, .mp4, .webm, and .mov files are accepted.",
+                ),
+            z.string(),
+            z.undefined(),
+            z.null(),
+        ])
+        .optional(),
     status: z.boolean(),
+    adId: z.string().optional(),
 });
 
 export const AddAdminFormSchema = z.object({

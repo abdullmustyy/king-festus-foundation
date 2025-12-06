@@ -29,13 +29,18 @@ const GovernanceStructurePage = async () => {
                 <h3 className="text-center text-3xl">Governance structure</h3>
 
                 <div className="flex flex-col items-start gap-6 lg:flex-row">
-                    <h6 className="lg:mt-2 text-xl text-black/70 lg:[writing-mode:sideways-lr]">Board of trustees:</h6>
+                    <h6 className="text-xl text-black/70 lg:mt-2 lg:[writing-mode:sideways-lr]">Board of trustees:</h6>
 
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-6 lg:gap-12.5">
                         {governanceBodies.map((item) => (
                             <div key={item.id} className="flex flex-col gap-5">
                                 <div className="relative aspect-square w-full overflow-hidden rounded-lg">
-                                    <Image src={item.mediaAsset?.url || ""} alt={item.name} fill className="object-cover" />
+                                    <Image
+                                        src={item.mediaAsset?.url || ""}
+                                        alt={item.name}
+                                        fill
+                                        className="object-cover"
+                                    />
                                 </div>
                                 <div className="flex flex-col gap-1 text-center">
                                     <span className="text-xl font-medium text-primary">{item.name}</span>

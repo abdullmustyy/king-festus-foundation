@@ -4,6 +4,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import CalendarClock from "@/components/ui/icons/calendar-clock";
 import Department from "@/components/ui/icons/department";
+import { getDepartmentIcon } from "@/components/ui/icons/get-department-icon";
 import Host from "@/components/ui/icons/host";
 import Status from "@/components/ui/icons/status";
 import { cn } from "@/lib/utils";
@@ -40,7 +41,7 @@ export const meetingsAndEventsColumns: ColumnDef<TMeetingsAndEvents>[] = [
         ),
         cell: ({ row }) => (
             <div className="flex items-center gap-1.5">
-                <Department className="size-5 text-primary" />
+                {getDepartmentIcon(row.original.department)}
                 <span>{row.original.department}</span>
             </div>
         ),

@@ -148,6 +148,7 @@ export async function updateGovernanceStructure(data: z.infer<typeof UpdateGover
         });
 
         revalidatePath("/governance-structure");
+
         return { success: true };
     } catch (error) {
         console.error("Error updating Governance Structure:", error);

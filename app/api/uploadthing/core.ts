@@ -28,7 +28,9 @@ export const ourFileRouter = {
                     type: type,
                 },
             });
-            revalidatePath("/dashboard/cms/governance-structure");
+
+            revalidatePath("/dashboard/cms");
+
             return {
                 id: newMediaAsset.id,
                 key: newMediaAsset.key,
@@ -39,7 +41,7 @@ export const ourFileRouter = {
         }),
 
     dashboardAdMedia: f({ image: { maxFileSize: "2MB" }, video: { maxFileSize: "8MB" } })
-        .input(z.object({ title: z.string(), status: z.boolean() }))
+        .input(z.object({ title: z.string(), status: z.boolean(), adId: z.string().optional() }))
         .middleware(async ({ input, files }) => {
             const user = await currentUser();
 
@@ -52,54 +54,42 @@ export const ourFileRouter = {
         .onUploadComplete(async ({ metadata, file }) => {
             const { input, type } = metadata;
 
-            // 1. Cleanup: Find ALL existing DashboardAds and their MediaAssets
-            const existingAds = await db.dashboardAd.findMany({
-                include: { mediaAsset: true },
-            });
+            const mediaAssetToDelete: { id: string; key: string }[] = [];
+            const dashboardAdToDelete: string[] = [];
 
-            const mediaAssetsToDelete = existingAds
-                .map((ad) => ad.mediaAsset)
-                .filter(
-                    (
-                        media,
-                    ): media is {
-                        id: string;
-                        key: string;
-                        name: string;
-                        url: string;
-                        type: "IMAGE" | "VIDEO";
-                        createdAt: Date;
-                        updatedAt: Date;
-                    } => !!media,
-                );
-
-            const mediaKeysToDelete = mediaAssetsToDelete.map((m) => m.key);
-            const mediaIdsToDelete = mediaAssetsToDelete.map((m) => m.id);
-            const adIdsToDelete = existingAds.map((ad) => ad.id);
-
-            // 2. Delete from DB
-            if (adIdsToDelete.length > 0) {
-                await db.dashboardAd.deleteMany({
-                    where: { id: { in: adIdsToDelete } },
+            // Step 1: Handle cleanup for existing ad if it's an update
+            if (input.adId) {
+                const existingAd = await db.dashboardAd.findUnique({
+                    where: { id: input.adId },
+                    include: { mediaAsset: true },
                 });
-            }
 
-            if (mediaIdsToDelete.length > 0) {
-                await db.mediaAsset.deleteMany({
-                    where: { id: { in: mediaIdsToDelete } },
-                });
-            }
-
-            // 3. Delete from UploadThing
-            if (mediaKeysToDelete.length > 0) {
-                try {
-                    await utapi.deleteFiles(mediaKeysToDelete);
-                } catch (error) {
-                    console.error("Failed to delete old dashboard ad files:", error);
+                if (existingAd && existingAd.mediaAsset && existingAd.mediaAsset.key !== file.key) {
+                    // If mediaAsset is being replaced, add old one to deletion list
+                    mediaAssetToDelete.push({
+                        id: existingAd.mediaAsset.id,
+                        key: existingAd.mediaAsset.key,
+                    });
                 }
+            } else {
+                // Step 2: Aggressive cleanup if this is a CREATE scenario (no adId provided)
+                // Delete ALL existing DashboardAds and their MediaAssets to enforce single active ad policy
+                const allExistingAds = await db.dashboardAd.findMany({
+                    include: { mediaAsset: true },
+                });
+
+                allExistingAds.forEach((ad) => {
+                    dashboardAdToDelete.push(ad.id);
+                    if (ad.mediaAsset) {
+                        mediaAssetToDelete.push({
+                            id: ad.mediaAsset.id,
+                            key: ad.mediaAsset.key,
+                        });
+                    }
+                });
             }
 
-            // 4. Create the new MediaAsset record
+            // Step 3: Create the new MediaAsset record
             const newMediaAsset = await db.mediaAsset.create({
                 data: {
                     key: file.key,
@@ -109,18 +99,68 @@ export const ourFileRouter = {
                 },
             });
 
-            // 5. Create the DashboardAd record and link the mediaAsset
-            await db.dashboardAd.create({
-                data: {
-                    title: input.title,
-                    status: input.status,
-                    mediaAsset: {
-                        connect: { id: newMediaAsset.id },
+            // Step 4: Perform Upsert for DashboardAd
+            if (input.adId) {
+                // UPDATE existing DashboardAd
+                await db.dashboardAd.update({
+                    where: { id: input.adId },
+                    data: {
+                        title: input.title,
+                        status: input.status,
+                        mediaAsset: {
+                            connect: { id: newMediaAsset.id },
+                        },
                     },
-                },
-            });
+                });
+            } else {
+                // CREATE new DashboardAd
+                await db.dashboardAd.create({
+                    data: {
+                        title: input.title,
+                        status: input.status,
+                        mediaAsset: {
+                            connect: { id: newMediaAsset.id },
+                        },
+                    },
+                });
+            }
 
-            revalidatePath("/dashboard");
+            // Step 5: Execute MediaAsset Deletions (from update or create scenarios)
+            if (mediaAssetToDelete.length > 0) {
+                const uniqueMediaAssetsToDelete = Array.from(
+                    new Map(mediaAssetToDelete.map((item) => [item.id, item])).values(),
+                );
+                const mediaAssetIdsToDelete = uniqueMediaAssetsToDelete
+                    .map((m) => m.id)
+                    .filter((id) => id !== newMediaAsset.id); // Ensure new mediaAsset is not deleted
+
+                if (mediaAssetIdsToDelete.length > 0) {
+                    await db.mediaAsset.deleteMany({
+                        where: { id: { in: mediaAssetIdsToDelete } },
+                    });
+                }
+
+                const mediaAssetKeysToDelete = uniqueMediaAssetsToDelete
+                    .map((m) => m.key)
+                    .filter((key) => key !== newMediaAsset.key); // Ensure new mediaAsset key is not deleted
+
+                if (mediaAssetKeysToDelete.length > 0) {
+                    try {
+                        await utapi.deleteFiles(mediaAssetKeysToDelete);
+                    } catch (error) {
+                        console.error("Failed to delete old dashboard ad files from UploadThing:", error);
+                    }
+                }
+            }
+
+            // Step 6: Delete old DashboardAd records if in create scenario
+            if (dashboardAdToDelete.length > 0) {
+                await db.dashboardAd.deleteMany({
+                    where: { id: { in: dashboardAdToDelete } },
+                });
+            }
+
+            revalidatePath("/dashboard/cms");
         }),
 
     media: f(["image"])

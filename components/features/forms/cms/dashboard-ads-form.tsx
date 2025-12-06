@@ -1,10 +1,12 @@
 "use client";
 
+import { updateDashboardAd } from "@/app/actions/cms/dashboard-ads";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import UploadMediaTrigger from "@/components/ui/upload-media-trigger";
+import { DashboardAd, MediaAsset } from "@/generated/prisma/client";
 import { uploadFiles } from "@/lib/uploadthing";
 import { DashboardAdsFormSchema } from "@/lib/validators";
 import { TDashboardAdsForm } from "@/types";
@@ -18,22 +20,30 @@ import { CmsImageFormField } from "./cms-image-form-field";
 interface IDashboardAdsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
     onSubmittingChange?: (isSubmitting: boolean) => void;
+    initialData?: (DashboardAd & { mediaAsset: MediaAsset | null }) | null;
 }
 
-export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, ...props }: IDashboardAdsFormProps) {
+export default function DashboardAdsForm({
+    onComplete,
+    onSubmittingChange,
+    id,
+    initialData,
+    ...props
+}: IDashboardAdsFormProps) {
     const form = useForm<TDashboardAdsForm>({
         resolver: zodResolver(DashboardAdsFormSchema),
         defaultValues: {
-            adTitle: "",
-            adImage: undefined,
-            status: false,
+            adTitle: initialData?.title || "",
+            adImage: initialData?.mediaAsset?.url || undefined,
+            status: initialData?.status || false,
+            adId: initialData?.id || undefined,
         },
     });
 
     const {
         control,
         handleSubmit,
-        resetField,
+        setValue,
         formState: { isSubmitting },
     } = form;
 
@@ -43,19 +53,40 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
 
     const onSubmit = async (data: TDashboardAdsForm) => {
         try {
-            const res = await uploadFiles("dashboardAdMedia", {
-                files: [data.adImage],
-                input: {
+            if (data.adImage instanceof File) {
+                const res = await uploadFiles("dashboardAdMedia", {
+                    files: [data.adImage],
+                    input: {
+                        title: data.adTitle,
+                        status: data.status,
+                        adId: data.adId,
+                    },
+                });
+
+                if (!res) {
+                    throw new Error("Failed to upload ad image");
+                }
+            } else {
+                if (!data.adId) {
+                    // Should technically not happen if validator works and we are in "edit" mode without file change?
+                    // But if creating new ad without file... validator prevents it (adImage required).
+                    // So this block is for updating existing ad without changing image.
+                    throw new Error("Ad ID missing for update");
+                }
+
+                const res = await updateDashboardAd({
+                    adId: data.adId,
                     title: data.adTitle,
                     status: data.status,
-                },
-            });
+                });
 
-            if (!res) {
-                throw new Error("Failed to upload ad image");
+                if (res.error) {
+                    throw new Error(res.error);
+                }
             }
 
             toast.success("Dashboard ad updated successfully");
+
             onComplete();
         } catch (error) {
             console.error(error);
@@ -115,7 +146,13 @@ export default function DashboardAdsForm({ onComplete, onSubmittingChange, id, .
                                                 isSubmitting={isSubmitting}
                                                 preview={preview}
                                                 file={file}
-                                                onRemove={() => resetField("adImage")}
+                                                mediaType={initialData?.mediaAsset?.type}
+                                                onRemove={() =>
+                                                    setValue("adImage", undefined, {
+                                                        shouldValidate: true,
+                                                        shouldDirty: true,
+                                                    })
+                                                }
                                             />
                                         )}
                                     </UploadMediaTrigger>

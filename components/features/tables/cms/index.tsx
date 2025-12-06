@@ -11,10 +11,12 @@ import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { BreakingNews, GovernanceBody, MediaAsset } from "@/generated/prisma/client";
+import { AboutUs, BreakingNews, DashboardAd, GovernanceBody, LandingPage, MediaAsset } from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { XIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { cmsColumns, TCMS } from "./columns";
 
@@ -27,31 +29,69 @@ const CMS_IDS = {
     ADD_ADMIN: "add-admin",
 } as const;
 
-const initialData: TCMS[] = [
-    { id: CMS_IDS.LANDING_MEDIA, title: "Media on landing page", lastUpdated: "23/11/25" },
-    { id: CMS_IDS.GOVERNANCE, title: "Governance structure", lastUpdated: "23/11/25" },
-    { id: CMS_IDS.ABOUT_US, title: "About us", lastUpdated: "23/11/25" },
-    { id: CMS_IDS.BREAKING_NEWS, title: "Scroll bar with breaking news", lastUpdated: "23/11/25" },
-    { id: CMS_IDS.DASHBOARD_ADS, title: "Advertisement section on dashboard", lastUpdated: "23/11/25" },
-    { id: CMS_IDS.ADD_ADMIN, title: "Add new admin", lastUpdated: "23/11/25" },
-];
-
 interface ICMSTableProps {
     breakingNewsData?: BreakingNews | null;
     governanceBodiesData?: (GovernanceBody & { mediaAsset: MediaAsset | null })[] | null;
+    dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null }) | null;
+    landingPageData?: LandingPage | null;
+    aboutUsData?: AboutUs | null;
+    latestGovernanceUpdate?: Date;
 }
 
-export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTableProps) {
+export function CMSTable({
+    breakingNewsData,
+    governanceBodiesData,
+    dashboardAdData,
+    landingPageData,
+    aboutUsData,
+    latestGovernanceUpdate,
+}: ICMSTableProps) {
+    const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [selectedRow, setSelectedRow] = useState<TCMS | null>(null);
     const [isPublishing, setIsPublishing] = useState(false);
 
+    const dynamicInitialData: TCMS[] = useMemo(() => {
+        const data: TCMS[] = [
+            {
+                id: CMS_IDS.LANDING_MEDIA,
+                title: "Media on landing page",
+                lastUpdated: landingPageData?.updatedAt ? format(landingPageData.updatedAt, "dd/MM/yy") : "--",
+            },
+            {
+                id: CMS_IDS.GOVERNANCE,
+                title: "Governance structure",
+                lastUpdated:
+                    latestGovernanceUpdate && latestGovernanceUpdate.getTime() > 0
+                        ? format(latestGovernanceUpdate, "dd/MM/yy")
+                        : "--",
+            },
+            {
+                id: CMS_IDS.ABOUT_US,
+                title: "About us",
+                lastUpdated: aboutUsData?.updatedAt ? format(aboutUsData.updatedAt, "dd/MM/yy") : "--",
+            },
+            {
+                id: CMS_IDS.BREAKING_NEWS,
+                title: "Scroll bar with breaking news",
+                lastUpdated: breakingNewsData?.updatedAt ? format(breakingNewsData.updatedAt, "dd/MM/yy") : "--",
+            },
+            {
+                id: CMS_IDS.DASHBOARD_ADS,
+                title: "Advertisement section on dashboard",
+                lastUpdated: dashboardAdData?.updatedAt ? format(dashboardAdData.updatedAt, "dd/MM/yy") : "--",
+            },
+            { id: CMS_IDS.ADD_ADMIN, title: "Add new admin", lastUpdated: "--" },
+        ];
+        return data;
+    }, [landingPageData, latestGovernanceUpdate, aboutUsData, breakingNewsData, dashboardAdData]);
+
     const filteredData = useMemo(() => {
-        if (!searchQuery) return initialData;
+        if (!searchQuery) return dynamicInitialData;
         const lowerQuery = searchQuery.toLowerCase();
-        return initialData.filter((item) => item.title.toLowerCase().includes(lowerQuery));
-    }, [searchQuery]);
+        return dynamicInitialData.filter((item) => item.title.toLowerCase().includes(lowerQuery));
+    }, [searchQuery, dynamicInitialData]);
 
     const { table } = useDataTable({
         data: filteredData,
@@ -69,6 +109,11 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
         setIsPublishing(isSubmitting);
     };
 
+    const handleComplete = () => {
+        setIsSheetOpen(false);
+        router.refresh();
+    };
+
     const renderSheetContent = () => {
         if (!selectedRow) return null;
 
@@ -77,7 +122,7 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
                 return (
                     <LandingPageMediaForm
                         id={`${CMS_IDS.LANDING_MEDIA}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
+                        onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
                     />
                 );
@@ -85,7 +130,7 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
                 return (
                     <GovernanceStructureForm
                         id={`${CMS_IDS.GOVERNANCE}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
+                        onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
                         initialData={{
                             governanceBodies: governanceBodiesData?.map((b) => ({
@@ -102,7 +147,7 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
                 return (
                     <AboutUsForm
                         id={`${CMS_IDS.ABOUT_US}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
+                        onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
                     />
                 );
@@ -110,7 +155,7 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
                 return (
                     <BreakingNewsForm
                         id={`${CMS_IDS.BREAKING_NEWS}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
+                        onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
                         initialData={breakingNewsData}
                     />
@@ -119,12 +164,13 @@ export function CMSTable({ breakingNewsData, governanceBodiesData }: ICMSTablePr
                 return (
                     <DashboardAdsForm
                         id={`${CMS_IDS.DASHBOARD_ADS}-form`}
-                        onComplete={() => setIsSheetOpen(false)}
+                        onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={dashboardAdData}
                     />
                 );
             case CMS_IDS.ADD_ADMIN:
-                return <AddAdminForm id={`${CMS_IDS.ADD_ADMIN}-form`} onComplete={() => setIsSheetOpen(false)} />;
+                return <AddAdminForm id={`${CMS_IDS.ADD_ADMIN}-form`} onComplete={handleComplete} />;
             default:
                 return <div className="mt-4 font-medium">{selectedRow.title}</div>;
         }

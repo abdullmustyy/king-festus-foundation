@@ -5,6 +5,7 @@ import { type ColumnDef } from "@tanstack/react-table";
 import { buttonVariants } from "@/components/ui/button";
 import Action from "@/components/ui/icons/action";
 import Department from "@/components/ui/icons/department";
+import { getDepartmentIcon } from "@/components/ui/icons/get-department-icon";
 import Status from "@/components/ui/icons/status";
 import Vendor from "@/components/ui/icons/vendor";
 import { cn } from "@/lib/utils";
@@ -29,7 +30,7 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
         ),
         cell: ({ row }) => (
             <div className="flex items-center gap-1.5">
-                <Department className="size-5 text-primary" />
+                {getDepartmentIcon(row.original.department)}
                 <span>{row.original.department}</span>
             </div>
         ),

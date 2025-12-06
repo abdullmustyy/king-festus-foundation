@@ -40,7 +40,6 @@ export async function updateBreakingNews(data: z.infer<typeof BreakingNewsFormSc
             });
         }
 
-        revalidatePath("/");
         revalidatePath("/dashboard/cms");
 
         return { success: true };

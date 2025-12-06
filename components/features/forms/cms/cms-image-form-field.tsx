@@ -6,14 +6,23 @@ interface CmsImageFormFieldProps {
     name: string;
     preview: string | null;
     file?: File | null;
+    mediaType?: string;
     isDragging: boolean;
     isSubmitting: boolean;
     onRemove: () => void;
 }
 
-export function CmsImageFormField({ preview, file, isDragging, isSubmitting, onRemove }: CmsImageFormFieldProps) {
+export function CmsImageFormField({
+    preview,
+    file,
+    mediaType,
+    isDragging,
+    isSubmitting,
+    onRemove,
+}: CmsImageFormFieldProps) {
     const isVideo = () => {
         if (file) return file.type.startsWith("video/");
+        if (mediaType) return mediaType === "VIDEO";
         if (preview) {
             const ext = preview.split(".").pop()?.toLowerCase();
             return ["mp4", "webm", "mov", "ogg"].includes(ext || "");
