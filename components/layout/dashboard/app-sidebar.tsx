@@ -15,6 +15,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/lib/constants/dashboard";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -22,6 +23,13 @@ import { useEffect } from "react";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { isMobile, setOpenMobile } = useSidebar();
     const pathname = usePathname();
+    const { user } = useUser();
+    const userRole = user?.publicMetadata?.role as string | undefined;
+
+    const filteredMainLinks = sidebarLinks.main.filter((item) => {
+        if (!item.roles) return true;
+        return item.roles.includes(userRole || "");
+    });
 
     useEffect(() => {
         if (isMobile) {
@@ -36,7 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <SidebarGroup>
                     <SidebarGroupContent className="flex flex-col gap-2">
                         <SidebarMenu>
-                            {sidebarLinks.main.map((item) => (
+                            {filteredMainLinks.map((item) => (
                                 <SidebarMenuItem key={item.title}>
                                     <SidebarMenuButton tooltip={item.title} asChild>
                                         <Link href={item.url}>

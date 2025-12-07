@@ -17,6 +17,7 @@ export const sidebarLinks = {
             title: "CMS",
             url: "/dashboard/cms",
             icon: Image,
+            roles: ["ADMIN"],
         },
     ],
 

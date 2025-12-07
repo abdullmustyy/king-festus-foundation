@@ -8,12 +8,12 @@ import SecretariatSupport from "@/public/images/secretariat-support.svg";
 import Image from "next/image";
 
 const structure = [
-    { image: MedicareConsultation, name: "Medicare Consultation" },
-    { image: LegalConsultation, name: "Legal Consultation" },
-    { image: SecretariatSupport, name: "Secretariat Support Services" },
-    { image: AccountsClarification, name: "Accounts Clarification" },
-    { image: PersonalAccount, name: "Personal Account / Ledger Review" },
-    { image: ITSupport, name: "IT Support" },
+    { image: MedicareConsultation, name: "Medicare" },
+    { image: LegalConsultation, name: "Legal consultation" },
+    { image: SecretariatSupport, name: "Secretariat support services - AlSECs" },
+    { image: AccountsClarification, name: "Accounting services- Adeniyi Christopher & co" },
+    { image: PersonalAccount, name: "Personal account ledger review- Elijah Igoko" },
+    { image: ITSupport, name: "IT support" },
 ];
 
 const GovernanceStructurePage = async () => {

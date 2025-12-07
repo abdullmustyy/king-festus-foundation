@@ -1,5 +1,6 @@
 "use client";
 
+import { addAdmin } from "@/app/actions/cms/add-admin";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
@@ -9,6 +10,7 @@ import { AddAdminFormSchema } from "@/lib/validators";
 import { TAddAdminForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface IAddAdminFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
@@ -21,7 +23,7 @@ export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminForm
             fullName: "",
             email: "",
             password: "",
-            role: undefined,
+            role: "ADMIN",
         },
     });
 
@@ -31,7 +33,24 @@ export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminForm
         formState: { isSubmitting },
     } = form;
 
-    const onSubmit = async () => onComplete();
+    const onSubmit = async (data: TAddAdminForm) => {
+        try {
+            const res = await addAdmin(data);
+
+            if (res.error) {
+                toast.error(res.error);
+                return;
+            }
+
+            toast.success("Admin user added successfully");
+            onComplete();
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong", {
+                description: "Please try again later",
+            });
+        }
+    };
 
     return (
         <div className="flex h-full flex-col">
@@ -104,7 +123,11 @@ export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminForm
                                 className="*:data-[slot='field-label']:text-foreground/50"
                             >
                                 {(field) => (
-                                    <Select onValueChange={field.onChange} defaultValue="ADMIN" disabled={isSubmitting}>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        defaultValue={field.value}
+                                        disabled={isSubmitting}
+                                    >
                                         <SelectTrigger className="w-full data-[size=default]:h-11.25">
                                             <SelectValue placeholder="Select role" />
                                         </SelectTrigger>

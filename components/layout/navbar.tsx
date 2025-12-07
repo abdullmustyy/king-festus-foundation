@@ -13,7 +13,7 @@ const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about-us" },
     { name: "Governance Structure", href: "/governance-structure" },
-    { name: "Contacts Us", href: "/contact-us" },
+    { name: "Contact Us", href: "/contact-us" },
 ];
 
 const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
@@ -31,26 +31,26 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
     }
 
     return (
-        <nav className={cn("relative lg:flex flex-col", className)}>
-            <div className="lg:flex hidden items-center justify-center">
+        <nav className={cn("relative flex-col lg:flex", className)}>
+            <div className="hidden items-center justify-center lg:flex">
                 <Link href="/" title="King Festus Foundation | Home">
                     <Image src={Logo} alt="King Festus Foundation" priority className="h20" />
                 </Link>
             </div>
 
             <div data-slot="navbar-menu" className="flex items-center justify-between">
-                <Link href="/" title="King Festus Foundation | Home" className="lg:hidden block">
+                <Link href="/" title="King Festus Foundation | Home" className="block lg:hidden">
                     <Image src={LogoIcon} alt="King Festus Foundation" priority className="size-25" />
                 </Link>
 
-                <ul className="lg:flex hidden items-center gap-10">
+                <ul className="hidden items-center gap-10 lg:flex">
                     {navLinks.map((link) => (
                         <li key={link.name}>
                             <a
                                 href={link.href}
                                 title={link.name}
                                 className={cn(
-                                    "text-foreground/50 hover:text-foreground transition-colors duration-300 text-sm",
+                                    "text-sm text-foreground/50 transition-colors duration-300 hover:text-foreground",
                                     {
                                         "text-primary": link.href === pathname,
                                     },
@@ -69,21 +69,21 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
                         aria-label={isHamburgerOpen ? "Close menu" : "Open menu"}
                         aria-expanded={isHamburgerOpen ? "true" : "false"}
                         variant="ghost"
-                        className="md:hidden inline-flex size-10"
+                        className="inline-flex size-10 md:hidden"
                         onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}
                     >
-                        <div className="flex items-center *:transition-all *:duration-300 [--bar-width:calc(var(--spacing)*6)]">
+                        <div className="flex items-center [--bar-width:calc(var(--spacing)*6)] *:transition-all *:duration-300">
                             {/* Top bar */}
                             <div
-                                className={cn("h-0.5 bg-primary w-(--bar-width) translate-x-full", {
+                                className={cn("h-0.5 w-(--bar-width) translate-x-full bg-primary", {
                                     "-translate-y-2": !isHamburgerOpen,
                                 })}
                             />
                             {/* Middle bar */}
-                            <div className={cn("h-0.5 bg-primary w-(--bar-width)")} />
+                            <div className={cn("h-0.5 w-(--bar-width) bg-primary")} />
                             {/* Bottom bar */}
                             <div
-                                className={cn("h-0.5 bg-primary w-(--bar-width) -translate-x-full", {
+                                className={cn("h-0.5 w-(--bar-width) -translate-x-full bg-primary", {
                                     "translate-y-2": !isHamburgerOpen,
                                 })}
                             />
@@ -95,10 +95,10 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
             {/* Mobile Nav */}
             <div
                 className={cn(
-                    "lg:hidden absolute inset-x-0 z-10 bg-background transition-all duration-300",
+                    "absolute inset-x-0 z-10 bg-background transition-all duration-300 lg:hidden",
                     isHamburgerOpen
-                        ? "[clip-path:inset(0_0_0_0)] max-h-dvh py-6"
-                        : "[clip-path:inset(0_0_100%_0)] max-h-0 py-0",
+                        ? "max-h-dvh py-6 [clip-path:inset(0_0_0_0)]"
+                        : "max-h-0 py-0 [clip-path:inset(0_0_100%_0)]",
                 )}
             >
                 <ul className="flex flex-col items-center gap-4">
@@ -106,7 +106,7 @@ const Navbar = ({ children, className }: React.ComponentProps<"nav">) => {
                         <li key={item.name + index} className="group relative">
                             <Link
                                 href={item.href}
-                                className={cn("hover:text-primary transition-all duration-300", {
+                                className={cn("transition-all duration-300 hover:text-primary", {
                                     "text-primary": pathname === item.href,
                                 })}
                             >

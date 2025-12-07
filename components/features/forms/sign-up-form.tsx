@@ -1,5 +1,6 @@
 "use client";
 
+import { syncUser } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
@@ -76,16 +77,13 @@ const SignUpForm = () => {
             if (signUpAttempt.status === "complete") {
                 await setActive({
                     session: signUpAttempt.createdSessionId,
-                    navigate: async ({ session }) => {
-                        if (session?.currentTask) {
-                            console.log(session?.currentTask);
-                            router.push("/sign-up/tasks");
-                            return;
-                        }
-
-                        router.push("/dashboard");
-                    },
                 });
+
+                await syncUser(); // Persist user data
+
+                if (signUpAttempt.createdSessionId) {
+                    router.push("/dashboard");
+                }
             } else {
                 console.error("Sign-up attempt not complete:", signUpAttempt);
                 console.error("Sign-up attempt status:", signUpAttempt.status);

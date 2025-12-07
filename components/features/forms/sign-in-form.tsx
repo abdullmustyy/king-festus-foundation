@@ -1,5 +1,6 @@
 "use client";
 
+import { syncUser } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldGroup } from "@/components/ui/field";
@@ -67,15 +68,13 @@ const SignInForm = () => {
             if (signInAttempt.status === "complete") {
                 await setActive({
                     session: signInAttempt.createdSessionId,
-                    navigate: async ({ session }) => {
-                        if (session?.currentTask) {
-                            console.log(session?.currentTask);
-                            return;
-                        }
-
-                        router.push("/dashboard");
-                    },
                 });
+
+                await syncUser(); // Persist user data
+
+                if (signInAttempt.createdSessionId) {
+                    router.push("/dashboard");
+                }
             } else {
                 console.error(JSON.stringify(signInAttempt, null, 2));
             }
