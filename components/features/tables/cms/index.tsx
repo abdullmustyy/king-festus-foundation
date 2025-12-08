@@ -32,7 +32,7 @@ const CMS_IDS = {
 interface ICMSTableProps {
     breakingNewsData?: BreakingNews[] | null;
     governanceBodiesData?: (GovernanceBody & { mediaAsset: MediaAsset | null })[] | null;
-    dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null }) | null;
+    dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null })[] | null;
     landingPageData?: LandingPage | null;
     aboutUsData?: AboutUs | null;
     latestGovernanceUpdate?: Date;
@@ -90,7 +90,15 @@ export function CMSTable({
             {
                 id: CMS_IDS.DASHBOARD_ADS,
                 title: "Advertisement section on dashboard",
-                lastUpdated: dashboardAdData?.updatedAt ? format(dashboardAdData.updatedAt, "dd/MM/yy") : "--",
+                lastUpdated:
+                    dashboardAdData && dashboardAdData.length > 0
+                        ? format(
+                              dashboardAdData.reduce((latest, current) => {
+                                  return current.updatedAt > latest ? current.updatedAt : latest;
+                              }, new Date(0)),
+                              "dd/MM/yy",
+                          )
+                        : "--",
             },
             {
                 id: CMS_IDS.ADD_ADMIN,

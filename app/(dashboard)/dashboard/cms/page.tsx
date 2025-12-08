@@ -33,8 +33,7 @@ export default async function CMSPage() {
         },
     });
     // Fetch dashboard ads with their media assets
-    const dashboardAd = await db.dashboardAd.findFirst({
-        where: { status: true },
+    const dashboardAds = await db.dashboardAd.findMany({
         include: { mediaAsset: true },
         orderBy: { createdAt: "desc" },
     });
@@ -63,7 +62,7 @@ export default async function CMSPage() {
                 <CMSTable
                     breakingNewsData={breakingNews}
                     governanceBodiesData={governanceBodies}
-                    dashboardAdData={dashboardAd}
+                    dashboardAdData={dashboardAds}
                     landingPageData={landingPage}
                     aboutUsData={aboutUs}
                     latestGovernanceUpdate={latestGovernanceUpdate}
