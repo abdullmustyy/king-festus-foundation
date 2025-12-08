@@ -76,7 +76,7 @@ model GovernanceBody {
 model BreakingNews {
   id        String   @id @default(uuid())
   headline  String
-  linkUrl   String
+  linkUrl   String?
   startDate DateTime
   endDate   DateTime
   status    Boolean  @default(false)

@@ -23,7 +23,9 @@ export default async function CMSPage() {
     }
 
     // Fetch breaking news
-    const breakingNews = await db.breakingNews.findFirst();
+    const breakingNews = await db.breakingNews.findMany({
+        orderBy: { createdAt: "desc" },
+    });
     // Fetch governance bodies with their media assets
     const governanceBodies = await db.governanceBody.findMany({
         include: {
@@ -59,7 +61,7 @@ export default async function CMSPage() {
             </div>
             <Suspense fallback={<></>}>
                 <CMSTable
-                    breakingNewsData={breakingNews}
+                    breakingNewsData={breakingNews[0]}
                     governanceBodiesData={governanceBodies}
                     dashboardAdData={dashboardAd}
                     landingPageData={landingPage}

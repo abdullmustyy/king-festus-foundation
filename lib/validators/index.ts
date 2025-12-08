@@ -121,7 +121,7 @@ export const AboutUsFormSchema = z.object({
 export const BreakingNewsFormSchema = z
     .object({
         headline: z.string().min(1, "Headline is required"),
-        linkUrl: z.url({ message: "Invalid URL" }),
+        linkUrl: z.url({ message: "Invalid URL" }).optional(),
         startDate: z.date({
             error: (issue) => (issue.input === undefined ? "Start date is required" : "Invalid date"),
         }),

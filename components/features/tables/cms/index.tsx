@@ -163,7 +163,6 @@ export function CMSTable({
                         id={`${CMS_IDS.BREAKING_NEWS}-form`}
                         onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
-                        initialData={breakingNewsData}
                     />
                 );
             case CMS_IDS.DASHBOARD_ADS:

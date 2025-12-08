@@ -1,6 +1,6 @@
 "use client";
 
-import { updateBreakingNews } from "@/app/actions/cms/breaking-news";
+import { createBreakingNews } from "@/app/actions/cms/breaking-news";
 import { CalendarDatePicker } from "@/components/ui/calendar-date-picker";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
@@ -16,24 +16,17 @@ import { toast } from "sonner";
 interface IBreakingNewsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
     onSubmittingChange?: (isSubmitting: boolean) => void;
-    initialData?: Partial<TBreakingNewsForm> | null;
 }
 
-export default function BreakingNewsForm({
-    onComplete,
-    onSubmittingChange,
-    initialData,
-    id,
-    ...props
-}: IBreakingNewsFormProps) {
+export default function BreakingNewsForm({ onComplete, onSubmittingChange, id, ...props }: IBreakingNewsFormProps) {
     const form = useForm<TBreakingNewsForm>({
         resolver: zodResolver(BreakingNewsFormSchema),
         defaultValues: {
-            headline: initialData?.headline || "",
-            linkUrl: initialData?.linkUrl || "",
-            startDate: initialData?.startDate ? new Date(initialData.startDate) : new Date(),
-            endDate: initialData?.endDate ? new Date(initialData.endDate) : undefined,
-            status: initialData?.status || false,
+            headline: "",
+            linkUrl: undefined,
+            startDate: new Date(),
+            endDate: undefined,
+            status: true,
         },
     });
 
@@ -49,14 +42,14 @@ export default function BreakingNewsForm({
 
     const onSubmit = async (data: TBreakingNewsForm) => {
         try {
-            const res = await updateBreakingNews(data);
+            const res = await createBreakingNews(data);
 
             if (res.error) {
                 toast.error(res.error);
                 return;
             }
 
-            toast.success("Breaking news updated successfully");
+            toast.success("Breaking news created successfully");
 
             onComplete();
         } catch (error) {

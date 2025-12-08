@@ -2,49 +2,40 @@
 
 import db from "@/lib/db";
 import { BreakingNewsFormSchema } from "@/lib/validators";
+import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import * as z from "zod";
 
-export async function updateBreakingNews(data: z.infer<typeof BreakingNewsFormSchema>) {
+export async function createBreakingNews(data: z.infer<typeof BreakingNewsFormSchema>) {
+    const user = await currentUser();
+
+    if (!user) {
+        return { error: "Unauthorized" };
+    }
+
     const result = BreakingNewsFormSchema.safeParse(data);
 
     if (!result.success) {
-        return { error: "Invalid input data" };
+        return { error: "Invalid data" };
     }
 
     const { headline, linkUrl, startDate, endDate, status } = result.data;
 
     try {
-        const existing = await db.breakingNews.findFirst();
-
-        if (existing) {
-            await db.breakingNews.update({
-                where: { id: existing.id },
-                data: {
-                    headline,
-                    linkUrl,
-                    startDate,
-                    endDate,
-                    status,
-                },
-            });
-        } else {
-            await db.breakingNews.create({
-                data: {
-                    headline,
-                    linkUrl,
-                    startDate,
-                    endDate,
-                    status,
-                },
-            });
-        }
+        await db.breakingNews.create({
+            data: {
+                headline,
+                linkUrl,
+                startDate,
+                endDate,
+                status,
+            },
+        });
 
         revalidatePath("/dashboard/cms");
-
-        return { success: true };
+        return { success: "Breaking news created successfully" };
     } catch (error) {
-        console.error("Error updating Breaking News:", error);
-        return { error: "Failed to update Breaking News" };
+        console.error(error);
+        return { error: "Something went wrong" };
     }
 }
