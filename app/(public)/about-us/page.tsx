@@ -1,4 +1,11 @@
+import { METADATA_DESCRIPTION, METADATA_TITLE } from "@/lib/constants";
 import db from "@/lib/db";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: `About Us`,
+    description: `Learn about the ${METADATA_TITLE}'s vision and missions to empower families through support and development initiatives. ${METADATA_DESCRIPTION}`,
+};
 
 const defaultMissions = [
     {
@@ -41,16 +48,16 @@ const AboutUspage = async () => {
     return (
         <section className="w-contain grid gap-12.5 py-10 text-xl lg:grid-cols-2 lg:gap-50">
             <div className="flex flex-col gap-12.5">
-                <h4 className="text-3xl text-primary">Vision</h4>
+                <h2 className="text-3xl text-primary">Vision</h2>
                 <p>{vision}</p>
             </div>
 
             <div className="flex flex-col gap-12.5">
-                <h4 className="text-3xl text-primary">Mission</h4>
+                <h2 className="text-3xl text-primary">Mission</h2>
                 <div className="flex flex-col gap-10">
                     {missions.map((item) => (
                         <div key={item.id} className="space-y-2">
-                            <h5 className="text-2xl text-foreground/50">{item.heading}</h5>
+                            <h3 className="text-2xl text-foreground/50">{item.heading}</h3>
                             <p>{item.text}</p>
                         </div>
                     ))}

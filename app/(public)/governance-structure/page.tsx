@@ -1,3 +1,4 @@
+import { METADATA_DESCRIPTION, METADATA_TITLE } from "@/lib/constants";
 import db from "@/lib/db";
 import AccountsClarification from "@/public/images/accounts-clarification.svg";
 import ITSupport from "@/public/images/it-support.svg";
@@ -5,7 +6,13 @@ import LegalConsultation from "@/public/images/legal-consultation.svg";
 import MedicareConsultation from "@/public/images/medicare-consultation.svg";
 import PersonalAccount from "@/public/images/personal-account.svg";
 import SecretariatSupport from "@/public/images/secretariat-support.svg";
+import { Metadata } from "next";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+    title: `Governance Structure`,
+    description: `Explore the ${METADATA_TITLE}'s governance and organizational structure, including our board of trustees and support services. ${METADATA_DESCRIPTION}`,
+};
 
 const structure = [
     { image: MedicareConsultation, name: "Medicare" },
@@ -26,10 +33,10 @@ const GovernanceStructurePage = async () => {
     return (
         <section className="w-contain flex flex-col gap-8 py-10">
             <div className="flex flex-col items-center gap-8">
-                <h3 className="text-center text-3xl">Governance structure</h3>
+                <h1 className="text-center text-3xl">Governance structure</h1>
 
                 <div className="flex flex-col items-start gap-6 lg:flex-row">
-                    <h6 className="text-xl text-black/70 lg:mt-2 lg:[writing-mode:sideways-lr]">Board of trustees:</h6>
+                    <h3 className="text-xl text-black/70 lg:mt-2 lg:[writing-mode:sideways-lr]">Board of trustees:</h3>
 
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-6 lg:gap-12.5">
                         {governanceBodies.map((item) => (
@@ -53,7 +60,7 @@ const GovernanceStructurePage = async () => {
             </div>
 
             <div className="flex flex-col items-center gap-8">
-                <h3 className="text-center text-3xl">Organisational Structure</h3>
+                <h2 className="text-center text-3xl">Organisational Structure</h2>
 
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-6 lg:gap-12.5">
                     {structure.map((item, index) => (
