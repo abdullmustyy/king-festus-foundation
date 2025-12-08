@@ -61,7 +61,7 @@ export default async function CMSPage() {
             </div>
             <Suspense fallback={<></>}>
                 <CMSTable
-                    breakingNewsData={breakingNews[0]}
+                    breakingNewsData={breakingNews}
                     governanceBodiesData={governanceBodies}
                     dashboardAdData={dashboardAd}
                     landingPageData={landingPage}

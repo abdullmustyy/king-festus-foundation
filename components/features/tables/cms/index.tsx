@@ -30,7 +30,7 @@ const CMS_IDS = {
 } as const;
 
 interface ICMSTableProps {
-    breakingNewsData?: BreakingNews | null;
+    breakingNewsData?: BreakingNews[] | null;
     governanceBodiesData?: (GovernanceBody & { mediaAsset: MediaAsset | null })[] | null;
     dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null }) | null;
     landingPageData?: LandingPage | null;
@@ -77,7 +77,15 @@ export function CMSTable({
             {
                 id: CMS_IDS.BREAKING_NEWS,
                 title: "Scroll bar with breaking news",
-                lastUpdated: breakingNewsData?.updatedAt ? format(breakingNewsData.updatedAt, "dd/MM/yy") : "--",
+                lastUpdated:
+                    breakingNewsData && breakingNewsData.length > 0
+                        ? format(
+                              breakingNewsData.reduce((latest, current) => {
+                                  return current.updatedAt > latest ? current.updatedAt : latest;
+                              }, new Date(0)),
+                              "dd/MM/yy",
+                          )
+                        : "--",
             },
             {
                 id: CMS_IDS.DASHBOARD_ADS,
@@ -163,6 +171,7 @@ export function CMSTable({
                         id={`${CMS_IDS.BREAKING_NEWS}-form`}
                         onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={breakingNewsData}
                     />
                 );
             case CMS_IDS.DASHBOARD_ADS:

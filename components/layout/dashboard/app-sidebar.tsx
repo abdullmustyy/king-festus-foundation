@@ -23,8 +23,6 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
     const { isMobile, setOpenMobile } = useSidebar();
     const pathname = usePathname();
 
-    console.log("User Role in AppSidebar:", userRole);
-
     const filteredMainLinks = sidebarLinks.main.filter((item) => {
         if (!item.roles) return true;
         return item.roles.includes(userRole || "");

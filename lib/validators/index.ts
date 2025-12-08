@@ -118,22 +118,27 @@ export const AboutUsFormSchema = z.object({
         .max(3, "There must be exactly three missions"),
 });
 
-export const BreakingNewsFormSchema = z
-    .object({
-        headline: z.string().min(1, "Headline is required"),
-        linkUrl: z.url({ message: "Invalid URL" }).optional(),
-        startDate: z.date({
-            error: (issue) => (issue.input === undefined ? "Start date is required" : "Invalid date"),
-        }),
-        endDate: z.date({
-            error: (issue) => (issue.input === undefined ? "End date is required" : "Invalid date"),
-        }),
-        status: z.boolean(),
-    })
-    .refine((data) => data.endDate >= data.startDate, {
-        error: "End date cannot be before start date",
-        path: ["endDate"],
-    });
+export const BreakingNewsFormSchema = z.object({
+    breakingNews: z.array(
+        z
+            .object({
+                id: z.string().optional(),
+                headline: z.string().min(1, "Headline is required"),
+                linkUrl: z.url({ message: "Invalid URL" }).optional(),
+                startDate: z.date({
+                    error: (issue) => (issue.input === undefined ? "Start date is required" : "Invalid date"),
+                }),
+                endDate: z.date({
+                    error: (issue) => (issue.input === undefined ? "End date is required" : "Invalid date"),
+                }),
+                status: z.boolean(),
+            })
+            .refine((data) => data.endDate >= data.startDate, {
+                error: "End date cannot be before start date",
+                path: ["endDate"],
+            }),
+    ),
+});
 
 export const DashboardAdsFormSchema = z.object({
     adTitle: z.string().min(1, "Ad title is required"),
