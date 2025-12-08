@@ -1,5 +1,8 @@
 "use client";
 
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+
 import { addAdmin } from "@/app/actions/cms/add-admin";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -17,6 +20,8 @@ interface IAddAdminFormProps extends React.ComponentProps<"form"> {
 }
 
 export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminFormProps) {
+    const [showPassword, setShowPassword] = useState(false);
+
     const form = useForm<TAddAdminForm>({
         resolver: zodResolver(AddAdminFormSchema),
         defaultValues: {
@@ -104,15 +109,26 @@ export default function AddAdminForm({ onComplete, id, ...props }: IAddAdminForm
                                 className="*:data-[slot='field-label']:text-foreground/50"
                             >
                                 {(field, fieldState) => (
-                                    <Input
-                                        {...field}
-                                        value={field.value as string}
-                                        type="password"
-                                        placeholder="Enter password"
-                                        disabled={isSubmitting}
-                                        aria-invalid={fieldState.invalid}
-                                        className="h-11.25"
-                                    />
+                                    <div className="relative flex items-center">
+                                        <Input
+                                            {...field}
+                                            value={field.value as string}
+                                            type={showPassword ? "text" : "password"}
+                                            placeholder="Enter password"
+                                            disabled={isSubmitting}
+                                            aria-invalid={fieldState.invalid}
+                                            className="h-11.25"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="icon"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="absolute right-2 text-muted-foreground"
+                                        >
+                                            {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
+                                        </Button>
+                                    </div>
                                 )}
                             </FormField>
 
