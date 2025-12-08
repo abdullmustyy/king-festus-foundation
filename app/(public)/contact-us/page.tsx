@@ -4,13 +4,12 @@ import Instagram from "@/components/ui/icons/instagram";
 import LinkedIn from "@/components/ui/icons/linkedin";
 import Phone from "@/components/ui/icons/phone";
 import Whatsapp from "@/components/ui/icons/whatsapp";
-import { baseSocialLinks } from "@/lib/constants";
+import { baseSocialLinks, METADATA_TITLE } from "@/lib/constants";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Contact Us",
-    description:
-        "Get in touch with King Festus Foundation. Reach our secretary, support services, or connect with us on social media.",
+    title: `Contact Us`,
+    description: `Get in touch with ${METADATA_TITLE}. Reach our secretary, support services, or connect with us on social media.`,
 };
 
 const contactDetails = [
@@ -58,7 +57,7 @@ const ContactUsPage = () => {
                             <ContactItem
                                 href={`tel:${detail.value}`}
                                 title={detail.label}
-                                Icon={Phone}
+                                icon={<Phone className="size-5 opacity-50" />}
                                 label={detail.label}
                                 value={detail.value}
                             />
@@ -77,7 +76,7 @@ const ContactUsPage = () => {
                             <ContactItem
                                 href={href}
                                 title={label ?? name}
-                                Icon={Icon}
+                                icon={Icon && <Icon className="size-5 opacity-50" />}
                                 label={label ?? ""}
                                 value={label ?? ""}
                             />

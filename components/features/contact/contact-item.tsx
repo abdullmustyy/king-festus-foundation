@@ -9,13 +9,13 @@ import Link from "next/link";
 export const ContactItem = ({
     href,
     title,
-    Icon,
+    icon,
     label,
     value,
 }: {
     href: string;
     title: string;
-    Icon?: React.ElementType;
+    icon?: React.ReactNode;
     label: string | null;
     value: string;
 }) => {
@@ -25,7 +25,7 @@ export const ContactItem = ({
         <div className="flex items-center justify-between">
             <Link href={href} title={title} target="_blank" rel="noopener noreferrer">
                 <div className="flex items-center gap-1.5">
-                    {Icon && <Icon className="size-5 opacity-50" />}
+                    {icon}
                     <span>{label}</span>
                 </div>
             </Link>
