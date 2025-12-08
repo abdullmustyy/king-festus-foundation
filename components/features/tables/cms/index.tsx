@@ -36,6 +36,7 @@ interface ICMSTableProps {
     landingPageData?: LandingPage | null;
     aboutUsData?: AboutUs | null;
     latestGovernanceUpdate?: Date;
+    latestAdminUpdate?: Date | null;
 }
 
 export function CMSTable({
@@ -45,6 +46,7 @@ export function CMSTable({
     landingPageData,
     aboutUsData,
     latestGovernanceUpdate,
+    latestAdminUpdate,
 }: ICMSTableProps) {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
@@ -82,10 +84,14 @@ export function CMSTable({
                 title: "Advertisement section on dashboard",
                 lastUpdated: dashboardAdData?.updatedAt ? format(dashboardAdData.updatedAt, "dd/MM/yy") : "--",
             },
-            { id: CMS_IDS.ADD_ADMIN, title: "Add new admin", lastUpdated: "--" },
+            {
+                id: CMS_IDS.ADD_ADMIN,
+                title: "Add new admin",
+                lastUpdated: latestAdminUpdate ? format(latestAdminUpdate, "dd/MM/yy") : "--",
+            },
         ];
         return data;
-    }, [landingPageData, latestGovernanceUpdate, aboutUsData, breakingNewsData, dashboardAdData]);
+    }, [landingPageData, latestGovernanceUpdate, aboutUsData, breakingNewsData, dashboardAdData, latestAdminUpdate]);
 
     const filteredData = useMemo(() => {
         if (!searchQuery) return dynamicInitialData;

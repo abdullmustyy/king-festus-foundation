@@ -1,13 +1,14 @@
 "use client";
 
 import { syncUser } from "@/app/actions/auth";
+import VerifyForm from "@/components/features/forms/verify-form";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
 import { SignInFormSchema } from "@/lib/validators";
-import { TSignInForm } from "@/types";
+import { TSignInForm, TVerifyForm } from "@/types";
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +23,7 @@ const SignInForm = () => {
     const { isLoaded, signIn, setActive } = useSignIn();
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const [verifying, setVerifying] = useState(false);
 
     const form = useForm<TSignInForm>({
         resolver: zodResolver(SignInFormSchema),
@@ -46,6 +48,7 @@ const SignInForm = () => {
 
     const {
         formState: { isSubmitting },
+        getValues,
     } = form;
 
     const onSubmit = async (data: TSignInForm) => {
@@ -75,11 +78,30 @@ const SignInForm = () => {
                 if (signInAttempt.createdSessionId) {
                     router.push("/dashboard");
                 }
+            } else if (signInAttempt.status === "needs_second_factor") {
+                const emailCodeFactor = signInAttempt.supportedSecondFactors?.find(
+                    (factor) => factor.strategy === "email_code",
+                );
+
+                if (emailCodeFactor) {
+                    await signIn.prepareFirstFactor({
+                        strategy: "email_code",
+                        emailAddressId: emailCodeFactor.emailAddressId,
+                    });
+
+                    setVerifying(true);
+                    toast.message("Please check your email for a verification code.");
+                } else {
+                    console.error("No supported email_code second factor found.");
+                    toast.error("Sign-in failed. 2FA required but email code not supported.");
+                }
             } else {
-                console.error(JSON.stringify(signInAttempt, null, 2));
+                console.error("Sign-in not complete:", signInAttempt, "Status:", signInAttempt.status);
+                toast.error("Sign-in failed. Please try again.");
             }
         } catch (err) {
-            console.error(JSON.stringify(err, null, 2));
+            console.error(err);
+
             if (isClerkAPIResponseError(err)) {
                 err.errors.forEach((error) => {
                     toast.error(error.longMessage);
@@ -87,6 +109,44 @@ const SignInForm = () => {
             }
         }
     };
+
+    const handleVerify = async (data: TVerifyForm) => {
+        if (!isLoaded) return;
+
+        try {
+            const signInAttempt = await signIn.attemptFirstFactor({
+                strategy: "email_code",
+                code: data.pin,
+            });
+
+            if (signInAttempt.status === "complete") {
+                await setActive({
+                    session: signInAttempt.createdSessionId,
+                });
+
+                await syncUser(); // Persist user data
+
+                if (signInAttempt.createdSessionId) {
+                    router.push("/dashboard");
+                }
+            } else {
+                console.error("Sign-in not complete:", signInAttempt, "Status:", signInAttempt.status);
+                toast.error("Verification failed. Please try again.");
+            }
+        } catch (err) {
+            console.error(err);
+
+            if (isClerkAPIResponseError(err)) {
+                err.errors.forEach((error) => {
+                    toast.error(error.longMessage);
+                });
+            }
+        }
+    };
+
+    if (verifying) {
+        return <VerifyForm onSubmit={handleVerify} email={getValues("email")} />;
+    }
 
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6 lg:px-6">

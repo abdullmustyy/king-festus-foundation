@@ -57,7 +57,8 @@ const SignUpForm = () => {
 
             setVerifying(true);
         } catch (err) {
-            console.error(JSON.stringify(err, null, 2));
+            console.error(err);
+
             if (isClerkAPIResponseError(err)) {
                 err.errors.forEach((error) => {
                     toast.error(error.longMessage);
@@ -77,19 +78,25 @@ const SignUpForm = () => {
             if (signUpAttempt.status === "complete") {
                 await setActive({
                     session: signUpAttempt.createdSessionId,
+                    navigate: async ({ session }) => {
+                        if (session?.currentTask) {
+                            console.log(session?.currentTask);
+                            router.push("/sign-up/tasks");
+                            return;
+                        }
+
+                        await syncUser(); // Persist user data
+
+                        router.push("/dashboard");
+                    },
                 });
-
-                await syncUser(); // Persist user data
-
-                if (signUpAttempt.createdSessionId) {
-                    router.push("/dashboard");
-                }
             } else {
-                console.error("Sign-up attempt not complete:", signUpAttempt);
-                console.error("Sign-up attempt status:", signUpAttempt.status);
+                console.error("Sign-up attempt not complete:", signUpAttempt, "Status:", signUpAttempt.status);
+                toast.error("Verification failed. Please try again.");
             }
         } catch (err) {
-            console.error(JSON.stringify(err, null, 2));
+            console.error(err);
+
             if (isClerkAPIResponseError(err)) {
                 err.errors.forEach((error) => {
                     toast.error(error.longMessage);

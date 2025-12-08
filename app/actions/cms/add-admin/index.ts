@@ -19,30 +19,55 @@ export async function addAdmin(data: z.infer<typeof AddAdminFormSchema>) {
     try {
         const client = await clerkClient();
 
-        // Split full name into first and last name
-        const nameParts = fullName.trim().split(/\s+/);
-        const firstName = nameParts[0];
-        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+        // Check if user already exists
+        const existingUsers = await client.users.getUserList({ emailAddress: [email] });
 
-        // 1. Create user in Clerk
-        const clerkUser = await client.users.createUser({
-            firstName,
-            lastName,
-            emailAddress: [email],
-            password,
-            skipPasswordChecks: false,
-            skipPasswordRequirement: false,
-        });
+        if (existingUsers.data.length > 0) {
+            // User exists, update role
+            const user = existingUsers.data[0];
 
-        // 2. Create user in local DB
-        await db.user.create({
-            data: {
-                id: clerkUser.id,
-                email,
-                fullName,
-                role: role as "ADMIN" | "USER",
-            },
-        });
+            await db.user.update({
+                where: { id: user.id },
+                data: {
+                    role,
+                },
+            });
+        } else {
+            // User does not exist, create new user
+            // Split full name into first and last name
+            const nameParts = fullName.trim().split(/\s+/);
+            const firstName = nameParts[0];
+            const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
+
+            const clerkUser = await client.users.createUser({
+                firstName,
+                lastName,
+                emailAddress: [email],
+                password,
+                skipPasswordChecks: false,
+                skipPasswordRequirement: false,
+            });
+
+            // Verify the email address to allow sign-in
+            if (clerkUser.emailAddresses && clerkUser.emailAddresses.length > 0) {
+                const emailObj = clerkUser.emailAddresses.find((e) => e.emailAddress === email);
+                if (emailObj) {
+                    await client.emailAddresses.updateEmailAddress(emailObj.id, {
+                        verified: true,
+                    });
+                }
+            }
+
+            // Create user in DB
+            await db.user.create({
+                data: {
+                    id: clerkUser.id,
+                    email,
+                    fullName,
+                    role: role as "ADMIN" | "USER",
+                },
+            });
+        }
 
         revalidatePath("/dashboard/cms");
 
@@ -50,12 +75,12 @@ export async function addAdmin(data: z.infer<typeof AddAdminFormSchema>) {
     } catch (error) {
         console.error("Error adding admin:", error);
 
-        // Handle Clerk errors (e.g., password too short, email taken)
+        // Handle Clerk errors
         if (isClerkAPIResponseError(error)) {
             const messages = error.errors.map((e) => e.longMessage).join(", ");
             return { error: messages };
         }
 
-        return { error: "Failed to add admin user. Ensure email is unique." };
+        return { error: "Failed to add admin user." };
     }
 }

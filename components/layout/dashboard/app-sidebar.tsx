@@ -15,16 +15,15 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/lib/constants/dashboard";
-import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof Sidebar> & { userRole: string }) {
     const { isMobile, setOpenMobile } = useSidebar();
     const pathname = usePathname();
-    const { user } = useUser();
-    const userRole = user?.publicMetadata?.role as string | undefined;
+
+    console.log("User Role in AppSidebar:", userRole);
 
     const filteredMainLinks = sidebarLinks.main.filter((item) => {
         if (!item.roles) return true;

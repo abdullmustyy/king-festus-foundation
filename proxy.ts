@@ -10,7 +10,7 @@ export default clerkMiddleware(async (auth, req) => {
     if (isAuthRoute(req)) {
         const { isAuthenticated } = await auth();
 
-        if (isAuthenticated) {
+        if (isAuthenticated && req.method === "GET") {
             const dashboardUrl = new URL("/dashboard", req.url);
             return NextResponse.redirect(dashboardUrl);
         }

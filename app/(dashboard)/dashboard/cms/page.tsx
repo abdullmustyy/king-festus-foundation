@@ -1,10 +1,27 @@
 import { CMSTable } from "@/components/features/tables/cms";
 import db from "@/lib/db";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
 
 export default async function CMSPage() {
+    const user = await currentUser();
+
+    if (!user) {
+        redirect("/auth/sign-in");
+    }
+
+    const dbUser = await db.user.findUnique({
+        where: { id: user.id },
+        select: { role: true },
+    });
+
+    if (!dbUser || dbUser.role !== "ADMIN") {
+        redirect("/dashboard");
+    }
+
     // Fetch breaking news
     const breakingNews = await db.breakingNews.findFirst();
     // Fetch governance bodies with their media assets
@@ -28,6 +45,13 @@ export default async function CMSPage() {
         return current.updatedAt > latest ? current.updatedAt : latest;
     }, new Date(0));
 
+    // Fetch latest admin update
+    const latestAdminUpdate = await db.user.findFirst({
+        where: { role: "ADMIN" },
+        orderBy: { updatedAt: "desc" },
+        select: { updatedAt: true },
+    });
+
     return (
         <>
             <div className="px-4 pt-5 lg:px-5">
@@ -41,6 +65,7 @@ export default async function CMSPage() {
                     landingPageData={landingPage}
                     aboutUsData={aboutUs}
                     latestGovernanceUpdate={latestGovernanceUpdate}
+                    latestAdminUpdate={latestAdminUpdate?.updatedAt || null}
                 />
             </Suspense>
         </>
