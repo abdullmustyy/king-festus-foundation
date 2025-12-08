@@ -50,7 +50,7 @@ const GovernanceStructurePage = async () => {
                                     />
                                 </div>
                                 <div className="flex flex-col gap-1 text-center">
-                                    <span className="text-xl font-medium text-primary">{item.name}</span>
+                                    <span className="text-lg font-medium text-primary">{item.name}</span>
                                     <span className="text-foreground/50 uppercase">{item.role}</span>
                                 </div>
                             </div>
