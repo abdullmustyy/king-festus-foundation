@@ -1,4 +1,4 @@
-import MeetingsAndEventsTable from "@/components/features/tables/meetings-and-events";
+// import MeetingsAndEventsTable from "@/components/features/tables/meetings-and-events";
 import { SupportServicesTable } from "@/components/features/tables/support-services";
 import db from "@/lib/db";
 import DashboardVolunteerImage from "@/public/images/dashboard-volunteer-image.svg";
@@ -43,9 +43,9 @@ const DashboardPage = async () => {
             </section>
 
             {/* Upcoming Meetings and Events. */}
-            <Suspense fallback={<></>}>
+            {/* <Suspense fallback={<></>}>
                 <MeetingsAndEventsTable />
-            </Suspense>
+            </Suspense> */}
         </>
     );
 };

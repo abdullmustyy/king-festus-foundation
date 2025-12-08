@@ -28,7 +28,7 @@ const socialLinks = baseSocialLinks.map((link) => {
 
 const Footer = () => {
     return (
-        <footer className="w-contain py-8.5 flex lg:flex-row flex-col lg:items-center lg:justify-center lg:gap-50 gap-4">
+        <footer className="w-contain flex flex-col gap-4 py-8.5 lg:flex-row lg:items-center lg:justify-center lg:gap-50">
             {socialLinks.map(({ icon, name, href }) => (
                 <a
                     key={name}
@@ -36,10 +36,10 @@ const Footer = () => {
                     title={name}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 hover:opacity-80 transition-opacity duration-300"
+                    className="flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-80"
                 >
                     <Image src={icon} alt={name} />
-                    <span className="text-secondary text-xl">{name}</span>
+                    <span className="text-xl text-secondary">{name}</span>
                 </a>
             ))}
         </footer>
