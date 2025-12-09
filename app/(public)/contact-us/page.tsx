@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 };
 
 const contactDetails = [
-    { name: "Phone number of Secretary", label: "+1 (253) 902 3456", value: "+1 (253) 902 3456" },
-    { name: "Sectarians Support Services Provider", label: "+1 (253) 902 3456", value: "+1 (253) 902 3456" },
-    { name: "Audit firm", label: "+1 (253) 902 3456", value: "+1 (253) 902 3456" },
+    { name: "Phone number of Secretary", label: "+1 (639) 998-0042", value: "+16399980042" },
+    { name: "Sectarians Support Services Provider", label: "+234 706 821 8779", value: "+2347068218779" },
+    { name: "Audit firm", label: "+234 803 430 2582", value: "+2348034302582" },
 ];
 
 const socialLinks = baseSocialLinks.map((link) => {
@@ -25,15 +25,15 @@ const socialLinks = baseSocialLinks.map((link) => {
     switch (link.name) {
         case "Facebook":
             Icon = Facebook;
-            label = "foundation_org";
+            label = "@kingfestusfoundation";
             break;
         case "Instagram":
             Icon = Instagram;
-            label = "Foundation_org";
+            label = "@kingfestusfoundation";
             break;
         case "LinkedIn":
             Icon = LinkedIn;
-            label = "Foundation_org";
+            label = "@kingfestusfoundation";
             break;
         case "WhatsApp":
             Icon = Whatsapp;
