@@ -11,7 +11,15 @@ import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { AboutUs, BreakingNews, DashboardAd, GovernanceBody, LandingPage, MediaAsset } from "@/generated/prisma/client";
+import {
+    AboutUs,
+    BreakingNews,
+    DashboardAd,
+    GovernanceBody,
+    LandingPage,
+    LandingPageMedia,
+    MediaAsset,
+} from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { format } from "date-fns";
@@ -37,6 +45,7 @@ interface ICMSTableProps {
     aboutUsData?: AboutUs | null;
     latestGovernanceUpdate?: Date;
     latestAdminUpdate?: Date | null;
+    landingPageMediaData?: (LandingPageMedia & { mediaAsset: MediaAsset | null })[] | null;
 }
 
 export function CMSTable({
@@ -47,6 +56,7 @@ export function CMSTable({
     aboutUsData,
     latestGovernanceUpdate,
     latestAdminUpdate,
+    landingPageMediaData,
 }: ICMSTableProps) {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
@@ -146,6 +156,7 @@ export function CMSTable({
                         id={`${CMS_IDS.LANDING_MEDIA}-form`}
                         onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={landingPageMediaData}
                     />
                 );
             case CMS_IDS.GOVERNANCE:

@@ -39,6 +39,12 @@ export default async function CMSPage() {
     });
     // Fetch landing page data
     const landingPage = await db.landingPage.findFirst();
+    // Fetch landing page media
+    const landingPageMedia = await db.landingPageMedia.findMany({
+        include: {
+            mediaAsset: true,
+        },
+    });
     // Fetch about us data
     const aboutUs = await db.aboutUs.findFirst();
     // Determine the latest update time among governance bodies
@@ -66,6 +72,7 @@ export default async function CMSPage() {
                     landingPageData={landingPage}
                     aboutUsData={aboutUs}
                     latestGovernanceUpdate={latestGovernanceUpdate}
+                    landingPageMediaData={landingPageMedia}
                     latestAdminUpdate={latestAdminUpdate?.updatedAt || null}
                 />
             </Suspense>
