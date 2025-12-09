@@ -66,15 +66,34 @@ export const AddImageFormSchema = z.object({
 });
 
 export const LandingPageMediaFormSchema = z.object({
-    image: z
-        .instanceof(File, { error: "Image is required." })
-        .refine((file) => file, "Image is required.")
-        .refine((file) => file?.size <= MAX_CMS_FILE_SIZE, `Max file size is 2MB.`)
-        .refine(
-            (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-            ".jpg, .jpeg, .png, .webp, and .svg files are accepted.",
-        ),
+    landingPageMedia: z
+        .array(
+            z.object({
+                mediaId: z.string().optional(),
+                image: z
+                    .union([
+                        z
+                            .instanceof(File)
+                            .refine((file) => file.size <= MAX_CMS_FILE_SIZE, `Max file size is 2MB.`)
+                            .refine(
+                                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+                                ".jpg, .jpeg, .png, .webp, and .svg files are accepted.",
+                            ),
+                        z.string(),
+                        z.undefined(),
+                        z.null(),
+                    ])
+                    .optional(),
+                mediaAssetId: z.string().optional(),
+            }),
+        )
+        .refine((media) => media.some((m) => m.image), {
+            message: "At least one landing page media item with an image is required.",
+            path: ["landingPageMedia.0.image"],
+        }),
 });
+
+export type TLandingPageMediaForm = z.infer<typeof LandingPageMediaFormSchema>;
 
 export const GovernanceStructureFormSchema = z.object({
     governanceBodies: z

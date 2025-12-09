@@ -107,22 +107,18 @@ export const ourFileRouter = {
             revalidatePath("/dashboard/media");
         }),
 
-    landingPageHeroImage: f(["image"])
+    landingPageMedia: f(["image"])
         .middleware(async () => {
             const user = await currentUser();
 
-            if (!user) throw new UploadThingError("You must be logged in to upload a landing page hero image");
+            if (!user) throw new UploadThingError("You must be logged in to upload landing page media");
 
             return { userId: user.id, type: "IMAGE" as const };
         })
-        .onUploadComplete(async ({ file, metadata }) => {
+        .onUploadComplete(async ({ metadata, file }) => {
             const { type } = metadata;
 
-            const existingLandingPage = await db.landingPage.findFirst({
-                include: { heroMediaAsset: true },
-            });
-
-            // 1. Create the new MediaAsset record
+            // Create the new MediaAsset record
             const newMediaAsset = await db.mediaAsset.create({
                 data: {
                     key: file.key,
@@ -132,37 +128,13 @@ export const ourFileRouter = {
                 },
             });
 
-            if (existingLandingPage) {
-                const oldMediaAssetId = existingLandingPage.heroMediaAsset?.id;
-                const oldMediaAssetKey = existingLandingPage.heroMediaAsset?.key;
-
-                // 2. Update LandingPage to point to the new mediaAsset FIRST
-                // This removes the reference to the old mediaAsset
-                await db.landingPage.update({
-                    where: { id: existingLandingPage.id },
-                    data: {
-                        heroMediaAsset: {
-                            connect: { id: newMediaAsset.id },
-                        },
-                    },
-                });
-
-                // 3. Now it is safe to delete the old mediaAsset
-                if (oldMediaAssetId && oldMediaAssetKey) {
-                    await utapi.deleteFiles(oldMediaAssetKey);
-                    await db.mediaAsset.delete({ where: { id: oldMediaAssetId } });
-                }
-            } else {
-                await db.landingPage.create({
-                    data: {
-                        heroMediaAsset: {
-                            connect: { id: newMediaAsset.id },
-                        },
-                    },
-                });
-            }
-
-            revalidatePath("/");
+            return {
+                id: newMediaAsset.id,
+                key: newMediaAsset.key,
+                name: newMediaAsset.name,
+                url: newMediaAsset.url,
+                type: newMediaAsset.type,
+            };
         }),
 } satisfies FileRouter;
 
