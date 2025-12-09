@@ -30,7 +30,7 @@ export function HeroCarousel({ media }: HeroCarouselProps) {
     return (
         <Carousel
             plugins={[plugin.current]}
-            className="size-full overflow-hidden rounded-[20px] *:size-full"
+            className="size-full *:size-full"
             opts={{
                 loop: true,
             }}
