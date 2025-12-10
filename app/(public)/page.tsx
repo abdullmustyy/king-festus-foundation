@@ -95,7 +95,7 @@ const HomePage = async () => {
                 </div>
             </div>
 
-            <div className="relative size-full min-h-[300px] overflow-hidden rounded-[20px] lg:min-h-auto">
+            <div className="relative size-full min-h-[300px] lg:min-h-auto">
                 <HeroCarousel media={landingPageMedia} />
             </div>
         </section>
