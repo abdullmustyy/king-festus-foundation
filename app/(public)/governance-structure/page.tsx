@@ -67,13 +67,13 @@ const GovernanceStructurePage = async () => {
                 <div className="flex flex-col items-start gap-6 lg:flex-row">
                     <h3 className="text-right text-xl text-black/70 lg:mt-2 lg:[writing-mode:sideways-lr]">
                         Support service
-                        <br /> providers:
+                        <br className="md-br" /> providers:
                     </h3>
 
                     <div className="grid grid-cols-2 gap-4 lg:grid-cols-7">
                         {organisationalStructure.map((item, index) => (
                             <div key={item.name + index} className="flex flex-col items-center gap-2.5">
-                                <div className="flex aspect-video h-12.5 items-center justify-center rounded-lg border border-primary">
+                                <div className="flex aspect-3/1 h-12.5 items-center justify-center rounded-lg border border-primary">
                                     <Image src={item.image} alt={item.name} className="size-6.5" />
                                 </div>
                                 <div className="flex flex-col gap-1 text-center">

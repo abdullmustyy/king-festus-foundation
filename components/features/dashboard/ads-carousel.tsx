@@ -24,7 +24,7 @@ export function AdsCarousel({ ads }: AdsCarouselProps) {
                 loop: true,
             }}
         >
-            <CarouselContent className="ml-0 h-66">
+            <CarouselContent className="h-66">
                 {ads.map((ad) => {
                     const adMediaUrl = ad.mediaAsset?.url;
                     const isVideo = ad.mediaAsset?.type === "VIDEO";
@@ -32,7 +32,7 @@ export function AdsCarousel({ ads }: AdsCarouselProps) {
                     if (!adMediaUrl) return null;
 
                     return (
-                        <CarouselItem key={ad.id} className="h-full pl-0">
+                        <CarouselItem key={ad.id} className="h-full">
                             {isVideo ? (
                                 <ReactPlayer
                                     src={adMediaUrl}

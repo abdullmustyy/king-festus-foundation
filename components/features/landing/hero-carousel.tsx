@@ -21,7 +21,7 @@ export function HeroCarousel({ media }: HeroCarouselProps) {
                 alt="Hero Volunteer Image"
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
             />
         );
@@ -35,20 +35,20 @@ export function HeroCarousel({ media }: HeroCarouselProps) {
                 loop: true,
             }}
         >
-            <CarouselContent className="ml-0 h-full">
+            <CarouselContent className="h-full">
                 {media.map((item) => {
                     const mediaUrl = item.mediaAsset?.url;
 
                     if (!mediaUrl) return null;
 
                     return (
-                        <CarouselItem key={item.id} className="relative pl-0">
+                        <CarouselItem key={item.id} className="relative">
                             <Image
                                 src={mediaUrl}
                                 alt={item.mediaAsset?.name || "Landing Page Media"}
                                 sizes="(max-width: 1024px) 100vw, 50vw"
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                                 priority
                             />
                         </CarouselItem>
