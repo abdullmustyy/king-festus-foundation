@@ -32,7 +32,7 @@ export function AdsCarousel({ ads }: AdsCarouselProps) {
                     if (!adMediaUrl) return null;
 
                     return (
-                        <CarouselItem key={ad.id} className="h-full">
+                        <CarouselItem key={ad.id} className="relative h-full bg-black/90">
                             {isVideo ? (
                                 <ReactPlayer
                                     src={adMediaUrl}
@@ -41,16 +41,10 @@ export function AdsCarousel({ ads }: AdsCarouselProps) {
                                     muted
                                     playing
                                     loop
-                                    className="object-cover"
+                                    className="object-contain"
                                 />
                             ) : (
-                                <Image
-                                    src={adMediaUrl}
-                                    alt={ad.title}
-                                    className="size-full object-cover"
-                                    fill
-                                    priority
-                                />
+                                <Image src={adMediaUrl} alt={ad.title} fill priority className="object-contain" />
                             )}
                         </CarouselItem>
                     );
