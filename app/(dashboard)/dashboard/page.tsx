@@ -21,7 +21,7 @@ const DashboardPage = async () => {
             </Suspense>
 
             {/* Dashboard Ad */}
-            <section className="px-4 py-5 lg:px-5">
+            <section className="px-4 pb-5 lg:px-5">
                 {dashboardAds.length > 0 ? (
                     <AdsCarousel ads={dashboardAds} />
                 ) : (

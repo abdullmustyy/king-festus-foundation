@@ -24,7 +24,7 @@ export function AdsCarousel({ ads }: AdsCarouselProps) {
                 loop: true,
             }}
         >
-            <CarouselContent className="h-66">
+            <CarouselContent className="h-100">
                 {ads.map((ad) => {
                     const adMediaUrl = ad.mediaAsset?.url;
                     const isVideo = ad.mediaAsset?.type === "VIDEO";
