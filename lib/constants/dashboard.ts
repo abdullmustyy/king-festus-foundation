@@ -1,6 +1,6 @@
 import Home from "@/components/ui/icons/home";
 import Image from "@/components/ui/icons/image";
-import { History, Mail } from "lucide-react";
+import { Calendar, File, History, Mail } from "lucide-react";
 
 export const sidebarLinks = {
     main: [
@@ -10,9 +10,15 @@ export const sidebarLinks = {
             icon: Home,
         },
         {
-            title: "Media",
+            title: "Photo dump",
             url: "/dashboard/media",
             icon: Image,
+        },
+        {
+            title: "Calendar",
+            url: "https://calendar.google.com/",
+            icon: Calendar,
+            target: "_blank",
         },
         {
             title: "Email",
@@ -28,7 +34,7 @@ export const sidebarLinks = {
         {
             title: "CMS",
             url: "/dashboard/cms",
-            icon: Image,
+            icon: File,
             roles: ["ADMIN"],
         },
     ],
