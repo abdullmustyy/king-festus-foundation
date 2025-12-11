@@ -3,9 +3,10 @@
 import CalendarWeek from "@/components/ui/icons/calendar-week";
 import Status from "@/components/ui/icons/status";
 import { BreakingNews } from "@/generated/prisma/client";
+import { cn } from "@/lib/utils";
 import { IconAd } from "@tabler/icons-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { format } from "date-fns";
+import { format, isPast } from "date-fns";
 import { ExternalLink, Link as LinkIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -88,10 +89,16 @@ export const pastAnnouncementsColumns: ColumnDef<BreakingNews>[] = [
                 <span>Status</span>
             </div>
         ),
-        cell: ({ row }) => (
-            <span className={row.original.status ? "text-[#10B981]" : "text-destructive"}>
-                {row.original.status ? "Active" : "Inactive"}
-            </span>
-        ),
+        cell: ({ row }) => {
+            const hasExpired = isPast(new Date(row.original.endDate));
+            const statusText = hasExpired ? "Expired" : row.original.status ? "Active" : "Inactive";
+            const statusColorClass = hasExpired
+                ? "text-destructive"
+                : row.original.status
+                  ? "text-[#10B981]"
+                  : "text-[#FEBC2F]";
+
+            return <span className={cn(statusColorClass)}>{statusText}</span>;
+        },
     },
 ];
