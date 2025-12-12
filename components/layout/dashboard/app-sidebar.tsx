@@ -1,14 +1,12 @@
 "use client";
 
 import { NavUser } from "@/components/features/dashboard/nav-user";
-import ArrowUpRight from "@/components/ui/icons/arrow-up-right";
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -68,7 +66,7 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
                 </SidebarGroup>
 
                 {/* Support apps group */}
-                <SidebarGroup>
+                {/* <SidebarGroup>
                     <SidebarGroupContent className="flex flex-col gap-2.5">
                         <SidebarGroupLabel className="h-auto">Support apps</SidebarGroupLabel>
                         <SidebarMenu>
@@ -88,7 +86,7 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
             </SidebarContent>
 
             <SidebarFooter>

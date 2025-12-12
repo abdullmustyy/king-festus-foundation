@@ -108,13 +108,23 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
             const isAvailable = row.original.status === "Available";
             if (isAvailable) {
                 const department = row.original.department;
-                let scheduleMeetingHref = ""; // Default empty href
-                const sendMailHref = ""; // Default empty href
+                let scheduleMeetingHref = "";
+                const sendMailHref = "";
                 let firstLinkText = "Schedule meeting";
 
-                if (department === "Accounts Clarification") {
-                    scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
-                    firstLinkText = "View account statement";
+                switch (department) {
+                    case "Accounts Clarification":
+                        scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
+                        firstLinkText = "View account statement";
+                        break;
+                    case "Secretariat Support Services":
+                        scheduleMeetingHref = "https://cal.com/ademola1234";
+                        break;
+                    case "Personal Account / Ledger Review":
+                        scheduleMeetingHref = "https://cal.com/jenel-consulting-pdjdqe/30min";
+                        break;
+                    default:
+                        break;
                 }
 
                 return (
