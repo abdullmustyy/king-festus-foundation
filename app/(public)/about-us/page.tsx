@@ -11,17 +11,17 @@ const defaultMissions = [
     {
         id: "1",
         heading: "Mission One",
-        text: "To care for and improve the welfare of the descendants of the LATE PA FESTUS MBAH",
+        text: "To care for and improve the welfare of descendants of LATE PA FESTUS MBAH",
     },
     {
         id: "2",
         heading: "Mission Two",
-        text: "To facilitate opportunities for self development and empowerment of the descendants of PA FESTUS MBAH and foster prosperity of the family and society in general",
+        text: "To facilitate opportunities for self development and empowerment of descendants of PA FESTUS MBAH towards fostering prosperity of the family and society in general.",
     },
     {
         id: "3",
         heading: "Mission Three",
-        text: "To develop and strengthen the ties of kinship between the descendants of PA FESTUS MBAH and stimulate the exchange of positive ideas through its programs and projects.",
+        text: "To develop and strengthen the ties of kinship between the descendants of PA FESTUS MBAH and stimulate exchange of positive ideas through its programs and projects.",
     },
 ];
 

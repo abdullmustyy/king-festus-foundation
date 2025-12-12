@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 };
 
 const organisationalStructure = [
-    { image: MedicareConsultation, name: "Medicare", organizer: "Chuka Obienu" },
+    { image: MedicareConsultation, name: "Medicare", organizer: "Dr. Chuka Obienu" },
     { image: LegalConsultation, name: "Legal consultation", organizer: null },
-    { image: SecretariatSupport, name: "Secretariat support services", organizer: "AlSECs" },
+    { image: SecretariatSupport, name: "Secretariat support services", organizer: "ALSEC NOMINEE" },
     { image: AccountsClarification, name: "Accounting services", organizer: "Jenel Consulting" },
     { image: PersonalAccount, name: "Personal account ledger review", organizer: "Elijah Igoko" },
     { image: ITSupport, name: "IT support", organizer: null },

@@ -66,9 +66,9 @@ const HomePage = async () => {
                         <h1 className="text-5xl leading-[100%]">Empowering progress through purpose</h1>
                         <p className="text-xl text-foreground/50">
                             King Festus Foundation was established in 2021 to support a network of related families
-                            towards achieving stable, middle-class livelihoods through facilitation of free medical and
-                            legal advisory services, affordable loans, vocational training, joint ventures, regulated
-                            savings groups as well as financial literacy education.
+                            towards achieving stable, middle-class standard of living through facilitation of free
+                            medical and legal advisory services, affordable loans, vocational training, joint ventures,
+                            regulated savings groups as well as financial literacy education.
                         </p>
                     </div>
                 </div>
