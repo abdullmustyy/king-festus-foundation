@@ -2,9 +2,9 @@ import { ContactItem } from "@/components/features/contact/contact-item";
 import Facebook from "@/components/ui/icons/facebook";
 import Instagram from "@/components/ui/icons/instagram";
 import LinkedIn from "@/components/ui/icons/linkedin";
-import Phone from "@/components/ui/icons/phone";
 import Whatsapp from "@/components/ui/icons/whatsapp";
 import { baseSocialLinks, METADATA_TITLE } from "@/lib/constants";
+import { Mail, MapPin, User } from "lucide-react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -13,9 +13,63 @@ export const metadata: Metadata = {
 };
 
 const contactDetails = [
-    { name: "Phone number of Secretary", label: "+1 (639) 998-0042", value: "+16399980042" },
-    { name: "Sectarians Support Services Provider", label: "+234 706 821 8779", value: "+2347068218779" },
-    { name: "Audit firm", label: "+234 803 430 2582", value: "+2348034302582" },
+    {
+        title: "Secretary",
+        items: [
+            {
+                value: "Chukwuemeka Mbah",
+                icon: User,
+            },
+            {
+                value: "1 Ukehe Street, Off Ezillo Avenue, Independence layout, Enugu, Nigeria",
+                icon: MapPin,
+                href: "https://www.google.com/maps/search/?api=1&query=1+Ukehe+Street,+Off+Ezillo+Avenue,+Independence+layout,+Enugu,+Nigeria",
+            },
+            {
+                value: "emekambah2@yahoo.com",
+                icon: Mail,
+                href: "mailto:emekambah2@yahoo.com",
+            },
+        ],
+    },
+    {
+        title: "Secretariats Support",
+        items: [
+            {
+                value: "Ademola Adeyanju",
+                icon: User,
+            },
+            {
+                value: "Alsec Nominees Limited, 13th Floor, St. Nicholas House, Catholic Mission Street, Lagos Island, Lagos, Nigeria",
+                icon: MapPin,
+                href: "https://www.google.com/maps/search/?api=1&query=Alsec+Nominees+Limited,+13th+Floor,+St.+Nicholas+House,+Catholic+Mission+Street,+Lagos+Island,+Lagos,+Nigeria",
+            },
+            {
+                value: "Ademola.adeyanju@alsecnominees.com",
+                icon: Mail,
+                href: "mailto:Ademola.adeyanju@alsecnominees.com",
+            },
+        ],
+    },
+    {
+        title: "Audit Firm",
+        items: [
+            {
+                value: "Adeniyi christopher & co",
+                icon: User,
+            },
+            {
+                value: "Right wing, 2nd floor emmanuel plaza 23b, Fatai Atere way, Matori-Mushin, Lagos",
+                icon: MapPin,
+                href: "https://www.google.com/maps/search/?api=1&query=Right+wing,+2nd+floor+emmanuel+plaza+23b,+Fatai+Atere+way,+Matori-Mushin,+Lagos",
+            },
+            {
+                value: "Info@acco.ng",
+                icon: Mail,
+                href: "mailto:Info@acco.ng",
+            },
+        ],
+    },
 ];
 
 const socialLinks = baseSocialLinks.map((link) => {
@@ -48,31 +102,36 @@ const ContactUsPage = () => {
     return (
         <main className="w-contain grid gap-10 py-10 text-xl lg:grid-cols-2 lg:gap-50">
             <div className="flex flex-col gap-6">
-                <h1 className="text-3xl text-primary">Contact details</h1>
+                <h1 className="text-2xl text-primary">Contact details</h1>
 
                 <div className="flex flex-col gap-4">
-                    {contactDetails.map((detail, index) => (
-                        <div key={detail.name + index} className="flex flex-col gap-2 border-b border-black/20 pb-5">
-                            <h2 className="text-2xl text-foreground/80">{detail.name}</h2>
-                            <ContactItem
-                                href={`tel:${detail.value}`}
-                                title={detail.label}
-                                icon={<Phone className="size-5 opacity-50" />}
-                                label={detail.label}
-                                value={detail.value}
-                            />
+                    {contactDetails.map((group, index) => (
+                        <div key={group.title + index} className="flex flex-col gap-2 border-b border-black/20 pb-5">
+                            <h2 className="text-xl text-foreground/80">{group.title}</h2>
+                            <div className="flex flex-col gap-3">
+                                {group.items.map((item, i) => (
+                                    <ContactItem
+                                        key={i}
+                                        href={item.href}
+                                        title={item.value}
+                                        icon={<item.icon className="size-5 opacity-50" />}
+                                        label={item.value}
+                                        value={item.value}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     ))}
                 </div>
             </div>
 
             <div className="flex flex-col gap-6">
-                <h1 className="text-3xl text-primary">Social media</h1>
+                <h1 className="text-2xl text-primary">Social media</h1>
 
                 <div className="flex flex-col gap-4">
                     {socialLinks.map(({ Icon, href, label, name }, index) => (
                         <div key={name + index} className="flex flex-col gap-2 border-b border-black/20 pb-5">
-                            <h2 className="text-2xl text-foreground/80">{name}</h2>
+                            <h2 className="text-xl text-foreground/80">{name}</h2>
                             <ContactItem
                                 href={href}
                                 title={label ?? name}
