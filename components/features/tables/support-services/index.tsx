@@ -39,8 +39,8 @@ const data: TSupportServices[] = [
     {
         id: "6",
         department: "IT Support",
-        vendor: "Not Available",
-        status: "Not Available",
+        vendor: "Available",
+        status: "Available",
     },
 ];
 

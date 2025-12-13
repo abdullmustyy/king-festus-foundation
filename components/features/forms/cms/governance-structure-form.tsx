@@ -42,8 +42,8 @@ export default function GovernanceStructureForm({
                               name: b.name,
                               role: b.role,
                           })),
-                          // Pad with empty objects until length 6
-                          ...Array.from({ length: Math.max(0, 6 - initialData.governanceBodies.length) }).map(() => ({
+                          // Pad with empty objects until length 7
+                          ...Array.from({ length: Math.max(0, 7 - initialData.governanceBodies.length) }).map(() => ({
                               id: undefined,
                               image: undefined,
                               mediaAssetId: undefined,
@@ -51,7 +51,7 @@ export default function GovernanceStructureForm({
                               role: "",
                           })),
                       ]
-                    : Array.from({ length: 6 }).map(() => ({
+                    : Array.from({ length: 7 }).map(() => ({
                           id: undefined,
                           image: undefined,
                           mediaAssetId: undefined,

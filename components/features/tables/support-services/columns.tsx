@@ -129,6 +129,10 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
                         scheduleMeetingHref = "https://cal.com/jenel-consulting-pdjdqe/30min";
                         sendMailHref = "mailto:jenelconsulting13@gmail.com";
                         break;
+                    case "IT Support":
+                        scheduleMeetingHref = "https://cal.com/awariyusuf02/15min";
+                        sendMailHref = "mailto:awariyusuf02@gmail.com";
+                        break;
                     default:
                         break;
                 }
