@@ -13,7 +13,11 @@ const MediaPage = async () => {
             select: { role: true },
         });
         isAdmin = dbUser?.role === UserRole.ADMIN;
+        console.log("Current user email:", user.emailAddresses[0].emailAddress);
+        console.log("User from DB:", dbUser);
     }
+
+    console.log("isAdmin:", isAdmin);
 
     const mediaPromise = db.media.findMany({
         include: {
