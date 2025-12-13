@@ -7,17 +7,14 @@ const MediaPage = async () => {
     const user = await currentUser();
     let isAdmin = false;
 
-    if (user && user.emailAddresses && user.emailAddresses.length > 0) {
+    if (user) {
         const dbUser = await db.user.findUnique({
-            where: { email: user.emailAddresses[0].emailAddress },
+            where: { id: user.id },
             select: { role: true },
         });
-        isAdmin = dbUser?.role === UserRole.ADMIN;
-        console.log("Current user email:", user.emailAddresses[0].emailAddress);
-        console.log("User from DB:", dbUser);
-    }
 
-    console.log("isAdmin:", isAdmin);
+        isAdmin = dbUser?.role === UserRole.ADMIN;
+    }
 
     const mediaPromise = db.media.findMany({
         include: {
