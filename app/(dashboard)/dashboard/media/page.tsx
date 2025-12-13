@@ -1,7 +1,7 @@
+import { UserRole } from "@/generated/prisma/enums";
 import db from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import MediaGallery from "./_components/media-gallery";
-import { UserRole } from "@/generated/prisma/enums";
 
 const MediaPage = async () => {
     const user = await currentUser();

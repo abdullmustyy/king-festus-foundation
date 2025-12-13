@@ -16,7 +16,7 @@ const AuthLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
                 <section className="w-contain grid items-center gap-7 lg:grid-cols-2 xl:gap-30">
                     {children}
 
-                    <div className="hidden size-full p-15 lg:block">
+                    <div className="hidden size-full min-h-[300px] lg:block">
                         <HeroCarousel media={landingPageMedia} />
                     </div>
                 </section>

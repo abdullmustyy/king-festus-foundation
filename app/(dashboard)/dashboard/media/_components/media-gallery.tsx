@@ -50,15 +50,9 @@ const MediaGallery = ({ mediaPromise, isAdmin }: IMediaGalleryProps) => {
                 <div className="flex items-center justify-between">
                     <h6 className="font-medium">Media</h6>
 
-                    {isAdmin && (
-                        <Button
-                            size="sm"
-                            className="rounded-full text-sm"
-                            onClick={() => setOpen((prevOpen) => !prevOpen)}
-                        >
-                            Add image
-                        </Button>
-                    )}
+                    <Button size="sm" className="rounded-full text-sm" onClick={() => setOpen((prevOpen) => !prevOpen)}>
+                        Add image
+                    </Button>
                 </div>
 
                 {/* Media gallery */}
