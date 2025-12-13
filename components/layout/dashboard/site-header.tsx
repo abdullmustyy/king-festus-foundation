@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const SiteHeader = () => {
     return (
-        <header className="flex shrink-0 items-center gap-2 px-5 py-2 border-b border-border transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
-            <div className="w-full flex items-center">
-                <Link href="/dashboard" className="mx-auto">
+        <header className="flex shrink-0 items-center gap-2 border-b border-border px-5 py-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
+            <div className="flex w-full items-center">
+                <Link href="/" className="mx-auto">
                     <div className="flex flex-col items-center gap-1">
                         <Image src={LogoIcon} alt="King Festus Foundation" priority className="size-15.5" />
                         <span className="text-sm font-medium uppercase">King Festus Foundation</span>

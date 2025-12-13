@@ -37,6 +37,7 @@ const HomePage = async () => {
     const landingPage = await db.landingPage.findFirst({
         include: { media: { include: { mediaAsset: true } } },
     });
+    const landingPageMedia = landingPage?.media || [];
 
     const socialLinks = baseSocialLinks.map((link) => link.href);
 
@@ -49,8 +50,6 @@ const HomePage = async () => {
         description: METADATA_DESCRIPTION,
         sameAs: socialLinks,
     };
-
-    const landingPageMedia = landingPage?.media || [];
 
     return (
         <section className="w-contain grid items-center gap-7 py-10 lg:grid-cols-2 lg:grid-rows-[28.125rem]">

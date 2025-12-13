@@ -1,8 +1,13 @@
+import { HeroCarousel } from "@/components/features/landing/hero-carousel";
 import Navbar from "@/components/layout/navbar";
-import KingFestusFamily from "@/public/images/king-festus-family.webp";
-import Image from "next/image";
+import db from "@/lib/db";
 
-const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+const AuthLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
+    const landingPage = await db.landingPage.findFirst({
+        include: { media: { include: { mediaAsset: true } } },
+    });
+    const landingPageMedia = landingPage?.media || [];
+
     return (
         <>
             <Navbar className="w-contain gap-4 *:data-[slot='navbar-menu']:justify-between lg:pb-4 lg:*:data-[slot='navbar-menu']:justify-center" />
@@ -11,13 +16,8 @@ const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
                 <section className="w-contain grid items-center gap-7 lg:grid-cols-2 xl:gap-30">
                     {children}
 
-                    <div className="hidden p-15 lg:block">
-                        <Image
-                            src={KingFestusFamily}
-                            alt="Hero Volunteer Image"
-                            priority
-                            className="size-full object-cover"
-                        />
+                    <div className="hidden size-full p-15 lg:block">
+                        <HeroCarousel media={landingPageMedia} />
                     </div>
                 </section>
             </main>

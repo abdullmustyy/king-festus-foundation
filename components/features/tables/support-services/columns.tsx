@@ -109,19 +109,25 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
             if (isAvailable) {
                 const department = row.original.department;
                 let scheduleMeetingHref = "";
-                const sendMailHref = "";
+                let sendMailHref = "";
                 let firstLinkText = "Schedule meeting";
 
                 switch (department) {
-                    case "Accounts Clarification":
-                        scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
-                        firstLinkText = "View account statement";
+                    case "Medicare Consultation":
+                        sendMailHref = "mailto:chukaobienu@gmail.com";
                         break;
                     case "Secretariat Support Services":
                         scheduleMeetingHref = "https://cal.com/ademola1234";
+                        sendMailHref = "mailto:Ademola.adeyanju@alsecnominees.com";
+                        break;
+                    case "Accounts Clarification":
+                        scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
+                        firstLinkText = "View account statement";
+                        sendMailHref = "mailto:jenelconsulting13@gmail.com";
                         break;
                     case "Personal Account / Ledger Review":
                         scheduleMeetingHref = "https://cal.com/jenel-consulting-pdjdqe/30min";
+                        sendMailHref = "mailto:jenelconsulting13@gmail.com";
                         break;
                     default:
                         break;

@@ -14,25 +14,25 @@ const data: TSupportServices[] = [
     },
     {
         id: "2",
-        department: "Legal Consultation",
-        vendor: "Available",
-        status: "Available",
-    },
-    {
-        id: "3",
         department: "Secretariat Support Services",
         vendor: "Available",
         status: "Available",
     },
     {
-        id: "4",
+        id: "3",
         department: "Accounts Clarification",
         vendor: "Available",
         status: "Available",
     },
     {
-        id: "5",
+        id: "4",
         department: "Personal Account / Ledger Review",
+        vendor: "Available",
+        status: "Available",
+    },
+    {
+        id: "5",
+        department: "Legal Consultation",
         vendor: "Available",
         status: "Available",
     },

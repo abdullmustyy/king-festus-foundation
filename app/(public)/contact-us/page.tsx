@@ -3,6 +3,7 @@ import Facebook from "@/components/ui/icons/facebook";
 import Instagram from "@/components/ui/icons/instagram";
 import LinkedIn from "@/components/ui/icons/linkedin";
 import Whatsapp from "@/components/ui/icons/whatsapp";
+import X from "@/components/ui/icons/x";
 import { baseSocialLinks, METADATA_TITLE } from "@/lib/constants";
 import { Mail, MapPin, User } from "lucide-react";
 import { Metadata } from "next";
@@ -83,15 +84,19 @@ const socialLinks = baseSocialLinks.map((link) => {
             break;
         case "Instagram":
             Icon = Instagram;
-            label = "@kingfestusfoundation";
+            label = "@king_festusfoundation";
             break;
         case "LinkedIn":
             Icon = LinkedIn;
-            label = "@kingfestusfoundation";
+            label = "@king-festus-foundation-family-office";
+            break;
+        case "X(Twitter)":
+            Icon = X;
+            label = "@KFF2021";
             break;
         case "WhatsApp":
             Icon = Whatsapp;
-            label = "+1 (253) 902 3456";
+            label = "+1 (470) 637-8404";
             break;
     }
 
@@ -100,16 +105,19 @@ const socialLinks = baseSocialLinks.map((link) => {
 
 const ContactUsPage = () => {
     return (
-        <main className="w-contain grid gap-10 py-10 text-xl lg:grid-cols-2 lg:gap-50">
+        <main className="w-contain grid gap-10 py-10 lg:grid-cols-2 lg:gap-50">
             <div className="flex flex-col gap-6">
                 <h1 className="text-2xl text-primary">Contact details</h1>
 
                 <div className="flex flex-col gap-4">
                     {contactDetails.map((group, index) => (
                         <div key={group.title + index} className="flex flex-col gap-2 border-b border-black/20 pb-5">
-                            <h2 className="text-xl text-foreground/80">{group.title}</h2>
+                            <h2 className="w-fit rounded border border-primary px-2 text-lg text-foreground/80">
+                                <span>{group.title}</span> -{" "}
+                                <span className="text-primary uppercase">{group.items[0].value}</span>
+                            </h2>
                             <div className="flex flex-col gap-3">
-                                {group.items.map((item, i) => (
+                                {group.items.slice(1).map((item, i) => (
                                     <ContactItem
                                         key={i}
                                         href={item.href}
@@ -131,7 +139,9 @@ const ContactUsPage = () => {
                 <div className="flex flex-col gap-4">
                     {socialLinks.map(({ Icon, href, label, name }, index) => (
                         <div key={name + index} className="flex flex-col gap-2 border-b border-black/20 pb-5">
-                            <h2 className="text-xl text-foreground/80">{name}</h2>
+                            <h2 className="w-fit rounded border border-primary px-2 text-lg text-foreground/80">
+                                {name}
+                            </h2>
                             <ContactItem
                                 href={href}
                                 title={label ?? name}
