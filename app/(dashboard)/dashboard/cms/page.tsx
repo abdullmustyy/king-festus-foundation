@@ -46,7 +46,16 @@ export default async function CMSPage() {
         },
     });
     // Fetch about us data
-    const aboutUs = await db.aboutUs.findFirst();
+    const aboutUs = await db.aboutUs.findFirst({
+        include: {
+            missions: true,
+            media: {
+                include: {
+                    mediaAsset: true,
+                },
+            },
+        },
+    });
     // Determine the latest update time among governance bodies
     const latestGovernanceUpdate = governanceBodies.reduce((latest, current) => {
         return current.updatedAt > latest ? current.updatedAt : latest;

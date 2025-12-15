@@ -13,12 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
     AboutUs,
+    AboutUsMedia,
     BreakingNews,
     DashboardAd,
     GovernanceBody,
     LandingPage,
     LandingPageMedia,
     MediaAsset,
+    Mission,
 } from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
@@ -42,7 +44,12 @@ interface ICMSTableProps {
     governanceBodiesData?: (GovernanceBody & { mediaAsset: MediaAsset | null })[] | null;
     dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null })[] | null;
     landingPageData?: LandingPage | null;
-    aboutUsData?: AboutUs | null;
+    aboutUsData?:
+        | (AboutUs & {
+              missions: Mission[];
+              media: (AboutUsMedia & { mediaAsset: MediaAsset })[];
+          })
+        | null;
     latestGovernanceUpdate?: Date;
     latestAdminUpdate?: Date | null;
     landingPageMediaData?: (LandingPageMedia & { mediaAsset: MediaAsset | null })[] | null;
@@ -182,6 +189,7 @@ export function CMSTable({
                         id={`${CMS_IDS.ABOUT_US}-form`}
                         onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={aboutUsData}
                     />
                 );
             case CMS_IDS.BREAKING_NEWS:

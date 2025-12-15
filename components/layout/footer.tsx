@@ -42,7 +42,7 @@ const Footer = () => {
                     rel="noopener noreferrer"
                     className="flex items-center gap-2.5 transition-opacity duration-300 hover:opacity-80"
                 >
-                    <Image src={icon} alt={name} className="size-7.5" />
+                    <Image src={icon} alt={name} />
                     <span className="text-xl text-secondary">{name}</span>
                 </a>
             ))}

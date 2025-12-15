@@ -29,6 +29,7 @@ model MediaAsset {
   governanceBodies GovernanceBody[]
   dashboardAds     DashboardAd[]
   media            Media?
+  aboutUsMedia     AboutUsMedia[]
 }
 
 model Media {
@@ -58,11 +59,22 @@ model LandingPageMedia {
 }
 
 model AboutUs {
-  id        String    @id @default(uuid())
+  id        String         @id @default(uuid())
   vision    String
   missions  Mission[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  media     AboutUsMedia[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model AboutUsMedia {
+  id           String     @id @default(uuid())
+  mediaAssetId String
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id])
+  aboutUsId    String
+  aboutUs      AboutUs    @relation(fields: [aboutUsId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model Mission {

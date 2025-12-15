@@ -114,6 +114,7 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
 
                 switch (department) {
                     case "Medicare Consultation":
+                        scheduleMeetingHref = "https://cal.com/chuka-md/30min";
                         sendMailHref = "mailto:chukaobienu@gmail.com";
                         break;
                     case "Secretariat Support Services":

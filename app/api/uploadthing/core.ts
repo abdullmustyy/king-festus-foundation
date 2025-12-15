@@ -136,6 +136,38 @@ export const ourFileRouter = {
                 type: newMediaAsset.type,
             };
         }),
+
+    aboutUsMedia: f(["image"])
+        .middleware(async () => {
+            const user = await currentUser();
+
+            if (!user) throw new UploadThingError("You must be logged in to upload about us media");
+
+            return { userId: user.id, type: "IMAGE" as const };
+        })
+        .onUploadComplete(async ({ metadata, file }) => {
+            const { type } = metadata;
+
+            // Create the new MediaAsset record
+            const newMediaAsset = await db.mediaAsset.create({
+                data: {
+                    key: file.key,
+                    name: file.name,
+                    url: file.ufsUrl,
+                    type: type,
+                },
+            });
+
+            revalidatePath("/dashboard/cms");
+
+            return {
+                id: newMediaAsset.id,
+                key: newMediaAsset.key,
+                name: newMediaAsset.name,
+                url: newMediaAsset.url,
+                type: newMediaAsset.type,
+            };
+        }),
 } satisfies FileRouter;
 
 export const utapi = new UTApi();

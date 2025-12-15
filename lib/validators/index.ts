@@ -135,6 +135,28 @@ export const AboutUsFormSchema = z.object({
         )
         .min(3)
         .max(3, "There must be exactly three missions"),
+    media: z
+        .array(
+            z.object({
+                mediaId: z.string().optional(),
+                image: z
+                    .union([
+                        z
+                            .instanceof(File)
+                            .refine((file) => file.size <= MAX_CMS_FILE_SIZE, `Max file size is 2MB.`)
+                            .refine(
+                                (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+                                ".jpg, .jpeg, .png, .webp, and .svg files are accepted.",
+                            ),
+                        z.string(),
+                        z.undefined(),
+                        z.null(),
+                    ])
+                    .optional(),
+                mediaAssetId: z.string().optional(),
+            }),
+        )
+        .optional(),
 });
 
 export const BreakingNewsFormSchema = z.object({
