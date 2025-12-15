@@ -25,10 +25,11 @@ model MediaAsset {
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
 
-  landingPages     LandingPage[]
+  landingPageMedia LandingPageMedia[]
   governanceBodies GovernanceBody[]
   dashboardAds     DashboardAd[]
   media            Media?
+  aboutUsMedia     AboutUsMedia[]
 }
 
 model Media {
@@ -41,19 +42,39 @@ model Media {
 }
 
 model LandingPage {
-  id               String     @id @default(uuid())
-  heroMediaAssetId String
-  heroMediaAsset   MediaAsset @relation(fields: [heroMediaAssetId], references: [id])
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  id        String             @id @default(uuid())
+  media     LandingPageMedia[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model LandingPageMedia {
+  id            String      @id @default(uuid())
+  mediaAssetId  String
+  mediaAsset    MediaAsset  @relation(fields: [mediaAssetId], references: [id])
+  landingPageId String
+  landingPage   LandingPage @relation(fields: [landingPageId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 model AboutUs {
-  id        String    @id @default(uuid())
+  id        String         @id @default(uuid())
   vision    String
   missions  Mission[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  media     AboutUsMedia[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model AboutUsMedia {
+  id           String     @id @default(uuid())
+  mediaAssetId String
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id])
+  aboutUsId    String
+  aboutUs      AboutUs    @relation(fields: [aboutUsId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
 model Mission {

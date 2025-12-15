@@ -14,33 +14,33 @@ const data: TSupportServices[] = [
     },
     {
         id: "2",
-        department: "Legal Consultation",
-        vendor: "Available",
-        status: "Available",
-    },
-    {
-        id: "3",
         department: "Secretariat Support Services",
         vendor: "Available",
         status: "Available",
     },
     {
-        id: "4",
+        id: "3",
         department: "Accounts Clarification",
         vendor: "Available",
         status: "Available",
     },
     {
-        id: "5",
+        id: "4",
         department: "Personal Account / Ledger Review",
+        vendor: "Available",
+        status: "Available",
+    },
+    {
+        id: "5",
+        department: "Legal Consultation",
         vendor: "Available",
         status: "Available",
     },
     {
         id: "6",
         department: "IT Support",
-        vendor: "Not Available",
-        status: "Not Available",
+        vendor: "Available",
+        status: "Available",
     },
 ];
 
@@ -52,8 +52,8 @@ export function SupportServicesTable() {
     });
 
     return (
-        <section className="py-5">
-            <DataTable table={table} className="gap-5 lg:px-5">
+        <section className="py-2">
+            <DataTable table={table} className="gap-2 lg:px-5">
                 <div className="flex items-center justify-between px-4 lg:p-0">
                     <h6 className="font-medium">Support Services</h6>
                     <DataTableViewOptions table={table} align="end" />

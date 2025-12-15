@@ -72,6 +72,8 @@ export async function manageBreakingNews(data: z.infer<typeof BreakingNewsFormSc
         await db.$transaction([...updates, ...creations, ...deletions]);
 
         revalidatePath("/dashboard/cms");
+        revalidatePath("/dashboard/past-announcements");
+
         return { success: "Breaking news managed successfully" };
     } catch (error) {
         console.error(error);

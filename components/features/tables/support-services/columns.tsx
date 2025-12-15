@@ -108,13 +108,34 @@ export const supportServicesColumns: ColumnDef<TSupportServices>[] = [
             const isAvailable = row.original.status === "Available";
             if (isAvailable) {
                 const department = row.original.department;
-                let scheduleMeetingHref = ""; // Default empty href
-                const sendMailHref = ""; // Default empty href
+                let scheduleMeetingHref = "";
+                let sendMailHref = "";
                 let firstLinkText = "Schedule meeting";
 
-                if (department === "Accounts Clarification") {
-                    scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
-                    firstLinkText = "View account statement";
+                switch (department) {
+                    case "Medicare Consultation":
+                        scheduleMeetingHref = "https://cal.com/chuka-md/30min";
+                        sendMailHref = "mailto:chukaobienu@gmail.com";
+                        break;
+                    case "Secretariat Support Services":
+                        scheduleMeetingHref = "https://cal.com/ademola1234";
+                        sendMailHref = "mailto:Ademola.adeyanju@alsecnominees.com";
+                        break;
+                    case "Accounts Clarification":
+                        scheduleMeetingHref = "https://books.zohosecure.com/portal/festusfoundation/index#/statement";
+                        firstLinkText = "View account statement";
+                        sendMailHref = "mailto:jenelconsulting13@gmail.com";
+                        break;
+                    case "Personal Account / Ledger Review":
+                        scheduleMeetingHref = "https://cal.com/jenel-consulting-pdjdqe/30min";
+                        sendMailHref = "mailto:jenelconsulting13@gmail.com";
+                        break;
+                    case "IT Support":
+                        scheduleMeetingHref = "https://cal.com/awariyusuf02/15min";
+                        sendMailHref = "mailto:awariyusuf02@gmail.com";
+                        break;
+                    default:
+                        break;
                 }
 
                 return (

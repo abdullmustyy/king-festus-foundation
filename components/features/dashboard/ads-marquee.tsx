@@ -35,7 +35,7 @@ const AdsMarquee = async ({ className }: React.ComponentProps<"aside">) => {
                 className,
             )}
         >
-            <div className="flex h-13.5 items-center gap-(--marquee-gap) overflow-hidden mask-x-from-90% text-white [--direction:alternate] [--marquee-gap:calc(var(--spacing)*5)]">
+            <div className="flex h-13.5 items-center gap-(--marquee-gap) overflow-hidden text-white [--direction:alternate] [--marquee-gap:calc(var(--spacing)*5)] lg:mask-x-from-90%">
                 {Array.from({ length: 2 }, (_, i) => (
                     <ul key={i} className="flex animate-marquee items-center gap-(--marquee-gap) whitespace-nowrap">
                         {duplicatedBreakingNewsItems.map((news) => (

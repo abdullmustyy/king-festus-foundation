@@ -1,20 +1,19 @@
 "use client";
 
 import { NavUser } from "@/components/features/dashboard/nav-user";
-import ArrowUpRight from "@/components/ui/icons/arrow-up-right";
 import {
     Sidebar,
     SidebarContent,
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar";
 import { sidebarLinks } from "@/lib/constants/dashboard";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
@@ -43,8 +42,18 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
                         <SidebarMenu>
                             {filteredMainLinks.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton tooltip={item.title} asChild>
-                                        <Link href={item.url}>
+                                    <SidebarMenuButton
+                                        tooltip={item.title}
+                                        asChild
+                                        className={cn({
+                                            "bg-sidebar-accent": pathname === item.url,
+                                        })}
+                                    >
+                                        <Link
+                                            href={item.url}
+                                            target={item.target}
+                                            rel={item.target === "_blank" ? "noopener noreferrer" : undefined}
+                                        >
                                             {item.icon && <item.icon />}
 
                                             <span>{item.title}</span>
@@ -57,7 +66,7 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
                 </SidebarGroup>
 
                 {/* Support apps group */}
-                <SidebarGroup>
+                {/* <SidebarGroup>
                     <SidebarGroupContent className="flex flex-col gap-2.5">
                         <SidebarGroupLabel className="h-auto">Support apps</SidebarGroupLabel>
                         <SidebarMenu>
@@ -68,7 +77,7 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
                                         className="hover:bgtransparent h-auto justify-between"
                                         asChild
                                     >
-                                        <Link href={item.url} target="_blank">
+                                        <Link href={item.url} target="_blank" rel="noopener noreferrer">
                                             <span>{item.title}</span>
                                             <ArrowUpRight className="size-4" />
                                         </Link>
@@ -77,7 +86,7 @@ export function AppSidebar({ userRole, ...props }: React.ComponentProps<typeof S
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
             </SidebarContent>
 
             <SidebarFooter>

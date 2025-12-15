@@ -40,56 +40,20 @@ export const ourFileRouter = {
             };
         }),
 
-    dashboardAdMedia: f({ image: { maxFileSize: "2MB" }, video: { maxFileSize: "8MB" } })
-        .input(z.object({ title: z.string(), status: z.boolean(), adId: z.string().optional() }))
-        .middleware(async ({ input, files }) => {
+    dashboardAdMedia: f({ image: { maxFileSize: "8MB" }, video: { maxFileSize: "32MB" } })
+        .middleware(async ({ files }) => {
             const user = await currentUser();
 
             if (!user) throw new UploadThingError("You must be logged in to add a dashboard ad");
 
             const type = files[0].type.startsWith("video/") ? ("VIDEO" as const) : ("IMAGE" as const);
 
-            return { userId: user.id, input, type };
+            return { userId: user.id, type };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-            const { input, type } = metadata;
+            const { type } = metadata;
 
-            const mediaAssetToDelete: { id: string; key: string }[] = [];
-            const dashboardAdToDelete: string[] = [];
-
-            // Step 1: Handle cleanup for existing ad if it's an update
-            if (input.adId) {
-                const existingAd = await db.dashboardAd.findUnique({
-                    where: { id: input.adId },
-                    include: { mediaAsset: true },
-                });
-
-                if (existingAd && existingAd.mediaAsset && existingAd.mediaAsset.key !== file.key) {
-                    // If mediaAsset is being replaced, add old one to deletion list
-                    mediaAssetToDelete.push({
-                        id: existingAd.mediaAsset.id,
-                        key: existingAd.mediaAsset.key,
-                    });
-                }
-            } else {
-                // Step 2: Aggressive cleanup if this is a CREATE scenario (no adId provided)
-                // Delete ALL existing DashboardAds and their MediaAssets to enforce single active ad policy
-                const allExistingAds = await db.dashboardAd.findMany({
-                    include: { mediaAsset: true },
-                });
-
-                allExistingAds.forEach((ad) => {
-                    dashboardAdToDelete.push(ad.id);
-                    if (ad.mediaAsset) {
-                        mediaAssetToDelete.push({
-                            id: ad.mediaAsset.id,
-                            key: ad.mediaAsset.key,
-                        });
-                    }
-                });
-            }
-
-            // Step 3: Create the new MediaAsset record
+            // Create the new MediaAsset record
             const newMediaAsset = await db.mediaAsset.create({
                 data: {
                     key: file.key,
@@ -99,68 +63,13 @@ export const ourFileRouter = {
                 },
             });
 
-            // Step 4: Perform Upsert for DashboardAd
-            if (input.adId) {
-                // UPDATE existing DashboardAd
-                await db.dashboardAd.update({
-                    where: { id: input.adId },
-                    data: {
-                        title: input.title,
-                        status: input.status,
-                        mediaAsset: {
-                            connect: { id: newMediaAsset.id },
-                        },
-                    },
-                });
-            } else {
-                // CREATE new DashboardAd
-                await db.dashboardAd.create({
-                    data: {
-                        title: input.title,
-                        status: input.status,
-                        mediaAsset: {
-                            connect: { id: newMediaAsset.id },
-                        },
-                    },
-                });
-            }
-
-            // Step 5: Execute MediaAsset Deletions (from update or create scenarios)
-            if (mediaAssetToDelete.length > 0) {
-                const uniqueMediaAssetsToDelete = Array.from(
-                    new Map(mediaAssetToDelete.map((item) => [item.id, item])).values(),
-                );
-                const mediaAssetIdsToDelete = uniqueMediaAssetsToDelete
-                    .map((m) => m.id)
-                    .filter((id) => id !== newMediaAsset.id); // Ensure new mediaAsset is not deleted
-
-                if (mediaAssetIdsToDelete.length > 0) {
-                    await db.mediaAsset.deleteMany({
-                        where: { id: { in: mediaAssetIdsToDelete } },
-                    });
-                }
-
-                const mediaAssetKeysToDelete = uniqueMediaAssetsToDelete
-                    .map((m) => m.key)
-                    .filter((key) => key !== newMediaAsset.key); // Ensure new mediaAsset key is not deleted
-
-                if (mediaAssetKeysToDelete.length > 0) {
-                    try {
-                        await utapi.deleteFiles(mediaAssetKeysToDelete);
-                    } catch (error) {
-                        console.error("Failed to delete old dashboard ad files from UploadThing:", error);
-                    }
-                }
-            }
-
-            // Step 6: Delete old DashboardAd records if in create scenario
-            if (dashboardAdToDelete.length > 0) {
-                await db.dashboardAd.deleteMany({
-                    where: { id: { in: dashboardAdToDelete } },
-                });
-            }
-
-            revalidatePath("/dashboard/cms");
+            return {
+                id: newMediaAsset.id,
+                key: newMediaAsset.key,
+                name: newMediaAsset.name,
+                url: newMediaAsset.url,
+                type: newMediaAsset.type,
+            };
         }),
 
     media: f(["image"])
@@ -198,22 +107,18 @@ export const ourFileRouter = {
             revalidatePath("/dashboard/media");
         }),
 
-    landingPageHeroImage: f(["image"])
+    landingPageMedia: f(["image"])
         .middleware(async () => {
             const user = await currentUser();
 
-            if (!user) throw new UploadThingError("You must be logged in to upload a landing page hero image");
+            if (!user) throw new UploadThingError("You must be logged in to upload landing page media");
 
             return { userId: user.id, type: "IMAGE" as const };
         })
-        .onUploadComplete(async ({ file, metadata }) => {
+        .onUploadComplete(async ({ metadata, file }) => {
             const { type } = metadata;
 
-            const existingLandingPage = await db.landingPage.findFirst({
-                include: { heroMediaAsset: true },
-            });
-
-            // 1. Create the new MediaAsset record
+            // Create the new MediaAsset record
             const newMediaAsset = await db.mediaAsset.create({
                 data: {
                     key: file.key,
@@ -223,37 +128,45 @@ export const ourFileRouter = {
                 },
             });
 
-            if (existingLandingPage) {
-                const oldMediaAssetId = existingLandingPage.heroMediaAsset?.id;
-                const oldMediaAssetKey = existingLandingPage.heroMediaAsset?.key;
+            return {
+                id: newMediaAsset.id,
+                key: newMediaAsset.key,
+                name: newMediaAsset.name,
+                url: newMediaAsset.url,
+                type: newMediaAsset.type,
+            };
+        }),
 
-                // 2. Update LandingPage to point to the new mediaAsset FIRST
-                // This removes the reference to the old mediaAsset
-                await db.landingPage.update({
-                    where: { id: existingLandingPage.id },
-                    data: {
-                        heroMediaAsset: {
-                            connect: { id: newMediaAsset.id },
-                        },
-                    },
-                });
+    aboutUsMedia: f(["image"])
+        .middleware(async () => {
+            const user = await currentUser();
 
-                // 3. Now it is safe to delete the old mediaAsset
-                if (oldMediaAssetId && oldMediaAssetKey) {
-                    await utapi.deleteFiles(oldMediaAssetKey);
-                    await db.mediaAsset.delete({ where: { id: oldMediaAssetId } });
-                }
-            } else {
-                await db.landingPage.create({
-                    data: {
-                        heroMediaAsset: {
-                            connect: { id: newMediaAsset.id },
-                        },
-                    },
-                });
-            }
+            if (!user) throw new UploadThingError("You must be logged in to upload about us media");
 
-            revalidatePath("/");
+            return { userId: user.id, type: "IMAGE" as const };
+        })
+        .onUploadComplete(async ({ metadata, file }) => {
+            const { type } = metadata;
+
+            // Create the new MediaAsset record
+            const newMediaAsset = await db.mediaAsset.create({
+                data: {
+                    key: file.key,
+                    name: file.name,
+                    url: file.ufsUrl,
+                    type: type,
+                },
+            });
+
+            revalidatePath("/dashboard/cms");
+
+            return {
+                id: newMediaAsset.id,
+                key: newMediaAsset.key,
+                name: newMediaAsset.name,
+                url: newMediaAsset.url,
+                type: newMediaAsset.type,
+            };
         }),
 } satisfies FileRouter;
 

@@ -1,5 +1,6 @@
 import Home from "@/components/ui/icons/home";
 import Image from "@/components/ui/icons/image";
+import { Calendar, File, History, Mail } from "lucide-react";
 
 export const sidebarLinks = {
     main: [
@@ -9,14 +10,31 @@ export const sidebarLinks = {
             icon: Home,
         },
         {
-            title: "Media",
+            title: "Photo dump",
             url: "/dashboard/media",
             icon: Image,
         },
         {
+            title: "Calendar",
+            url: "https://calendar.google.com/",
+            icon: Calendar,
+            target: "_blank",
+        },
+        {
+            title: "Email",
+            url: "https://mail.hostinger.com/",
+            icon: Mail,
+            target: "_blank",
+        },
+        {
+            title: "Past announcements",
+            url: "/dashboard/past-announcements",
+            icon: History,
+        },
+        {
             title: "CMS",
             url: "/dashboard/cms",
-            icon: Image,
+            icon: File,
             roles: ["ADMIN"],
         },
     ],

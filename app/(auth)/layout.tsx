@@ -1,23 +1,23 @@
+import { HeroCarousel } from "@/components/features/landing/hero-carousel";
 import Navbar from "@/components/layout/navbar";
-import AuthVolunteerImage from "@/public/images/auth-volunteer-image.svg";
-import Image from "next/image";
+import db from "@/lib/db";
 
-const AuthLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
+const AuthLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
+    const landingPage = await db.landingPage.findFirst({
+        include: { media: { include: { mediaAsset: true } } },
+    });
+    const landingPageMedia = landingPage?.media || [];
+
     return (
         <>
-            <Navbar className="w-contain gap-4 lg:pb-4 lg:*:data-[slot='navbar-menu']:justify-center *:data-[slot='navbar-menu']:justify-between" />
+            <Navbar className="w-contain gap-4 *:data-[slot='navbar-menu']:justify-between lg:pb-4 lg:*:data-[slot='navbar-menu']:justify-center" />
 
-            <main className="bg-white lg:py10 py20 flex-1 flex items-center">
-                <section className="w-contain grid lg:grid-cols-2 items-center xl:gap-30 gap-7">
+            <main className="lg:py10 py20 flex flex-1 items-center bg-white">
+                <section className="w-contain grid items-center gap-7 lg:grid-cols-2 xl:gap-30">
                     {children}
 
-                    <div className="lg:block hidden p-15">
-                        <Image
-                            src={AuthVolunteerImage}
-                            alt="Hero Volunteer Image"
-                            priority
-                            className="size-full object-cover"
-                        />
+                    <div className="hidden size-full min-h-[300px] lg:block">
+                        <HeroCarousel media={landingPageMedia} />
                     </div>
                 </section>
             </main>

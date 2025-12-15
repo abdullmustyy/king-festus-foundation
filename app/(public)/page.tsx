@@ -1,22 +1,21 @@
+import { HeroCarousel } from "@/components/features/landing/hero-carousel";
 import { buttonVariants } from "@/components/ui/button";
 import DottedArrowRight from "@/components/ui/icons/dotted-arrow-right";
 import SectionTag from "@/components/ui/section-tag";
 import { baseSocialLinks, METADATA_DESCRIPTION, METADATA_IMAGE, METADATA_TITLE, METADATA_URL } from "@/lib/constants";
 import db from "@/lib/db";
 import { cn } from "@/lib/utils";
-import HeroVolunteerImage from "@/public/images/hero-volunteer-image.svg";
 import { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 export async function generateMetadata(): Promise<Metadata> {
     const landingPage = await db.landingPage.findFirst({
-        include: { heroMediaAsset: true },
+        include: { media: { include: { mediaAsset: true } } },
     });
 
     const pageTitle = `Empowering Progress Through Purpose`;
     const pageDescription = METADATA_DESCRIPTION;
-    const imageUrl = landingPage?.heroMediaAsset?.url || "/images/hero-volunteer-image.svg";
+    const imageUrl = landingPage?.media?.[0]?.mediaAsset?.url || "/images/hero-volunteer-image.svg";
 
     return {
         title: pageTitle,
@@ -36,8 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const HomePage = async () => {
     const landingPage = await db.landingPage.findFirst({
-        include: { heroMediaAsset: true },
+        include: { media: { include: { mediaAsset: true } } },
     });
+    const landingPageMedia = landingPage?.media || [];
 
     const socialLinks = baseSocialLinks.map((link) => link.href);
 
@@ -65,9 +65,9 @@ const HomePage = async () => {
                         <h1 className="text-5xl leading-[100%]">Empowering progress through purpose</h1>
                         <p className="text-xl text-foreground/50">
                             King Festus Foundation was established in 2021 to support a network of related families
-                            towards achieving stable, middle-class livelihoods through facilitation of free medical and
-                            legal advisory services, affordable loans, vocational training, joint ventures, regulated
-                            savings groups as well as financial literacy education.
+                            towards achieving stable, middle-class standard of living through facilitation of free
+                            medical and legal advisory services, affordable loans, vocational training, joint ventures,
+                            regulated savings groups as well as financial literacy education.
                         </p>
                     </div>
                 </div>
@@ -95,14 +95,7 @@ const HomePage = async () => {
             </div>
 
             <div className="relative size-full min-h-[300px] lg:min-h-auto">
-                <Image
-                    src={landingPage?.heroMediaAsset?.url || HeroVolunteerImage}
-                    alt="Hero Volunteer Image"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    fill
-                    priority
-                    className="object-contain"
-                />
+                <HeroCarousel media={landingPageMedia} />
             </div>
         </section>
     );

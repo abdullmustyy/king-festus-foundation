@@ -11,7 +11,17 @@ import { Button } from "@/components/ui/button";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { AboutUs, BreakingNews, DashboardAd, GovernanceBody, LandingPage, MediaAsset } from "@/generated/prisma/client";
+import {
+    AboutUs,
+    AboutUsMedia,
+    BreakingNews,
+    DashboardAd,
+    GovernanceBody,
+    LandingPage,
+    LandingPageMedia,
+    MediaAsset,
+    Mission,
+} from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
 import { Row } from "@tanstack/react-table";
 import { format } from "date-fns";
@@ -32,11 +42,17 @@ const CMS_IDS = {
 interface ICMSTableProps {
     breakingNewsData?: BreakingNews[] | null;
     governanceBodiesData?: (GovernanceBody & { mediaAsset: MediaAsset | null })[] | null;
-    dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null }) | null;
+    dashboardAdData?: (DashboardAd & { mediaAsset: MediaAsset | null })[] | null;
     landingPageData?: LandingPage | null;
-    aboutUsData?: AboutUs | null;
+    aboutUsData?:
+        | (AboutUs & {
+              missions: Mission[];
+              media: (AboutUsMedia & { mediaAsset: MediaAsset })[];
+          })
+        | null;
     latestGovernanceUpdate?: Date;
     latestAdminUpdate?: Date | null;
+    landingPageMediaData?: (LandingPageMedia & { mediaAsset: MediaAsset | null })[] | null;
 }
 
 export function CMSTable({
@@ -47,6 +63,7 @@ export function CMSTable({
     aboutUsData,
     latestGovernanceUpdate,
     latestAdminUpdate,
+    landingPageMediaData,
 }: ICMSTableProps) {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState("");
@@ -90,7 +107,15 @@ export function CMSTable({
             {
                 id: CMS_IDS.DASHBOARD_ADS,
                 title: "Advertisement section on dashboard",
-                lastUpdated: dashboardAdData?.updatedAt ? format(dashboardAdData.updatedAt, "dd/MM/yy") : "--",
+                lastUpdated:
+                    dashboardAdData && dashboardAdData.length > 0
+                        ? format(
+                              dashboardAdData.reduce((latest, current) => {
+                                  return current.updatedAt > latest ? current.updatedAt : latest;
+                              }, new Date(0)),
+                              "dd/MM/yy",
+                          )
+                        : "--",
             },
             {
                 id: CMS_IDS.ADD_ADMIN,
@@ -138,6 +163,7 @@ export function CMSTable({
                         id={`${CMS_IDS.LANDING_MEDIA}-form`}
                         onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={landingPageMediaData}
                     />
                 );
             case CMS_IDS.GOVERNANCE:
@@ -163,6 +189,7 @@ export function CMSTable({
                         id={`${CMS_IDS.ABOUT_US}-form`}
                         onComplete={handleComplete}
                         onSubmittingChange={handleSubmittingChange}
+                        initialData={aboutUsData}
                     />
                 );
             case CMS_IDS.BREAKING_NEWS:

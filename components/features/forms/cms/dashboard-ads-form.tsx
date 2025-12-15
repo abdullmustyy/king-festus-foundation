@@ -1,6 +1,8 @@
 "use client";
 
-import { updateDashboardAd } from "@/app/actions/cms/dashboard-ads";
+import { manageDashboardAds } from "@/app/actions/cms/dashboard-ads";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { FieldGroup } from "@/components/ui/field";
 import FormField from "@/components/ui/form-field";
 import { Input } from "@/components/ui/input";
@@ -11,16 +13,16 @@ import { uploadFiles } from "@/lib/uploadthing";
 import { DashboardAdsFormSchema } from "@/lib/validators";
 import { TDashboardAdsForm } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Info } from "lucide-react";
+import { Info, PlusCircle, Trash2 } from "lucide-react";
 import { useEffect } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { CmsImageFormField } from "./cms-image-form-field";
 
 interface IDashboardAdsFormProps extends React.ComponentProps<"form"> {
     onComplete: () => void;
     onSubmittingChange?: (isSubmitting: boolean) => void;
-    initialData?: (DashboardAd & { mediaAsset: MediaAsset | null }) | null;
+    initialData?: (DashboardAd & { mediaAsset: MediaAsset | null })[] | null;
 }
 
 export default function DashboardAdsForm({
@@ -33,10 +35,16 @@ export default function DashboardAdsForm({
     const form = useForm<TDashboardAdsForm>({
         resolver: zodResolver(DashboardAdsFormSchema),
         defaultValues: {
-            adTitle: initialData?.title || "",
-            adImage: initialData?.mediaAsset?.url || undefined,
-            status: initialData?.status || false,
-            adId: initialData?.id || undefined,
+            dashboardAds:
+                initialData && initialData.length > 0
+                    ? initialData.map((ad) => ({
+                          adId: ad.id,
+                          adTitle: ad.title,
+                          adImage: ad.mediaAsset?.url,
+                          mediaAssetId: ad.mediaAssetId || undefined,
+                          status: ad.status,
+                      }))
+                    : [{ adTitle: "", adImage: undefined, status: true, adId: undefined }],
         },
     });
 
@@ -47,45 +55,51 @@ export default function DashboardAdsForm({
         formState: { isSubmitting },
     } = form;
 
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: "dashboardAds",
+    });
+
     useEffect(() => {
         onSubmittingChange?.(isSubmitting);
     }, [isSubmitting, onSubmittingChange]);
 
     const onSubmit = async (data: TDashboardAdsForm) => {
         try {
-            if (data.adImage instanceof File) {
-                const res = await uploadFiles("dashboardAdMedia", {
-                    files: [data.adImage],
-                    input: {
-                        title: data.adTitle,
-                        status: data.status,
-                        adId: data.adId,
-                    },
-                });
+            const validAds = data.dashboardAds.filter((ad) => ad.adTitle?.trim() && ad.adImage !== undefined);
 
-                if (!res) {
-                    throw new Error("Failed to upload ad image");
-                }
-            } else {
-                if (!data.adId) {
-                    // Should technically not happen if validator works and we are in "edit" mode without file change?
-                    // But if creating new ad without file... validator prevents it (adImage required).
-                    // So this block is for updating existing ad without changing image.
-                    throw new Error("Ad ID missing for update");
-                }
+            const processedAds = await Promise.all(
+                validAds.map(async (ad) => {
+                    let imageUrl = ad.adImage;
+                    let mediaAssetId = ad.mediaAssetId;
 
-                const res = await updateDashboardAd({
-                    adId: data.adId,
-                    title: data.adTitle,
-                    status: data.status,
-                });
+                    if (ad.adImage instanceof File) {
+                        const res = await uploadFiles("dashboardAdMedia", {
+                            files: [ad.adImage],
+                        });
 
-                if (res.error) {
-                    throw new Error(res.error);
-                }
+                        if (res && res[0]) {
+                            imageUrl = res[0].ufsUrl;
+                            mediaAssetId = res[0].serverData?.id;
+                        }
+                    }
+
+                    return {
+                        ...ad,
+                        adImage: imageUrl,
+                        mediaAssetId: mediaAssetId,
+                    };
+                }),
+            );
+
+            const res = await manageDashboardAds({ dashboardAds: processedAds });
+
+            if (res.error) {
+                toast.error(res.error);
+                return;
             }
 
-            toast.success("Dashboard ad updated successfully");
+            toast.success("Dashboard ads updated successfully");
 
             onComplete();
         } catch (error) {
@@ -103,84 +117,134 @@ export default function DashboardAdsForm({
             <FormProvider {...form}>
                 <form id={id} onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" {...props}>
                     <FieldGroup className="flex flex-col gap-5">
-                        <FormField
-                            name="adTitle"
-                            control={control}
-                            label="Ad title"
-                            className="*:data-[slot='field-label']:text-foreground/50"
-                        >
-                            {(field, fieldState) => (
-                                <Input
-                                    {...field}
-                                    value={field.value as string}
-                                    placeholder="Enter ad title"
-                                    disabled={isSubmitting}
-                                    aria-invalid={fieldState.invalid}
-                                    className="h-11.25"
-                                />
-                            )}
-                        </FormField>
-
-                        <FormField
-                            name="adImage"
-                            control={control}
-                            label="Ads Image/Video"
-                            className="*:data-[slot='field-label']:text-foreground/50"
-                        >
-                            {(_, fieldState) => (
-                                <div className="space-y-3">
-                                    <UploadMediaTrigger
-                                        name="adImage"
+                        {fields.map((field, index) => (
+                            <Collapsible key={field.id} defaultOpen={index === 0} className="flex flex-col gap-3">
+                                <div className="flex w-full items-center justify-between">
+                                    <CollapsibleTrigger
+                                        className="flex w-full cursor-pointer items-center justify-between *:[[data-state=open]>span]:text-base *:[[data-state=open]>svg]:rotate-90"
                                         disabled={isSubmitting}
-                                        aria-invalid={fieldState.invalid}
-                                        accept={{
-                                            "image/*": [".jpg", ".jpeg", ".png", ".webp", ".svg"],
-                                            "video/*": [".mp4", ".webm", ".mov"],
-                                        }}
-                                        maxSize={8 * 1024 * 1024}
                                     >
-                                        {({ isDragging, preview, file }) => (
-                                            <CmsImageFormField
-                                                name="adImage"
-                                                isDragging={isDragging}
-                                                isSubmitting={isSubmitting}
-                                                preview={preview}
-                                                file={file}
-                                                mediaType={initialData?.mediaAsset?.type}
-                                                onRemove={() =>
-                                                    setValue("adImage", undefined, {
-                                                        shouldValidate: true,
-                                                        shouldDirty: true,
-                                                    })
-                                                }
+                                        <span className="text-sm font-medium transition-[font-size] duration-200">
+                                            Ad {index + 1}
+                                        </span>
+                                    </CollapsibleTrigger>
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => remove(index)}
+                                        disabled={isSubmitting || fields.length === 1}
+                                    >
+                                        <Trash2 className="size-4 text-destructive" />
+                                    </Button>
+                                </div>
+
+                                <CollapsibleContent className="space-y-4">
+                                    <FormField
+                                        name={`dashboardAds.${index}.adTitle`}
+                                        control={control}
+                                        label="Ad title"
+                                        className="*:data-[slot='field-label']:text-foreground/50"
+                                    >
+                                        {(field, fieldState) => (
+                                            <Input
+                                                {...field}
+                                                value={field.value as string}
+                                                placeholder="Enter ad title"
+                                                disabled={isSubmitting}
+                                                aria-invalid={fieldState.invalid}
+                                                className="h-11.25"
                                             />
                                         )}
-                                    </UploadMediaTrigger>
-                                    <div className="flex items-center gap-1">
-                                        <Info className="size-4 fill-[#B47818] stroke-white" />
-                                        <span className="text-xs text-[#693D11]">8MB Image/Video, or less</span>
-                                    </div>
-                                </div>
-                            )}
-                        </FormField>
+                                    </FormField>
 
-                        <FormField
-                            name="status"
-                            control={control}
-                            className="*:data-[slot='field-label']:text-foreground/50"
-                            label="Status (Inactive/Active)"
-                        >
-                            {(field, fieldState) => (
-                                <Switch
-                                    checked={field.value as boolean}
-                                    onCheckedChange={field.onChange}
-                                    disabled={isSubmitting}
-                                    aria-invalid={fieldState.invalid}
-                                    className="w-8!"
-                                />
-                            )}
-                        </FormField>
+                                    <FormField
+                                        name={`dashboardAds.${index}.adImage`}
+                                        control={control}
+                                        label="Ads Image/Video"
+                                        className="*:data-[slot='field-label']:text-foreground/50"
+                                    >
+                                        {(_, fieldState) => (
+                                            <div className="space-y-3">
+                                                <UploadMediaTrigger
+                                                    name={`dashboardAds.${index}.adImage`}
+                                                    disabled={isSubmitting}
+                                                    aria-invalid={fieldState.invalid}
+                                                    accept={{
+                                                        "image/*": [".jpg", ".jpeg", ".png", ".webp", ".svg"],
+                                                        "video/*": [".mp4", ".webm", ".mov"],
+                                                    }}
+                                                    maxSize={8 * 1024 * 1024}
+                                                >
+                                                    {({ isDragging, preview, file }) => (
+                                                        <CmsImageFormField
+                                                            name={`dashboardAds.${index}.adImage`}
+                                                            isDragging={isDragging}
+                                                            isSubmitting={isSubmitting}
+                                                            preview={preview}
+                                                            file={file}
+                                                            mediaType={
+                                                                file
+                                                                    ? file.type.startsWith("video/")
+                                                                        ? "VIDEO"
+                                                                        : "IMAGE"
+                                                                    : initialData?.[index]?.mediaAsset?.type
+                                                            }
+                                                            onRemove={() =>
+                                                                setValue(`dashboardAds.${index}.adImage`, undefined, {
+                                                                    shouldValidate: true,
+                                                                    shouldDirty: true,
+                                                                })
+                                                            }
+                                                        />
+                                                    )}
+                                                </UploadMediaTrigger>
+                                                <div className="flex items-center gap-1">
+                                                    <Info className="size-4 fill-[#B47818] stroke-white" />
+                                                    <span className="text-xs text-[#693D11]">
+                                                        8MB Image/Video, or less
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </FormField>
+
+                                    <FormField
+                                        name={`dashboardAds.${index}.status`}
+                                        control={control}
+                                        className="*:data-[slot='field-label']:text-foreground/50"
+                                        label="Status (Inactive/Active)"
+                                    >
+                                        {(field, fieldState) => (
+                                            <Switch
+                                                checked={field.value as boolean}
+                                                onCheckedChange={field.onChange}
+                                                disabled={isSubmitting}
+                                                aria-invalid={fieldState.invalid}
+                                                className="w-8!"
+                                            />
+                                        )}
+                                    </FormField>
+                                </CollapsibleContent>
+                            </Collapsible>
+                        ))}
                     </FieldGroup>
+                    <Button
+                        type="button"
+                        size="icon"
+                        onClick={() =>
+                            append({
+                                adTitle: "",
+                                adImage: undefined,
+                                status: true,
+                                adId: undefined,
+                            })
+                        }
+                        disabled={isSubmitting}
+                        className="mx-auto rounded-full"
+                    >
+                        <PlusCircle className="size-4" />
+                    </Button>
                 </form>
             </FormProvider>
         </section>
