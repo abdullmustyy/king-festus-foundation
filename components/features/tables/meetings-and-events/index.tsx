@@ -26,7 +26,6 @@ const MeetingsAndEventsTable = () => {
     const { table } = useDataTable({
         data,
         columns: meetingsAndEventsColumns,
-        pageCount: 1,
     });
 
     return (

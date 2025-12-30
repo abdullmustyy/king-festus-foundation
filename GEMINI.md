@@ -15,7 +15,6 @@ This is a Next.js 16 web application for the **King Festus Foundation**. It is a
 * **Forms:** React Hook Form + Zod
 * **File Upload:** UploadThing
 * **Data Tables:** TanStack Table
-* **State Management:** `nuqs` (URL search params state)
 
 ## Architecture & Structure
 

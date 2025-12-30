@@ -3,7 +3,6 @@ import { METADATA_DESCRIPTION, METADATA_IMAGE, METADATA_TITLE, METADATA_URL } fr
 import { cn } from "@/lib/utils";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { instrumentSans, sfPro } from "./fonts";
 import "./globals.css";
 
@@ -47,7 +46,7 @@ export default function RootLayout({
         <ClerkProvider>
             <html lang="en">
                 <body className={cn(sfPro.variable, instrumentSans.variable, "flex min-h-dvh flex-col")}>
-                    <NuqsAdapter>{children}</NuqsAdapter>
+                    {children}
                     <Toaster />
                 </body>
             </html>

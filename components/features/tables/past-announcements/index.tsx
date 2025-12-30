@@ -20,7 +20,6 @@ export function PastAnnouncementsTable({ data }: IPastAnnouncementsTableProps) {
     const { table } = useDataTable({
         data: filteredData,
         columns: pastAnnouncementsColumns,
-        pageCount: 1,
         getRowId: (row) => row.id,
     });
 

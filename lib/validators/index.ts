@@ -7,6 +7,11 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
 const ACCEPTED_MEDIA_TYPES = [...ACCEPTED_IMAGE_TYPES, "video/mp4", "video/webm", "video/quicktime"];
 
 const emailSchema = z.email({ message: "Invalid email address" });
+const foundationEmailSchema = z.email({
+    message: "Email must be a foundation email address",
+    pattern: /^(?!\.)(?!.*\.\.)([a-z0-9_'+\-\.]*)[a-z0-9_+-]@kingfestusfoundation\.com$/i,
+});
+
 const passwordSchema = z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -25,7 +30,7 @@ export const SignUpFormSchema = z
     .object({
         firstName: z.string().min(1, "First name is required"),
         lastName: z.string().min(1, "Last name is required"),
-        email: emailSchema,
+        email: foundationEmailSchema,
         password: passwordSchema,
         confirmPassword: z.string().min(8, "Password must be at least 8 characters"),
     })
@@ -92,8 +97,6 @@ export const LandingPageMediaFormSchema = z.object({
             path: ["landingPageMedia.0.image"],
         }),
 });
-
-export type TLandingPageMediaForm = z.infer<typeof LandingPageMediaFormSchema>;
 
 export const GovernanceStructureFormSchema = z.object({
     governanceBodies: z
@@ -209,7 +212,7 @@ export const DashboardAdsFormSchema = z.object({
 
 export const AddAdminFormSchema = z.object({
     fullName: z.string().min(1, "Full name is required"),
-    email: emailSchema,
+    email: foundationEmailSchema,
     password: passwordSchema,
     role: z.enum(["ADMIN", "USER"], "Role is required"),
 });

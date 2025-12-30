@@ -27,11 +27,11 @@ export function DataTableViewOptions<TData>({ table, ...props }: DataTableViewOp
                     role="combobox"
                     variant="outline"
                     size="sm"
-                    className="group ml-auto hidden h-8 lg:flex rounded-full"
+                    className="group ml-auto hidden h-8 rounded-full lg:flex"
                 >
-                    <Status className="text-black/70 size-5" />
+                    <Status className="size-5 text-black/70" />
                     All status
-                    <ChevronDown className="text-black/50 size-5 group-data-[state=open]:-rotate-180 transition-transform duration-300" />
+                    <ChevronDown className="size-5 text-black/50 transition-transform duration-300 group-data-[state=open]:-rotate-180" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-44 p-0" {...props}>

@@ -135,7 +135,6 @@ export function CMSTable({
     const { table } = useDataTable({
         data: filteredData,
         columns: cmsColumns,
-        pageCount: 1,
         getRowId: (row) => row.id,
     });
 
@@ -226,7 +225,7 @@ export function CMSTable({
                 className="gap-2.5 lg:px-5"
             >
                 <div className="flex items-center justify-between px-4 lg:p-0">
-                    <div className="relative w-full">
+                    <div className="relative md:w-4/5">
                         <Search className="absolute top-1/2 left-3 size-5 -translate-y-1/2 text-[#7F7F7F]" />
                         <Input
                             placeholder="Search CMS"

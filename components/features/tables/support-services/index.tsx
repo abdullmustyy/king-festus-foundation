@@ -48,7 +48,6 @@ export function SupportServicesTable() {
     const { table } = useDataTable({
         data,
         columns: supportServicesColumns,
-        pageCount: 1,
     });
 
     return (

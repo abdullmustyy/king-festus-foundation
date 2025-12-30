@@ -1,4 +1,7 @@
+import { getAllUsers } from "@/app/actions/users";
 import { CMSTable } from "@/components/features/tables/cms";
+import { UsersTable } from "@/components/features/tables/cms/users-table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import db from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -68,23 +71,43 @@ export default async function CMSPage() {
         select: { updatedAt: true },
     });
 
+    const users = await getAllUsers();
+
     return (
-        <>
+        <div className="flex h-full flex-col">
             <div className="px-4 pt-5 lg:px-5">
                 <h1 className="font-medium">Content management system</h1>
             </div>
-            <Suspense fallback={<></>}>
-                <CMSTable
-                    breakingNewsData={breakingNews}
-                    governanceBodiesData={governanceBodies}
-                    dashboardAdData={dashboardAds}
-                    landingPageData={landingPage}
-                    aboutUsData={aboutUs}
-                    latestGovernanceUpdate={latestGovernanceUpdate}
-                    landingPageMediaData={landingPageMedia}
-                    latestAdminUpdate={latestAdminUpdate?.updatedAt || null}
-                />
-            </Suspense>
-        </>
+
+            <Tabs defaultValue="content" className="flex flex-1 flex-col">
+                <div className="px-4 pt-4 lg:px-5">
+                    <TabsList>
+                        <TabsTrigger value="content">Content</TabsTrigger>
+                        <TabsTrigger value="users">Users</TabsTrigger>
+                    </TabsList>
+                </div>
+
+                <TabsContent value="content" className="flex-1">
+                    <Suspense fallback={<></>}>
+                        <CMSTable
+                            breakingNewsData={breakingNews}
+                            governanceBodiesData={governanceBodies}
+                            dashboardAdData={dashboardAds}
+                            landingPageData={landingPage}
+                            aboutUsData={aboutUs}
+                            latestGovernanceUpdate={latestGovernanceUpdate}
+                            landingPageMediaData={landingPageMedia}
+                            latestAdminUpdate={latestAdminUpdate?.updatedAt || null}
+                        />
+                    </Suspense>
+                </TabsContent>
+
+                <TabsContent value="users" className="flex-1">
+                    <div className="px-4 py-5 lg:px-5">
+                        <UsersTable data={users} />
+                    </div>
+                </TabsContent>
+            </Tabs>
+        </div>
     );
 }
