@@ -49,6 +49,7 @@ export async function updateUserRole(userId: string, role: UserRole) {
         });
 
         revalidatePath("/dashboard/cms");
+
         return { success: true };
     } catch (error) {
         console.error("Failed to update user role:", error);

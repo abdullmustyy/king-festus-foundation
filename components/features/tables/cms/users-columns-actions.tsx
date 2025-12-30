@@ -25,8 +25,10 @@ export function UsersColumnActions({ user }: UsersColumnActionsProps) {
         if (user.role === newRole) return;
 
         setIsLoading(true);
+
         try {
             const result = await updateUserRole(user.id, newRole);
+
             if (result.success) {
                 toast.success(`User role updated to ${newRole}`);
             } else {
@@ -42,7 +44,7 @@ export function UsersColumnActions({ user }: UsersColumnActionsProps) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
+                <Button disabled={isLoading} isLoading={isLoading} variant="ghost" className="h-8 w-8 p-0">
                     <span className="sr-only">Open menu</span>
                     <MoreHorizontal className="h-4 w-4" />
                 </Button>

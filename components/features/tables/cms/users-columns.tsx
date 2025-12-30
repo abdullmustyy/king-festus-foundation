@@ -24,7 +24,7 @@ export const usersColumns: ColumnDef<User>[] = [
         cell: ({ row }) => {
             return (
                 <span
-                    className={`rounded-full px-2 py-1 text-xs font-medium ${
+                    className={`rounded-full px-2 py-1 text-xs font-semibold ${
                         row.original.role === "ADMIN" ? "bg-primary/20" : "bg-muted/20"
                     }`}
                 >

@@ -6,7 +6,7 @@ import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { User } from "@/generated/prisma/client";
 import { useDataTable } from "@/hooks/use-data-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface UsersTableProps {
     data: User[];
@@ -15,11 +15,13 @@ interface UsersTableProps {
 export function UsersTable({ data }: UsersTableProps) {
     const [searchQuery, setSearchQuery] = useState("");
 
-    const filteredData = data.filter(
-        (user) =>
-            user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
+    const filteredData = useMemo(() => {
+        return data.filter(
+            (user) =>
+                user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                user.email.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+    }, [data, searchQuery]);
 
     const { table } = useDataTable({
         data: filteredData,
