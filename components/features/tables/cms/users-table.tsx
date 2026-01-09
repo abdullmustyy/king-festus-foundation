@@ -1,19 +1,23 @@
 "use client";
 
-import { usersColumns } from "@/components/features/tables/cms/users-columns";
+import { getUsersColumns } from "@/components/features/tables/cms/users-columns";
 import { DataTable } from "@/components/features/tables/data-table/data-table";
 import Search from "@/components/ui/icons/search";
 import { Input } from "@/components/ui/input";
 import { User } from "@/generated/prisma/client";
+import { UserRole } from "@/generated/prisma/enums";
 import { useDataTable } from "@/hooks/use-data-table";
 import { useMemo, useState } from "react";
 
 interface UsersTableProps {
     data: User[];
+    currentUserRole: UserRole;
 }
 
-export function UsersTable({ data }: UsersTableProps) {
+export function UsersTable({ data, currentUserRole }: UsersTableProps) {
     const [searchQuery, setSearchQuery] = useState("");
+
+    const columns = useMemo(() => getUsersColumns(currentUserRole), [currentUserRole]);
 
     const filteredData = useMemo(() => {
         return data.filter(
@@ -25,7 +29,7 @@ export function UsersTable({ data }: UsersTableProps) {
 
     const { table } = useDataTable({
         data: filteredData,
-        columns: usersColumns,
+        columns,
     });
 
     return (

@@ -11,7 +11,7 @@ const ErrorToast = ({ heading, description }: ErrorToastProps) => {
     return (
         <div className="flex items-start gap-3">
             <div className="shrink-0">
-                <X className="h-5 w-5 text-red-500" />
+                <X className="h-5 w-5 text-destructive" />
             </div>
             <div className="flex-1">
                 <p className="font-semibold">{heading}</p>

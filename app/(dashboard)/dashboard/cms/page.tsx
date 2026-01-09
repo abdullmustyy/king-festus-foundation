@@ -21,7 +21,7 @@ export default async function CMSPage() {
         select: { role: true },
     });
 
-    if (!dbUser || dbUser.role !== "ADMIN") {
+    if (!dbUser || (dbUser.role !== "ADMIN" && dbUser.role !== "SUPER_ADMIN")) {
         redirect("/dashboard");
     }
 
@@ -104,7 +104,7 @@ export default async function CMSPage() {
 
                 <TabsContent value="users" className="flex-1">
                     <div className="px-4 py-5 lg:px-5">
-                        <UsersTable data={users} />
+                        <UsersTable data={users} currentUserRole={dbUser.role} />
                     </div>
                 </TabsContent>
             </Tabs>

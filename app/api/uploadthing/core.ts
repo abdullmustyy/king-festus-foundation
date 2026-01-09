@@ -79,10 +79,25 @@ export const ourFileRouter = {
 
             if (!user) throw new UploadThingError("You must be logged in to add an image to your gallery");
 
+            const dbUser = await db.user.findUnique({
+                where: { id: user.id },
+                select: { role: true },
+            });
+
+            if (dbUser?.role === "USER") {
+                const count = await db.media.count({
+                    where: { userId: user.id },
+                });
+
+                if (count >= 10) {
+                    throw new UploadThingError("Storage limit reached (10 images). Delete some images to upload more.");
+                }
+            }
+
             return { userId: user.id, input, type: "IMAGE" as const };
         })
         .onUploadComplete(async ({ metadata, file }) => {
-            const { input, type } = metadata;
+            const { input, type, userId } = metadata;
 
             // 1. Create the new MediaAsset record
             const newMediaAsset = await db.mediaAsset.create({
@@ -98,9 +113,8 @@ export const ourFileRouter = {
             await db.media.create({
                 data: {
                     description: input.description,
-                    mediaAsset: {
-                        connect: { id: newMediaAsset.id },
-                    },
+                    userId: userId,
+                    mediaAssetId: newMediaAsset.id,
                 },
             });
 

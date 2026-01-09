@@ -4,23 +4,30 @@ import SiteHeader from "@/components/layout/dashboard/site-header";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import db from "@/lib/db";
 import { currentUser } from "@clerk/nextjs/server";
+import DeactivationChecker from "./_components/deactivation-checker";
 
 const DashboardLayout = async ({
     children,
+    modal,
 }: Readonly<{
     children: React.ReactNode;
+    modal: React.ReactNode;
 }>) => {
     const user = await currentUser();
     let userRole = "USER";
+    let shouldDeactivate = false;
 
     if (user) {
         const dbUser = await db.user.findUnique({
             where: { id: user.id },
-            select: { role: true },
+            select: { role: true, isActive: true },
         });
 
         if (dbUser) {
             userRole = dbUser.role;
+            if (!dbUser.isActive) {
+                shouldDeactivate = true;
+            }
         }
     }
 
@@ -32,12 +39,14 @@ const DashboardLayout = async ({
                 } as React.CSSProperties
             }
         >
+            {shouldDeactivate && <DeactivationChecker />}
             <AppSidebar userRole={userRole} />
 
             <main className="relative flex w-full flex-1 flex-col pb-13.5">
                 <SiteHeader />
 
                 {children}
+                {modal}
 
                 <AdsMarquee className="fixed bottom-0" />
             </main>

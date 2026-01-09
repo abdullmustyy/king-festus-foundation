@@ -17,8 +17,8 @@ export async function deleteMediaAction(mediaId: string) {
         where: { email: user.emailAddresses[0].emailAddress },
     });
 
-    if (!dbUser || dbUser.role !== UserRole.ADMIN) {
-        return { error: "Forbidden: Admins only" };
+    if (!dbUser) {
+        return { error: "User not found" };
     }
 
     try {
@@ -41,6 +41,14 @@ export async function deleteMediaAction(mediaId: string) {
 
         if (!media) {
             return { error: "Media not found" };
+        }
+
+        // Authorization: Owner or Admin
+        const isOwner = media.userId === user.id;
+        const isAdmin = dbUser.role === UserRole.ADMIN || dbUser.role === UserRole.SUPER_ADMIN;
+
+        if (!isOwner && !isAdmin) {
+            return { error: "Forbidden: You do not have permission to delete this media" };
         }
 
         const { mediaAsset } = media;
@@ -76,4 +84,14 @@ export async function deleteMediaAction(mediaId: string) {
         console.error("Error deleting media:", error);
         return { error: "Failed to delete media" };
     }
+}
+
+export async function getUserMediaCount(userId: string) {
+    const count = await db.media.count({
+        where: {
+            userId: userId,
+        },
+    });
+    
+    return count;
 }

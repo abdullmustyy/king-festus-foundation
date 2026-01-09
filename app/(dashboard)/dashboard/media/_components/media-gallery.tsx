@@ -20,27 +20,37 @@ type MediaWithAsset = Prisma.MediaGetPayload<{
 interface IMediaGalleryProps {
     mediaPromise: PrismaPromise<MediaWithAsset[]>;
     isAdmin: boolean;
+    mediaCount: number;
+    currentUserId?: string;
 }
 
-const MediaGallery = ({ mediaPromise, isAdmin }: IMediaGalleryProps) => {
+const MediaGallery = ({ mediaPromise, isAdmin, mediaCount, currentUserId }: IMediaGalleryProps) => {
     const [open, setOpen] = useState(false);
     const media = use(mediaPromise);
     const { refresh } = useRouter();
     const [isPending, startTransition] = useTransition();
+
+    const isLimitReached = !isAdmin && mediaCount >= 10;
+
+    const [mediaToDelete, setMediaToDelete] = useState<string | null>(null);
 
     const onUploadComplete = () => {
         setOpen(false);
         refresh();
     };
 
-    const handleDelete = async (id: string) => {
+    const confirmDelete = async () => {
+        if (!mediaToDelete) return;
+
         startTransition(async () => {
-            const result = await deleteMedia(id);
+            const result = await deleteMedia(mediaToDelete);
             if (result.error) {
                 toast.error(result.error);
             } else {
                 toast.success("Media deleted successfully");
+                refresh(); // Ensure count updates
             }
+            setMediaToDelete(null);
         });
     };
 
@@ -48,16 +58,31 @@ const MediaGallery = ({ mediaPromise, isAdmin }: IMediaGalleryProps) => {
         <>
             <section className="flex flex-col gap-5 p-5">
                 <div className="flex items-center justify-between">
-                    <h6 className="font-medium">Media</h6>
+                    <div className="flex flex-col gap-1">
+                        <h6 className="font-medium">Media</h6>
+                        {!isAdmin && (
+                            <span
+                                className={`text-xs ${isLimitReached ? "font-medium text-destructive" : "text-muted-foreground"}`}
+                            >
+                                Usage: {mediaCount}/10
+                            </span>
+                        )}
+                        {isAdmin && <span className="text-xs text-muted-foreground">Unlimited Access</span>}
+                    </div>
 
-                    <Button size="sm" className="rounded-full text-sm" onClick={() => setOpen((prevOpen) => !prevOpen)}>
-                        Add image
+                    <Button
+                        size="sm"
+                        className="rounded-full text-sm"
+                        onClick={() => setOpen((prevOpen) => !prevOpen)}
+                        disabled={isLimitReached}
+                    >
+                        {isLimitReached ? "Limit Reached" : "Add image"}
                     </Button>
                 </div>
 
                 {/* Media gallery */}
                 <div className="columns-2 gap-1.5 lg:columns-3 lg:gap-2.5 2xl:columns-4">
-                    {media.map(({ id, mediaAsset, description }) => (
+                    {media.map(({ id, mediaAsset, description, userId }) => (
                         <div
                             key={id}
                             className="group relative mb-1.5 break-inside-avoid overflow-hidden rounded-md lg:mb-2.5"
@@ -69,14 +94,14 @@ const MediaGallery = ({ mediaPromise, isAdmin }: IMediaGalleryProps) => {
                                 width={500}
                                 className="h-auto w-full object-cover"
                             />
-                            {isAdmin && (
+                            {(isAdmin || (currentUserId && userId === currentUserId)) && (
                                 <div className="absolute right-4 bottom-0 translate-y-full rounded-t-full bg-background p-2 transition-transform duration-300 group-hover:translate-y-0 before:absolute before:bottom-0 before:left-0 before:-translate-x-full before:border-b-5 before:border-l-5 before:border-b-background before:border-l-transparent after:absolute after:right-0 after:bottom-0 after:translate-x-full after:border-r-5 after:border-b-5 after:border-r-transparent after:border-b-background">
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={() => handleDelete(id)}
+                                        onClick={() => setMediaToDelete(id)}
                                         disabled={isPending}
-                                        isLoading={isPending}
+                                        isLoading={isPending && mediaToDelete === id}
                                         className="rounded-full"
                                     >
                                         <Trash2 className="size-4 text-destructive" />
@@ -88,6 +113,7 @@ const MediaGallery = ({ mediaPromise, isAdmin }: IMediaGalleryProps) => {
                 </div>
             </section>
 
+            {/* Add Image Dialog */}
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="gap-0 p-0 *:data-[slot='dialog-close']:hidden">
                     <DialogHeader className="h-13 flex-row items-center justify-between border-b px-5 py-3">
@@ -107,6 +133,37 @@ const MediaGallery = ({ mediaPromise, isAdmin }: IMediaGalleryProps) => {
                     </DialogHeader>
 
                     <AddImageForm onUploadComplete={onUploadComplete} />
+                </DialogContent>
+            </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog open={!!mediaToDelete} onOpenChange={(open) => !open && setMediaToDelete(null)}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Delete Image</DialogTitle>
+                        <DialogDescription>
+                            Are you sure you want to delete this image? This action cannot be undone.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-end gap-2">
+                        <Button
+                            variant="outline"
+                            onClick={() => setMediaToDelete(null)}
+                            className="text-sm"
+                            disabled={isPending}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={confirmDelete}
+                            isLoading={isPending}
+                            className="text-sm"
+                            disabled={isPending}
+                        >
+                            Delete
+                        </Button>
+                    </div>
                 </DialogContent>
             </Dialog>
         </>

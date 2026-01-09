@@ -35,7 +35,7 @@ export const sidebarLinks = {
             title: "CMS",
             url: "/dashboard/cms",
             icon: File,
-            roles: ["ADMIN"],
+            roles: ["ADMIN", "SUPER_ADMIN"],
         },
     ],
 

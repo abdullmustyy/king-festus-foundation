@@ -35,7 +35,7 @@ export function NavUser({ className }: React.ComponentProps<typeof SidebarMenuIt
                             <AvatarImage src={user.imageUrl} alt={user.fullName ?? ""} />
                             <AvatarFallback className="rounded-lg text-xs">{user.fullName?.charAt(0)}</AvatarFallback>
                         </Avatar>
-                        <span className="truncate font-medium text-sm">{user.fullName}</span>
+                        <span className="truncate text-sm font-medium">{user.fullName}</span>
 
                         <Ellipsis className="ml-auto size-3.75 text-[#71717A]" />
                     </SidebarMenuButton>
@@ -54,7 +54,12 @@ export function NavUser({ className }: React.ComponentProps<typeof SidebarMenuIt
                                 <AvatarFallback className="rounded-lg">{user.fullName?.charAt(0)}</AvatarFallback>
                             </Avatar>
 
-                            <span className="truncate font-medium text-sm">{user.fullName}</span>
+                            <div className="flex flex-col">
+                                <span className="truncate text-sm font-medium">{user.fullName}</span>
+                                <span className="text-xs text-muted-foreground">
+                                    {user.emailAddresses[0].emailAddress}
+                                </span>
+                            </div>
                         </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
